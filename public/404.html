@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Not Found - Harsh Mehta</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
+    }
+    .container {
+      max-width: 600px;
+      padding: 40px 20px;
+    }
+    h1 {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      color: #000;
+    }
+    p {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+    a {
+      display: inline-block;
+      color: #fff;
+      background-color: #000;
+      padding: 12px 24px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    a:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #121212;
+        color: #f5f5f5;
+      }
+      h1 {
+        color: #fff;
+      }
+      a {
+        background-color: #fff;
+        color: #000;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>404</h1>
+    <p>Oops! The page you're looking for doesn't exist.</p>
+    <a href="/">Return to Homepage</a>
+  </div>
+  
+  <script>
+    // Analytics for 404 page
+    if (typeof window !== 'undefined' && window.location) {
+      // Log the page that wasn't found
+      console.error('Page not found:', window.location.pathname);
+      
+      // Automatically redirect to homepage after 10 seconds
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 10000);
+    }
+  </script>
+</body>
+</html> 
