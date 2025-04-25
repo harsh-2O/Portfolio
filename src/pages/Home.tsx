@@ -29,7 +29,7 @@ import pandasColorIcon from "../assets/icon/pandas_color.svg";
 
 // Import project logos
 import apeLogo from "../assets/logos/ape.png";
-import carbonLogo from "/assets/logos/carbon.jpg";
+import carbonLogo from "../assets/logos/CARBON.jpg";
 import sociobuzzLogo from "../assets/logos/sociobuzz.jpg";
 
 gsap.registerPlugin(ScrollTrigger, TextPlugin);
