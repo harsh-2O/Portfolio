@@ -1,25 +1,27 @@
 export const theme = {
   colors: {
-    primary: '#000000',
-    secondary: '#FFFFFF',
+    accent: '#0071e3',
+    primary: '#1d1d1f',
+    secondary: '#fbfbfd',
     text: {
-      primary: '#000000',
-      secondary: '#FFFFFF',
+      primary: '#1d1d1f',
+      secondary: '#f5f5f7',
+      muted: '#86868b',
     },
     background: {
-      light: '#FFFFFF',
+      light: '#fbfbfd',
       dark: '#000000',
-    }
+    },
   },
   typography: {
     fontFamily: {
-      primary: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+      primary: 'Labil Grotesk, -apple-system, BlinkMacSystemFont, sans-serif',
     },
     fontSize: {
-      h1: '5rem',
-      h2: '3rem',
-      h3: '2rem',
-      body: '1rem',
+      h1: 'clamp(3rem, 10vw, 7.5rem)',
+      h2: 'clamp(2rem, 5vw, 4rem)',
+      h3: 'clamp(1.5rem, 3vw, 2.5rem)',
+      body: '1.125rem',
       small: '0.875rem',
     },
     fontWeight: {
@@ -31,7 +33,7 @@ export const theme = {
       tight: 1.1,
       normal: 1.5,
       relaxed: 1.75,
-    }
+    },
   },
   spacing: {
     xs: '0.5rem',
@@ -41,25 +43,25 @@ export const theme = {
     xl: '8rem',
   },
   borderRadius: {
-    small: '4px',
-    medium: '8px',
-    large: '16px',
+    small: '0.75rem',
+    medium: '1.25rem',
+    large: '1.75rem',
     pill: '100px',
   },
   transitions: {
-    fast: '0.2s ease',
-    normal: '0.3s ease',
-    slow: '0.5s ease',
+    fast: '0.2s cubic-bezier(0.25, 0.1, 0.25, 1)',
+    normal: '0.4s cubic-bezier(0.25, 0.1, 0.25, 1)',
+    slow: '0.6s cubic-bezier(0.25, 0.1, 0.25, 1)',
   },
   shadows: {
-    small: '0 2px 4px rgba(0,0,0,0.1)',
-    medium: '0 4px 8px rgba(0,0,0,0.1)',
-    large: '0 8px 16px rgba(0,0,0,0.1)',
+    small: '0 2px 8px rgba(0, 0, 0, 0.04)',
+    medium: '0 4px 24px rgba(0, 0, 0, 0.06)',
+    large: '0 8px 32px rgba(0, 0, 0, 0.08)',
   },
   breakpoints: {
-    mobile: '320px',
+    mobile: '480px',
     tablet: '768px',
     desktop: '1024px',
     wide: '1440px',
   },
-}; 
+};
