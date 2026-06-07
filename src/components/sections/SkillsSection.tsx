@@ -36,6 +36,8 @@ const Category = styled(motion.div)<{ $accent: string }>`
   box-shadow: var(--card-shadow);
   transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
   position: relative;
+  overflow: hidden;
+  isolation: isolate;
 
   &::before {
     content: '';
@@ -43,10 +45,10 @@ const Category = styled(motion.div)<{ $accent: string }>`
     top: 0;
     left: 0;
     right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, ${({ $accent }) => $accent}, transparent);
-    opacity: 0.75;
-    border-radius: 1.5rem 1.5rem 0 0;
+    height: 3px;
+    background: linear-gradient(90deg, ${({ $accent }) => $accent} 0%, ${({ $accent }) => `${$accent}66`} 55%, transparent 100%);
+    border-radius: inherit;
+    pointer-events: none;
   }
 
   @media (hover: hover) {
