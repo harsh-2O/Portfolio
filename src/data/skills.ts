@@ -5,12 +5,14 @@ export type Skill = {
 
 export type SkillCategory = {
   title: string;
+  accent: string;
   skills: Skill[];
 };
 
 export const skillCategories: SkillCategory[] = [
   {
     title: 'Languages & Frameworks',
+    accent: '#0071e3',
     skills: [
       {
         name: 'Python',
@@ -60,6 +62,7 @@ export const skillCategories: SkillCategory[] = [
   },
   {
     title: 'AI / ML & Quant',
+    accent: '#5856d6',
     skills: [
       {
         name: 'LLMs',
@@ -113,6 +116,7 @@ export const skillCategories: SkillCategory[] = [
   },
   {
     title: 'AI Dev Tools · 2026',
+    accent: '#af52de',
     skills: [
       {
         name: 'Cursor',
@@ -158,6 +162,7 @@ export const skillCategories: SkillCategory[] = [
   },
   {
     title: 'Systems, Cloud & Data',
+    accent: '#32ade6',
     skills: [
       {
         name: 'Low-latency Systems',

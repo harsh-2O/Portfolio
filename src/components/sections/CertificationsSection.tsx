@@ -22,14 +22,17 @@ const Grid = styled(motion.div)`
   }
 `;
 
-const Card = styled(motion.a)`
+const ACCENT_CYCLE = ['#0071e3', '#5856d6', '#32ade6', '#af52de', '#34c759'];
+
+const Card = styled(motion.a)<{ $accent: string }>`
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
   padding: 1.25rem 1.35rem;
   border-radius: 1rem;
   border: 1px solid var(--card-border);
-  background: var(--surface-elevated);
+  border-left: 3px solid ${({ $accent }) => $accent};
+  background: linear-gradient(135deg, ${({ $accent }) => `${$accent}08`} 0%, var(--surface-elevated) 55%);
   box-shadow: var(--card-shadow);
   text-decoration: none;
   color: inherit;
@@ -37,7 +40,7 @@ const Card = styled(motion.a)`
 
   &:hover {
     background: var(--surface);
-    border-color: var(--accent-line);
+    border-color: ${({ $accent }) => `${$accent}55`};
     box-shadow: var(--card-shadow-hover);
     transform: translateY(-3px);
   }
@@ -76,9 +79,10 @@ export default function CertificationsSection() {
       />
 
       <Grid variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-        {certifications.map((cert) => (
+        {certifications.map((cert, index) => (
           <Card
             key={cert.id}
+            $accent={ACCENT_CYCLE[index % ACCENT_CYCLE.length]}
             href={cert.credentialUrl}
             target="_blank"
             rel="noopener noreferrer"

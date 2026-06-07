@@ -9,6 +9,11 @@ export const GlobalStyles = css`
 
   :root {
     --accent: #0071e3;
+    --accent-purple: #5856d6;
+    --accent-teal: #32ade6;
+    --accent-violet: #af52de;
+    --accent-green: #34c759;
+    --accent-gradient: linear-gradient(135deg, #0071e3 0%, #5856d6 55%, #af52de 100%);
     --primary: #1d1d1f;
     --primary-rgb: 29, 29, 31;
     --secondary: #fbfbfd;
@@ -47,7 +52,13 @@ export const GlobalStyles = css`
     --card-shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.04), 0 16px 48px rgba(0, 113, 227, 0.12);
     --card-border: rgba(0, 0, 0, 0.07);
     --card-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.85);
-    --section-band: rgba(0, 113, 227, 0.035);
+    --section-band: linear-gradient(
+      135deg,
+      rgba(0, 113, 227, 0.045) 0%,
+      rgba(88, 86, 214, 0.035) 45%,
+      rgba(50, 173, 230, 0.03) 100%
+    );
+    --marquee-bg: linear-gradient(135deg, #0071e3 0%, #5856d6 50%, #1d1d1f 100%);
     --divider: linear-gradient(90deg, transparent, var(--accent-line) 20%, var(--accent-line) 80%, transparent);
     --focus-ring: 0 0 0 3px rgba(0, 113, 227, 0.4);
     --scrollbar-thumb: rgba(0, 0, 0, 0.18);
@@ -78,7 +89,13 @@ export const GlobalStyles = css`
     --card-shadow-hover: 0 12px 40px rgba(0, 113, 227, 0.15);
     --card-border: rgba(255, 255, 255, 0.08);
     --card-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.06);
-    --section-band: rgba(0, 113, 227, 0.05);
+    --section-band: linear-gradient(
+      135deg,
+      rgba(0, 113, 227, 0.07) 0%,
+      rgba(88, 86, 214, 0.05) 45%,
+      rgba(175, 82, 222, 0.04) 100%
+    );
+    --marquee-bg: linear-gradient(135deg, #0071e3 0%, #5856d6 45%, #000000 100%);
     --divider: linear-gradient(90deg, transparent, var(--accent-line) 20%, var(--accent-line) 80%, transparent);
     --focus-ring: 0 0 0 3px rgba(0, 113, 227, 0.5);
     --scrollbar-thumb: rgba(255, 255, 255, 0.18);

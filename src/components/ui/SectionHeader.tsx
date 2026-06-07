@@ -48,7 +48,7 @@ const Label = styled.span`
     width: 20px;
     height: 2px;
     border-radius: 2px;
-    background: linear-gradient(90deg, var(--accent), transparent);
+    background: var(--accent-gradient);
   }
 `;
 

@@ -8,8 +8,8 @@ const Banner = styled.div`
   align-items: center;
   overflow: hidden;
   overflow-x: clip;
-  background: var(--text-primary);
-  color: var(--background);
+  background: var(--marquee-bg);
+  color: #fff;
   margin: 0;
   position: relative;
   isolation: isolate;
@@ -27,12 +27,12 @@ const Banner = styled.div`
 
   &::before {
     left: 0;
-    background: linear-gradient(90deg, var(--text-primary), transparent);
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.35), transparent);
   }
 
   &::after {
     right: 0;
-    background: linear-gradient(270deg, var(--text-primary), transparent);
+    background: linear-gradient(270deg, rgba(0, 0, 0, 0.35), transparent);
   }
 `;
 

@@ -64,7 +64,7 @@ const Title = styled.h2`
 `;
 
 const EmailButton = styled.a`
-  background: var(--accent);
+  background: var(--accent-gradient);
   color: #fff;
   border-radius: 9rem;
   padding: clamp(0.85rem, 2vw, 1.1rem) clamp(1.25rem, 4vw, 2rem);

@@ -123,7 +123,7 @@ const NavLink = styled.button<{ $active?: boolean; $mobile?: boolean }>`
     left: 0;
     right: 0;
     height: 1px;
-    background: var(--text-primary);
+    background: var(--accent-gradient);
     transform: scaleX(${({ $active }) => ($active ? 1 : 0)});
     transition: transform 0.3s ease;
   }

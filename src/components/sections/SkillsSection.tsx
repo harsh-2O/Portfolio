@@ -28,7 +28,7 @@ const Grid = styled(motion.div)`
   }
 `;
 
-const Category = styled(motion.div)`
+const Category = styled(motion.div)<{ $accent: string }>`
   padding: clamp(1.25rem, 3vw, 2rem);
   border-radius: 1.5rem;
   background: var(--surface-elevated);
@@ -44,8 +44,8 @@ const Category = styled(motion.div)`
     left: 0;
     right: 0;
     height: 2px;
-    background: linear-gradient(90deg, var(--accent), transparent);
-    opacity: 0.6;
+    background: linear-gradient(90deg, ${({ $accent }) => $accent}, transparent);
+    opacity: 0.75;
     border-radius: 1.5rem 1.5rem 0 0;
   }
 
@@ -58,10 +58,10 @@ const Category = styled(motion.div)`
   }
 `;
 
-const CategoryTitle = styled.h4`
+const CategoryTitle = styled.h4<{ $accent: string }>`
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--accent);
+  color: ${({ $accent }) => $accent};
   text-transform: uppercase;
   letter-spacing: 0.06em;
   margin-bottom: 1.25rem;
@@ -73,23 +73,23 @@ const Pills = styled.div`
   gap: 0.5rem;
 `;
 
-const Pill = styled.button<{ $active?: boolean }>`
+const Pill = styled.button<{ $active?: boolean; $accent: string }>`
   font-size: 0.875rem;
   font-weight: 500;
   padding: 0.45rem 0.9rem;
   min-height: 36px;
   border-radius: 100px;
-  background: ${({ $active }) => ($active ? 'var(--accent)' : 'var(--accent-subtle)')};
+  background: ${({ $active, $accent }) => ($active ? $accent : `${$accent}14`)};
   color: ${({ $active }) => ($active ? '#fff' : 'var(--text-primary)')};
-  border: 1px solid ${({ $active }) => ($active ? 'var(--accent)' : 'var(--card-border)')};
+  border: 1px solid ${({ $active, $accent }) => ($active ? $accent : 'var(--card-border)')};
   transition: all var(--transition);
   cursor: pointer;
   text-align: left;
 
   &:hover {
-    border-color: var(--accent);
-    color: ${({ $active }) => ($active ? '#fff' : 'var(--accent)')};
-    background: ${({ $active }) => ($active ? 'var(--accent)' : 'var(--accent-subtle)')};
+    border-color: ${({ $accent }) => $accent};
+    color: ${({ $active }) => ($active ? '#fff' : 'var(--text-primary)')};
+    background: ${({ $active, $accent }) => ($active ? $accent : `${$accent}22`)};
   }
 
   &:focus-visible {
@@ -98,18 +98,18 @@ const Pill = styled.button<{ $active?: boolean }>`
   }
 `;
 
-const SkillDetail = styled(motion.div)`
+const SkillDetail = styled(motion.div)<{ $accent: string }>`
   margin-top: 1rem;
   padding: 0.85rem 1rem;
   border-radius: 0.85rem;
-  background: var(--accent-subtle);
-  border: 1px solid var(--accent-line);
+  background: ${({ $accent }) => `${$accent}12`};
+  border: 1px solid ${({ $accent }) => `${$accent}40`};
 `;
 
-const DetailTitle = styled.p`
+const DetailTitle = styled.p<{ $accent: string }>`
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--accent);
+  color: ${({ $accent }) => $accent};
   margin-bottom: 0.35rem;
   letter-spacing: -0.01em;
 `;
@@ -171,13 +171,14 @@ export default function SkillsSection() {
           const isActiveCategory = selected?.category === cat.title;
 
           return (
-            <Category key={cat.title} variants={itemVariant}>
-              <CategoryTitle>{cat.title}</CategoryTitle>
+          <Category key={cat.title} $accent={cat.accent} variants={itemVariant}>
+            <CategoryTitle $accent={cat.accent}>{cat.title}</CategoryTitle>
               <Pills>
                 {cat.skills.map((skill) => (
                   <Pill
                     key={skill.name}
                     type="button"
+                    $accent={cat.accent}
                     $active={isActiveCategory && selected.skill.name === skill.name}
                     aria-pressed={isActiveCategory && selected.skill.name === skill.name}
                     aria-label={`${skill.name}: ${skill.description}`}
@@ -192,6 +193,7 @@ export default function SkillsSection() {
                 {isActiveCategory && selected && (
                   <SkillDetail
                     key={selected.skill.name}
+                    $accent={cat.accent}
                     variants={detailVariant}
                     initial="hidden"
                     animate="visible"
@@ -200,7 +202,7 @@ export default function SkillsSection() {
                     aria-live="polite"
                     aria-label={`About ${selected.skill.name}`}
                   >
-                    <DetailTitle>{selected.skill.name}</DetailTitle>
+                    <DetailTitle $accent={cat.accent}>{selected.skill.name}</DetailTitle>
                     <DetailText>{selected.skill.description}</DetailText>
                   </SkillDetail>
                 )}

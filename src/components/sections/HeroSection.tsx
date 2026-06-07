@@ -204,23 +204,25 @@ const BadgeRow = styled.div`
   margin-top: 0.25rem;
 `;
 
-const Badge = styled.span`
+const BADGE_ACCENTS = ['#0071e3', '#5856d6', '#32ade6'];
+
+const Badge = styled.span<{ $accent: string }>`
   font-size: var(--text-small);
   font-weight: 500;
   padding: 0.4rem 0.75rem;
   max-width: 100%;
   border-radius: 100px;
-  border: 1px solid var(--card-border);
-  background: var(--surface);
+  border: 1px solid ${({ $accent }) => `${$accent}35`};
+  background: ${({ $accent }) => `${$accent}10`};
   color: var(--text-muted);
   backdrop-filter: blur(8px);
   box-shadow: var(--card-highlight);
   transition: border-color var(--transition), color var(--transition), box-shadow var(--transition);
 
   &:hover {
-    border-color: var(--accent-line);
-    color: var(--accent);
-    box-shadow: 0 2px 12px var(--accent-subtle), var(--card-highlight);
+    border-color: ${({ $accent }) => $accent};
+    color: ${({ $accent }) => $accent};
+    box-shadow: 0 2px 12px ${({ $accent }) => `${$accent}25`}, var(--card-highlight);
   }
 `;
 
@@ -325,8 +327,10 @@ export default function HeroSection(refs: HeroRefs) {
         </Title>
 
         <BadgeRow ref={refs.badgesRef}>
-          {HERO_BADGES.map((badge) => (
-            <Badge key={badge}>{badge}</Badge>
+          {HERO_BADGES.map((badge, index) => (
+            <Badge key={badge} $accent={BADGE_ACCENTS[index % BADGE_ACCENTS.length]}>
+              {badge}
+            </Badge>
           ))}
         </BadgeRow>
       </Content>
