@@ -14,7 +14,6 @@ export default defineConfig({
         deps.filter(
           (dep) =>
             dep.includes('vendor-react') ||
-            dep.includes('vendor-emotion') ||
             /\/index-[^/]+\.js$/.test(dep),
         ),
     },
@@ -23,8 +22,15 @@ export default defineConfig({
         manualChunks(id) {
           if (id.includes('node_modules')) {
             if (id.includes('framer-motion')) return 'vendor-motion';
-            if (id.includes('@emotion')) return 'vendor-emotion';
-            if (id.includes('react-dom') || id.includes('/react/')) return 'vendor-react';
+            // Keep React + Emotion in one chunk — splitting them causes a circular
+            // chunk dependency and "Cannot access before initialization" in production.
+            if (
+              id.includes('@emotion') ||
+              id.includes('react-dom') ||
+              id.includes('/react/')
+            ) {
+              return 'vendor-react';
+            }
             if (id.includes('react-intersection-observer')) return 'vendor-observe';
           }
           if (id.includes('/src/data/blog')) return 'content-blog';
