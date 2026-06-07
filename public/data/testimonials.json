@@ -1,32 +1,26 @@
 [
   {
     "id": 1,
-    "quote": "Harsh is a remarkable full-stack developer. He grasps abstract ideas and transforms them into exceptional digital experiences. Throughout our project, he consistently delivered high-quality code that was both innovative and maintainable.",
-    "author": "Chris Ellington",
-    "position": "Product Lead, Gatha"
+    "quote": "I had the great opportunity to work alongside Harsh on the software development team at Searce. Harsh is a highly talented and dedicated engineer who consistently delivers high-quality work. His expertise in full-stack development, especially with cloud-native technologies, was a huge asset to our projects. What stands out about Harsh is his remarkable problem-solving ability and his focus on writing clean, maintainable, and scalable code. He has a keen eye for detail and always considers the long-term impact of his architectural decisions. Beyond his technical skills, Harsh is a collaborative and supportive colleague, making him a true pleasure to work with. He would be a valuable addition to any engineering organization.",
+    "author": "Aryan Vora",
+    "position": "AI Solutions Consultant, Searce Inc.",
+    "context": "Worked with Harsh on the same team · Aug 2025",
+    "linkedin": "https://www.linkedin.com/in/aryan9721"
   },
   {
     "id": 2,
-    "quote": "Working with Harsh was a game-changer for our startup. His ability to navigate both frontend and backend challenges with equal expertise saved us countless development hours. His solutions were elegant and forward-thinking.",
-    "author": "Sarah Johnson",
-    "position": "CTO, TechFusion"
+    "quote": "I had the pleasure of working closely with Harsh on a high-impact project, where I was leading the software engineering efforts. Throughout the engagement, Harsh consistently impressed the entire team with his strong technical acumen and adaptability. He seamlessly transitioned between programming languages like Go and Python, and quickly became a go-to engineer for solving complex technical challenges. What truly sets Harsh apart is his passion for automation and optimization. He played a key role in fast-tracking our development and testing processes by effectively leveraging various AI tools. His efforts directly contributed to significantly reducing our delivery timelines, enabling the entire team to move faster and more efficiently. He has undoubtedly set a high benchmark for engineering excellence within the team. Beyond his technical strengths, Harsh also demonstrated a keen eye for UI/UX and was instrumental in creating wireframes and crafting intuitive, user-friendly designs. His ability to bridge the gap between engineering and design is truly commendable. Additionally, Harsh's communication skills are exceptional. Whether collaborating with cross-functional teams or interacting with customers, he always approaches discussions with clarity, empathy, and professionalism. He has a calm, positive demeanor, remains open to new ideas, and is always ready to brainstorm innovative solutions, helping maintain a high team morale and a collaborative, friendly work environment. Harsh would be a valuable asset to any team, and I look forward to seeing the incredible impact he continues to make in his career!",
+    "author": "Ankit Bhatnagar",
+    "position": "Engineering Manager, Searce",
+    "context": "Managed Harsh directly · Jul 2025",
+    "linkedin": "https://www.linkedin.com/in/anktbhatnagar"
   },
   {
     "id": 3,
-    "quote": "Harsh's technical skills are matched only by his communication and problem-solving abilities. He took the time to understand our business needs before proposing technical solutions, ensuring we got exactly what we needed.",
-    "author": "Michael Chen",
-    "position": "Founder, Nexus Apps"
-  },
-  {
-    "id": 4,
-    "quote": "I've worked with many developers, but Harsh stands out for his attention to detail and commitment to quality. His code is clean, well-documented, and built with scalability in mind. A true professional.",
-    "author": "Priya Sharma",
-    "position": "Engineering Manager, DataSync"
-  },
-  {
-    "id": 5,
-    "quote": "Harsh has a rare talent for translating complex technical concepts into simple, intuitive user experiences. His work on our app's UI/UX transformation resulted in a 40% increase in user engagement.",
-    "author": "Alex Rodriguez",
-    "position": "UX Director, Interfuse"
+    "quote": "I've had the pleasure of working closely with Harsh since the beginning of his journey, when he joined us as an intern. From day one, he has consistently exceeded expectations and shown maturity, ownership, and technical skill far beyond his experience level. Harsh started out in a support project, where he not only resolved issues with remarkable speed and accuracy but also introduced optimized features that enhanced the system significantly. Even as an intern, he confidently handled client communications single-handedly—a rare quality at that stage. He later transitioned to working on an integrator service that involved complex authentication mechanisms. Despite the project being built in Python—outside his core expertise at the time—Harsh quickly adapted and soon became a reliable Python developer. This phase also revealed his innate leadership abilities and his effectiveness in dealing with international clients. What truly stood out was his work on a high-impact UI/UX initiative for a major telecom client. Harsh went through 500+ business stories and took complete ownership of the mobile and web UI/UX designs using Figma. His ability to understand complex business requirements and translate them into thoughtful design solutions was impressive. He then went on to contribute to the mobile app development using React Native and eventually participated in GoLang-based projects as well. From Node.js to Python, Figma, React Native, and GoLang—Harsh has consistently demonstrated versatility, accountability, and a strong sense of ownership in every task. For someone with just around a year of experience, he already embodies the qualities of a dependable, full-stack contributor. He is much more than what one typically expects from a 1-year experienced developer—truly a valuable asset to any team.",
+    "author": "Ayush Khare",
+    "position": "Software Engineer, Searce Inc.",
+    "context": "Senior to Harsh at Searce · IIIT Pune CSE'22 · Jul 2025",
+    "linkedin": "https://www.linkedin.com/in/ayushkhareindia"
   }
-] 
+]
