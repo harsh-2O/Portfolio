@@ -1,9 +1,4 @@
-# Allow all web crawlers
 User-agent: *
 Allow: /
 
-# Sitemap location
-Sitemap: https://yourdomain.com/sitemap.xml
-
-# Optimize crawl rate
-Crawl-delay: 10 
+Sitemap: https://portfolio-delta-one-30.vercel.app/sitemap.xml

@@ -3,10 +3,60 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Harsh Mehta</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#000000" />
+    <script>
+      (function () {
+        var saved = localStorage.getItem('theme');
+        var isDark = saved !== 'light';
+        if (isDark) document.documentElement.classList.add('dark');
+      })();
+    </script>
+    <meta
+      name="description"
+      content="Harsh Mehta — Quant Tools Developer & Software Engineer. Low-latency systems, AI/ML, and production infrastructure."
+    />
+    <meta name="keywords" content="quant developer, AI, ML, RAG, low-latency, Python, C++, Go, portfolio" />
+    <meta name="author" content="Harsh Mehta" />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://portfolio-delta-one-30.vercel.app/" />
+    <meta property="og:title" content="Harsh Mehta — Quant Tools Developer" />
+    <meta property="og:description" content="Quant tools developer building low-latency systems, AI/ML pipelines, and production infrastructure." />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://portfolio-delta-one-30.vercel.app/" />
+    <meta name="twitter:title" content="Harsh Mehta — Quant Tools Developer" />
+    <meta name="twitter:description" content="Quant tools developer building low-latency systems, AI/ML pipelines, and production infrastructure." />
+
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="canonical" href="https://portfolio-delta-one-30.vercel.app/" />
+    <title>Harsh Mehta — Quant Tools Developer</title>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Harsh Mehta",
+        "url": "https://portfolio-delta-one-30.vercel.app/",
+        "email": "harsh.mehta@tamu.edu",
+        "jobTitle": "Quant Tools Developer",
+        "worksFor": { "@type": "Organization", "name": "Graviton Research Capital LLP" },
+        "sameAs": [
+          "https://github.com/harsh-2O",
+          "https://www.linkedin.com/in/harsh2o",
+          "https://leetcode.com/u/JamesHiding"
+        ],
+        "alumniOf": [
+          { "@type": "CollegeOrUniversity", "name": "Texas A&M University" },
+          { "@type": "CollegeOrUniversity", "name": "Indian Institute of Information Technology Vadodara" }
+        ],
+        "description": "Quant tools developer and software engineer specializing in low-latency systems, AI/ML, and production infrastructure."
+      }
+    </script>
   </head>
   <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
