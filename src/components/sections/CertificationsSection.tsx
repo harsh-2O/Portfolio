@@ -1,0 +1,95 @@
+import styled from '@emotion/styled';
+import { motion } from '../../lib/motion';
+import SectionHeader from '../ui/SectionHeader';
+import { certifications } from '../../data/certifications';
+import { fadeUp, staggerContainer } from '../../styles/animations';
+import { sectionContainer } from '../../styles/layout';
+
+const Section = styled(motion.section)`
+  ${sectionContainer};
+  padding-top: 0;
+  padding-bottom: var(--section-padding-y-md);
+`;
+
+const Grid = styled(motion.div)`
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+`;
+
+const Card = styled(motion.a)`
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1.25rem 1.35rem;
+  border-radius: 1rem;
+  border: 1px solid var(--card-border);
+  background: var(--surface-elevated);
+  box-shadow: var(--card-shadow);
+  text-decoration: none;
+  color: inherit;
+  transition: all var(--transition);
+
+  &:hover {
+    background: var(--surface);
+    border-color: var(--accent-line);
+    box-shadow: var(--card-shadow-hover);
+    transform: translateY(-3px);
+  }
+`;
+
+const CertName = styled.span`
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+`;
+
+const Meta = styled.span`
+  font-size: 0.8rem;
+  color: var(--text-muted);
+`;
+
+const itemVariant = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+};
+
+export default function CertificationsSection() {
+  return (
+    <Section
+      id="certifications-section"
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-60px' }}
+    >
+      <SectionHeader
+        label="Credentials"
+        title="Certifications"
+        subtitle="Google Cloud · LinkedIn Learning (Anthropic) · Coursera. Tap to verify."
+      />
+
+      <Grid variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+        {certifications.map((cert) => (
+          <Card
+            key={cert.id}
+            href={cert.credentialUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            variants={itemVariant}
+            aria-label={`${cert.name} from ${cert.issuer}`}
+          >
+            <CertName>{cert.name}</CertName>
+            <Meta>{cert.issuer} · {cert.date}</Meta>
+          </Card>
+        ))}
+      </Grid>
+    </Section>
+  );
+}
