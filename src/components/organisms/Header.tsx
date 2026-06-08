@@ -64,10 +64,11 @@ const HeaderContainer = styled.header<{ $scrolled: boolean }>`
 
 const Logo = styled.button`
   justify-self: start;
-  font-size: clamp(0.75rem, 2.5vw, 0.8125rem);
-  font-weight: 500;
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  font-weight: 600;
   color: var(--text-primary);
-  letter-spacing: -0.01em;
+  letter-spacing: 0.01em;
   opacity: 0.88;
   transition: opacity var(--transition);
   background: none;
@@ -94,9 +95,9 @@ const DesktopNav = styled.nav`
 `;
 
 const NavLink = styled.button<{ $active?: boolean; $mobile?: boolean }>`
-  font-size: ${({ $mobile }) => ($mobile ? 'clamp(1.25rem, 5vw, 1.65rem)' : '0.75rem')};
-  font-weight: ${({ $mobile }) => ($mobile ? 500 : 400)};
-  letter-spacing: ${({ $mobile }) => ($mobile ? '-0.03em' : '-0.01em')};
+  font-size: ${({ $mobile }) => ($mobile ? 'clamp(1.35rem, 5vw, 1.75rem)' : 'var(--text-nav)')};
+  font-weight: ${({ $mobile }) => ($mobile ? 500 : 500)};
+  letter-spacing: ${({ $mobile }) => ($mobile ? '-0.02em' : '-0.01em')};
   color: var(--text-primary);
   opacity: ${({ $active, $mobile }) => {
     if ($mobile) return $active ? 1 : 0.4;

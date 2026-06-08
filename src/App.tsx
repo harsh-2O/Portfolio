@@ -1,6 +1,7 @@
 import { ThemeProvider as EmotionThemeProvider, Global } from '@emotion/react';
 import { theme } from './styles/theme';
 import { GlobalStyles } from './styles/GlobalStyles';
+import './styles/fonts.css';
 import { ThemeProvider } from './context/ThemeContext';
 import Home from './pages/Home';
 

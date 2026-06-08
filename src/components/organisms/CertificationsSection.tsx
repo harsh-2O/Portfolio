@@ -3,18 +3,16 @@ import { motion } from '../../lib/motion';
 import SectionHeader from '../molecules/SectionHeader';
 import { certifications } from '../../data/certifications';
 import { fadeUp, staggerContainer } from '../../styles/animations';
-import { sectionContainer } from '../../styles/layout';
+import { sectionCentered } from '../../styles/layout';
 
 const Section = styled(motion.section)`
-  ${sectionContainer};
-  padding-top: 0;
-  padding-bottom: var(--section-padding-y-md);
+  ${sectionCentered};
 `;
 
 const Grid = styled(motion.div)`
   display: grid;
   grid-template-columns: 1fr;
-  gap: 0.85rem;
+  gap: var(--block-gap);
 
   @media (min-width: 640px) {
     grid-template-columns: repeat(2, 1fr);

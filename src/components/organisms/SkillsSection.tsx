@@ -20,11 +20,11 @@ const Section = styled(motion.section)`
 const Grid = styled(motion.div)`
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1rem;
+  gap: var(--block-gap);
 
   @media (min-width: 640px) {
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.25rem;
+    gap: var(--section-inner-gap);
   }
 `;
 

@@ -21,11 +21,10 @@ const MainContent = styled.section`
   ${sectionContainer};
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   margin-top: var(--header-height);
-  padding-top: clamp(1.5rem, 5vw, 5rem);
-  padding-bottom: clamp(2rem, 6vw, 5rem);
-  gap: var(--section-gap);
+  padding-top: clamp(2rem, 4vw, 3rem);
+  padding-bottom: clamp(1.75rem, 3.5vw, 2.75rem);
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -36,7 +35,7 @@ const MainContent = styled.section`
     bottom: 0;
     left: 0;
     right: 0;
-    height: clamp(3rem, 8vw, 6rem);
+    height: clamp(2rem, 5vw, 3.5rem);
     background: linear-gradient(180deg, transparent, var(--background));
     pointer-events: none;
     z-index: 0;
@@ -44,8 +43,8 @@ const MainContent = styled.section`
 
   ${media.lgUp} {
     min-height: calc(100dvh - var(--header-height));
-    padding-top: clamp(2rem, 6vw, 5rem);
-    padding-bottom: clamp(3rem, 7vw, 5rem);
+    padding-top: clamp(2.5rem, 5vh, 4rem);
+    padding-bottom: clamp(2rem, 4vh, 3rem);
   }
 `;
 
@@ -105,7 +104,7 @@ const Content = styled.div`
   z-index: 1;
   display: flex;
   flex-direction: column;
-  gap: clamp(1rem, 3vw, 1.25rem);
+  gap: clamp(1rem, 2.5vw, 1.75rem);
   min-width: 0;
 `;
 
@@ -113,7 +112,7 @@ const Eyebrow = styled.div`
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: var(--text-small);
+  font-size: var(--text-body);
   font-weight: 500;
   color: var(--accent);
   letter-spacing: 0.08em;
@@ -146,7 +145,7 @@ const LiveDot = styled.span`
 const Title = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.5rem;
   color: var(--text-primary);
 `;
 
@@ -200,14 +199,14 @@ const ChangingText = styled.span`
 const BadgeRow = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.6rem;
   margin-top: 0.25rem;
 `;
 
 const BADGE_ACCENTS = ['#0071e3', '#5856d6', '#32ade6'];
 
 const Badge = styled.span<{ $accent: string }>`
-  font-size: var(--text-small);
+  font-size: var(--text-body);
   font-weight: 500;
   padding: 0.4rem 0.75rem;
   max-width: 100%;
@@ -233,8 +232,9 @@ const ContactSection = styled.div`
   justify-content: space-between;
   align-items: flex-end;
   width: 100%;
-  gap: clamp(1.25rem, 4vw, 3rem);
-  padding-top: 1.25rem;
+  gap: var(--section-inner-gap);
+  margin-top: clamp(1.5rem, 4vh, 2.5rem);
+  padding-top: clamp(1.25rem, 2.5vw, 2rem);
 
   &::before {
     content: '';
@@ -246,10 +246,14 @@ const ContactSection = styled.div`
     background: var(--divider);
   }
 
+  ${media.lgUp} {
+    margin-top: auto;
+  }
+
   ${media.md} {
     flex-direction: column;
     align-items: flex-start;
-    gap: 1rem;
+    gap: var(--block-gap);
   }
 `;
 
@@ -285,9 +289,9 @@ const ContactLink = styled.a`
 const Description = styled.p`
   flex: 1;
   min-width: 0;
-  max-width: 420px;
-  font-size: var(--text-body);
-  line-height: 1.65;
+  max-width: 480px;
+  font-size: clamp(1.0625rem, calc(0.6vw + 0.95rem), 1.25rem);
+  line-height: 1.6;
   text-align: right;
   color: var(--text-muted);
   letter-spacing: -0.01em;

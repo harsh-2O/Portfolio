@@ -11,9 +11,9 @@ const Footer = styled(motion.footer)`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding-top: var(--section-padding-y);
-  padding-bottom: max(clamp(2rem, 5vw, 3rem), env(safe-area-inset-bottom, 0px));
-  gap: clamp(2.5rem, 6vw, 5rem);
+  padding-top: var(--footer-padding-top);
+  padding-bottom: max(var(--footer-padding-bottom), env(safe-area-inset-bottom, 0px));
+  gap: clamp(2rem, 4vw, 3rem);
   position: relative;
   overflow: hidden;
 

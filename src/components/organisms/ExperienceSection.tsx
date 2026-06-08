@@ -10,14 +10,14 @@ import type { ExperienceSectionData, TimelineItem } from '../../types';
 
 const Section = styled.section`
   width: 100%;
-  padding: 1rem 0;
+  padding: 0;
 `;
 
 const SectionHeader = styled.div`
   display: flex;
   align-items: center;
-  gap: clamp(1rem, 3vw, 2rem);
-  margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+  gap: var(--section-inner-gap);
+  margin-bottom: var(--section-header-space);
 
   @media (max-width: 640px) {
     flex-direction: column;

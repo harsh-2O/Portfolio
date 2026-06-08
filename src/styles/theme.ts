@@ -15,7 +15,8 @@ export const theme = {
   },
   typography: {
     fontFamily: {
-      primary: 'Labil Grotesk, -apple-system, BlinkMacSystemFont, sans-serif',
+      display: "'Cormorant Garamond', Georgia, serif",
+      primary: "'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif",
     },
     fontSize: {
       h1: 'clamp(3rem, 10vw, 7.5rem)',

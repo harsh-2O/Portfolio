@@ -9,13 +9,14 @@ export const sectionContainer = css`
   padding-right: max(var(--section-padding-x), env(safe-area-inset-right, 0px));
 `;
 
-/** Standard section with vertical rhythm — no forced viewport heights on mobile/tablet. */
+/** Standard section with vertical rhythm — asymmetric padding avoids double gaps between sections. */
 export const sectionCentered = css`
   ${sectionContainer};
   display: flex;
   flex-direction: column;
-  padding-top: var(--section-padding-y);
-  padding-bottom: var(--section-padding-y);
+  gap: var(--section-inner-gap);
+  padding-top: var(--section-padding-top);
+  padding-bottom: var(--section-padding-bottom);
   position: relative;
   content-visibility: auto;
   contain-intrinsic-size: auto 500px;
@@ -61,6 +62,7 @@ export const cardSurface = css`
 
 /** Responsive heading scale */
 export const headingHero = css`
+  font-family: var(--font-display);
   font-size: var(--text-hero);
   font-weight: 700;
   line-height: 1.12;
@@ -69,13 +71,15 @@ export const headingHero = css`
 
 /** Hero role subline — extra line-height for descenders + gradient text clip */
 export const headingRole = css`
-  font-size: clamp(1rem, 4.5vw, 2.5rem);
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 5vw, 3rem);
   font-weight: 600;
   line-height: 1.3;
   letter-spacing: -0.02em;
 `;
 
 export const headingSection = css`
+  font-family: var(--font-display);
   font-size: var(--text-h1);
   font-weight: 600;
   letter-spacing: -0.03em;

@@ -32,20 +32,28 @@ export const GlobalStyles = css`
     --nav-bg: #1d1d1f;
     --nav-text: #f5f5f7;
     --transition: 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
-    --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    --header-height: 52px;
-    --header-height-scrolled: 48px;
+    --font-display: 'Cormorant Garamond', 'Georgia', 'Times New Roman', serif;
+    --font-primary: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --header-height: 60px;
+    --header-height-scrolled: 56px;
+    --text-nav: 1.125rem;
     --hamburger-color: var(--text-primary);
     --content-max: 1200px;
     --section-padding-x: clamp(1rem, 4vw, 3rem);
-    --section-padding-y: clamp(2.5rem, 7vw, 6rem);
-    --section-padding-y-md: clamp(2rem, 5vw, 3.5rem);
-    --section-gap: clamp(1.5rem, 4vw, 4rem);
-    --text-hero: clamp(2.25rem, calc(5vw + 1.5rem), 7rem);
-    --text-h1: clamp(1.75rem, calc(2vw + 1.25rem), 3rem);
-    --text-h2: clamp(1.25rem, calc(1.5vw + 1rem), 2.25rem);
-    --text-body: clamp(0.9375rem, calc(0.5vw + 0.875rem), 1.125rem);
-    --text-small: clamp(0.8125rem, calc(0.4vw + 0.75rem), 0.9375rem);
+    --section-padding-top: clamp(3rem, 5.5vw, 4.5rem);
+    --section-padding-bottom: clamp(2.25rem, 4vw, 3.25rem);
+    --section-padding-y-md: clamp(2.5rem, 4vw, 3.25rem);
+    --section-header-space: clamp(1.5rem, 3vw, 2.5rem);
+    --section-inner-gap: clamp(1.25rem, 2.5vw, 1.75rem);
+    --section-gap: clamp(1.25rem, 2.5vw, 2rem);
+    --block-gap: clamp(1rem, 2vw, 1.35rem);
+    --footer-padding-top: clamp(2.5rem, 4.5vw, 3.75rem);
+    --footer-padding-bottom: clamp(1.75rem, 3vw, 2.5rem);
+    --text-hero: clamp(2.75rem, calc(6vw + 1.75rem), 8.5rem);
+    --text-h1: clamp(1.875rem, calc(2.2vw + 1.35rem), 3.25rem);
+    --text-h2: clamp(1.375rem, calc(1.75vw + 1rem), 2.5rem);
+    --text-body: clamp(1rem, calc(0.55vw + 0.9rem), 1.1875rem);
+    --text-small: clamp(0.875rem, calc(0.45vw + 0.8rem), 1rem);
     --tech-item-bg: rgba(0, 0, 0, 0.03);
     --tech-item-hover-bg: rgba(0, 0, 0, 0.06);
     --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.03), 0 8px 32px rgba(0, 113, 227, 0.07);
@@ -147,7 +155,7 @@ export const GlobalStyles = css`
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-primary);
+    font-family: var(--font-display);
     font-weight: 700;
     line-height: 1.1;
     letter-spacing: -0.03em;
@@ -253,20 +261,28 @@ export const GlobalStyles = css`
 
   @media (max-width: 1024px) {
     :root {
-      --text-hero: clamp(2rem, calc(5vw + 1.25rem), 3rem);
+      --text-hero: clamp(2.5rem, calc(5.5vw + 1.5rem), 3.5rem);
+      --text-nav: 1rem;
     }
   }
 
   @media (max-width: 768px) {
     :root {
-      --header-height: calc(48px + env(safe-area-inset-top, 0px));
-      --text-hero: clamp(2.125rem, calc(7vw + 1.1rem), 2.75rem);
+      --header-height: calc(56px + env(safe-area-inset-top, 0px));
+      --text-hero: clamp(2.375rem, calc(7.5vw + 1.25rem), 3rem);
       --text-h1: clamp(1.5rem, calc(4vw + 1rem), 2rem);
       --text-h2: clamp(1.125rem, calc(2vw + 0.9rem), 1.5rem);
       --text-body: 1rem;
       --section-padding-x: 1.125rem;
-      --section-padding-y: clamp(2rem, 6vw, 2.75rem);
-      --section-gap: clamp(1.25rem, 4vw, 2rem);
+      --section-padding-top: clamp(2.5rem, 6vw, 3.25rem);
+      --section-padding-bottom: clamp(2rem, 5vw, 2.75rem);
+      --section-padding-y-md: clamp(2.25rem, 5vw, 3rem);
+      --section-header-space: clamp(1.25rem, 3.5vw, 2rem);
+      --section-inner-gap: 1.25rem;
+      --section-gap: clamp(1rem, 3vw, 1.5rem);
+      --block-gap: 1rem;
+      --footer-padding-top: clamp(2rem, 5vw, 2.5rem);
+      --footer-padding-bottom: clamp(1.5rem, 4vw, 2rem);
     }
   }
 
@@ -275,8 +291,15 @@ export const GlobalStyles = css`
       --text-hero: clamp(1.875rem, calc(8vw + 0.85rem), 2.25rem);
       --text-h1: clamp(1.375rem, calc(5vw + 0.85rem), 1.75rem);
       --section-padding-x: 1rem;
-      --section-padding-y: 2rem;
-      --section-gap: 1.25rem;
+      --section-padding-top: 2.25rem;
+      --section-padding-bottom: 2rem;
+      --section-padding-y-md: 2rem;
+      --section-header-space: 1.25rem;
+      --section-inner-gap: 1rem;
+      --section-gap: 1.125rem;
+      --block-gap: 0.875rem;
+      --footer-padding-top: 2rem;
+      --footer-padding-bottom: 1.5rem;
     }
   }
 

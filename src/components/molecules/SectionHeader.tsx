@@ -14,20 +14,19 @@ const Wrapper = styled.div`
   justify-content: space-between;
   align-items: flex-end;
   flex-wrap: wrap;
-  gap: 1.5rem;
-  margin-bottom: clamp(1.5rem, 4vw, 3.5rem);
+  gap: var(--section-inner-gap);
+  margin-bottom: var(--section-header-space);
 
   ${media.md} {
     flex-direction: column;
     align-items: stretch;
-    gap: 1.25rem;
   }
 `;
 
 const TextGroup = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.5rem;
   max-width: 640px;
   min-width: 0;
 `;
@@ -65,6 +64,7 @@ const Subtitle = styled.p`
   font-size: var(--text-body);
   color: var(--text-muted);
   line-height: 1.6;
+  margin-top: 0.125rem;
 `;
 
 const ActionSlot = styled.div`

@@ -91,8 +91,8 @@ const SNIPPETS = [
 
 const Wrapper = styled(motion.div)`
   ${sectionContainer};
-  padding-top: var(--section-padding-y-md);
-  padding-bottom: var(--section-padding-y-md);
+  padding-top: var(--section-padding-top);
+  padding-bottom: var(--section-padding-bottom);
 `;
 
 const Terminal = styled.div`
