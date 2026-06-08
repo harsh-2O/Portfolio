@@ -3,8 +3,8 @@ import styled from '@emotion/styled';
 import { motion } from '../../lib/motion';
 import { projects } from '../../data/projects';
 
-const ProjectModal = lazy(() => import('../ui/ProjectModal'));
-import SectionHeader from '../ui/SectionHeader';
+const ProjectModal = lazy(() => import('./ProjectModal'));
+import SectionHeader from '../molecules/SectionHeader';
 import { fadeUp } from '../../styles/animations';
 import { sectionBand, sectionCentered } from '../../styles/layout';
 import type { Project } from '../../types';

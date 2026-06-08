@@ -1,17 +1,17 @@
 import { lazy, Suspense } from 'react';
 import { LazyMotion, domAnimation } from '../../lib/motion';
-import SectionFallback from '../ui/SectionFallback';
-import LazyWhenVisible from '../ui/LazyWhenVisible';
+import SectionFallback from '../atoms/SectionFallback';
+import LazyWhenVisible from '../molecules/LazyWhenVisible';
 
-const ResumeSection = lazy(() => import('../sections/ResumeSection'));
-const CertificationsSection = lazy(() => import('../sections/CertificationsSection'));
-const SkillsSection = lazy(() => import('../sections/SkillsSection'));
-const DevTerminal = lazy(() => import('../ui/DevTerminal'));
-const ProjectsSection = lazy(() => import('../sections/ProjectsSection'));
-const MarqueeBanner = lazy(() => import('../sections/MarqueeBanner'));
-const BlogSection = lazy(() => import('../sections/BlogSection'));
-const TestimonialsSection = lazy(() => import('../sections/TestimonialsSection'));
-const FooterSection = lazy(() => import('../sections/FooterSection'));
+const ResumeSection = lazy(() => import('../organisms/ResumeSection'));
+const CertificationsSection = lazy(() => import('../organisms/CertificationsSection'));
+const SkillsSection = lazy(() => import('../organisms/SkillsSection'));
+const DevTerminal = lazy(() => import('../organisms/DevTerminal'));
+const ProjectsSection = lazy(() => import('../organisms/ProjectsSection'));
+const MarqueeBanner = lazy(() => import('../organisms/MarqueeBanner'));
+const BlogSection = lazy(() => import('../organisms/BlogSection'));
+const TestimonialsSection = lazy(() => import('../organisms/TestimonialsSection'));
+const FooterSection = lazy(() => import('../organisms/FooterSection'));
 
 /** Below-fold content — defers framer-motion and section chunks until needed. */
 export default function BelowFold() {

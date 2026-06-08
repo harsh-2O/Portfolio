@@ -1,14 +1,14 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
-import Header from '../components/layout/Header';
-import ScrollChrome from '../components/layout/ScrollChrome';
-import HeroSection from '../components/sections/HeroSection';
-import SectionFallback from '../components/ui/SectionFallback';
+import Header from '../components/organisms/Header';
+import ScrollChrome from '../components/organisms/ScrollChrome';
+import HeroSection from '../components/organisms/HeroSection';
+import SectionFallback from '../components/atoms/SectionFallback';
 import { useHeroAnimation } from '../hooks/useHeroAnimation';
 import { useScrollSpy } from '../hooks/useScrollSpy';
 import { useScrollChrome } from '../hooks/useScrollChrome';
 
-const BelowFold = lazy(() => import('../components/layout/BelowFold'));
+const BelowFold = lazy(() => import('../components/templates/BelowFold'));
 
 const Page = styled.div`
   width: 100%;

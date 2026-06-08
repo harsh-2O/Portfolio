@@ -34,11 +34,11 @@ export default defineConfig({
             if (id.includes('react-intersection-observer')) return 'vendor-observe';
           }
           if (id.includes('/src/data/blog')) return 'content-blog';
-          if (id.includes('/src/components/ui/DevTerminal')) return 'feature-terminal';
-          if (id.includes('/src/components/ui/ProjectModal') || id.includes('/src/components/ui/BlogModal')) {
+          if (id.includes('/src/components/organisms/DevTerminal')) return 'feature-terminal';
+          if (id.includes('/src/components/organisms/ProjectModal') || id.includes('/src/components/organisms/BlogModal')) {
             return 'feature-modals';
           }
-          if (id.includes('/src/components/layout/BelowFold')) return 'feature-below-fold';
+          if (id.includes('/src/components/templates/BelowFold')) return 'feature-below-fold';
         },
       },
     },

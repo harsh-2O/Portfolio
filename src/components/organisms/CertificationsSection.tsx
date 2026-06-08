@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { motion } from '../../lib/motion';
-import SectionHeader from '../ui/SectionHeader';
+import SectionHeader from '../molecules/SectionHeader';
 import { certifications } from '../../data/certifications';
 import { fadeUp, staggerContainer } from '../../styles/animations';
 import { sectionContainer } from '../../styles/layout';

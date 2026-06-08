@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
-import ThemeToggle from '../ui/ThemeToggle';
+import ThemeToggle from '../atoms/ThemeToggle';
 import type { NavSection } from '../../types';
 
 interface HeaderProps {

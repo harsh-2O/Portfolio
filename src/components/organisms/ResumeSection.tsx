@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { motion } from '../../lib/motion';
-import ExperienceSection from '../ExperienceSection';
-import SectionHeader from '../ui/SectionHeader';
+import ExperienceSection from './ExperienceSection';
+import SectionHeader from '../molecules/SectionHeader';
 import { experienceSections } from '../../data/experience';
 import { fadeUp } from '../../styles/animations';
 import { sectionBand, sectionCentered } from '../../styles/layout';

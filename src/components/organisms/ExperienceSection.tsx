@@ -4,9 +4,9 @@
  */
 import { useEffect } from 'react';
 import styled from '@emotion/styled';
-import { motion, useAnimation } from '../lib/motion';
+import { motion, useAnimation } from '../../lib/motion';
 import { useInView } from 'react-intersection-observer';
-import type { ExperienceSectionData, TimelineItem } from '../types';
+import type { ExperienceSectionData, TimelineItem } from '../../types';
 
 const Section = styled.section`
   width: 100%;

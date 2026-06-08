@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from '@emotion/styled';
 import { motion, AnimatePresence } from '../../lib/motion';
-import SectionHeader from '../ui/SectionHeader';
+import SectionHeader from '../molecules/SectionHeader';
 import { skillCategories } from '../../data/skills';
 import type { Skill } from '../../data/skills';
 import { fadeUp, staggerContainer } from '../../styles/animations';

@@ -2,9 +2,9 @@ import { lazy, Suspense, useState } from 'react';
 import styled from '@emotion/styled';
 import { motion } from '../../lib/motion';
 import { blogPosts } from '../../data/blog';
-import SectionHeader from '../ui/SectionHeader';
+import SectionHeader from '../molecules/SectionHeader';
 
-const BlogModal = lazy(() => import('../ui/BlogModal'));
+const BlogModal = lazy(() => import('./BlogModal'));
 import { fadeUp } from '../../styles/animations';
 import { sectionBand, sectionCentered } from '../../styles/layout';
 import { hideScrollbar } from '../../styles/hideScrollbar';

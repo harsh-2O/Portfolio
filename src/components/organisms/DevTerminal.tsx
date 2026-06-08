@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { motion, AnimatePresence } from '../../lib/motion';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
-import SectionHeader from './SectionHeader';
+import SectionHeader from '../molecules/SectionHeader';
 import { sectionContainer } from '../../styles/layout';
 
 const SNIPPETS = [
