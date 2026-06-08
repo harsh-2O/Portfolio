@@ -8,16 +8,18 @@ const marqueeScroll = keyframes`
 
 const Banner = styled.div`
   width: 100%;
-  height: clamp(64px, 10vw, 120px);
+  height: clamp(56px, 8vw, 88px);
   display: flex;
   align-items: center;
   overflow: hidden;
   overflow-x: clip;
   background: var(--marquee-bg);
-  color: #fff;
+  color: var(--accent-light);
   margin: 0;
   position: relative;
   isolation: isolate;
+  border-top: 1px solid var(--card-border);
+  border-bottom: 1px solid var(--card-border);
 
   &::before,
   &::after {
@@ -32,19 +34,19 @@ const Banner = styled.div`
 
   &::before {
     left: 0;
-    background: linear-gradient(90deg, rgba(0, 0, 0, 0.35), transparent);
+    background: linear-gradient(90deg, var(--marquee-bg), transparent);
   }
 
   &::after {
     right: 0;
-    background: linear-gradient(270deg, rgba(0, 0, 0, 0.35), transparent);
+    background: linear-gradient(270deg, var(--marquee-bg), transparent);
   }
 `;
 
 const Track = styled.div`
   display: flex;
   width: max-content;
-  animation: ${marqueeScroll} 80s linear infinite;
+  animation: ${marqueeScroll} 90s linear infinite;
   will-change: transform;
 
   @media (prefers-reduced-motion: reduce) {
@@ -57,29 +59,32 @@ const Track = styled.div`
 
 const Text = styled.span`
   white-space: nowrap;
-  font-size: clamp(0.9rem, 2.8vw, 3.5rem);
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  padding-right: 3rem;
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 2.5vw, 2.25rem);
+  font-weight: 500;
+  font-style: italic;
+  letter-spacing: 0.02em;
+  padding-right: 4rem;
   flex-shrink: 0;
+  opacity: 0.92;
 
   @media (max-width: 480px) {
-    font-size: clamp(0.85rem, 3.5vw, 1.1rem);
-    padding-right: 2rem;
+    font-size: clamp(0.95rem, 3vw, 1.15rem);
+    padding-right: 2.5rem;
   }
 
   @media (prefers-reduced-motion: reduce) {
     white-space: normal;
     text-align: center;
     font-size: var(--text-small);
-    font-weight: 500;
+    font-style: normal;
     line-height: 1.4;
     padding-right: 0;
   }
 `;
 
 const MARQUEE_TEXT =
-  'Low-latency market data · Production RAG systems · C++ alpha frameworks · Global exchange integrations · AI/ML pipelines · Quant tooling · ';
+  'Market data infrastructure · Alpha frameworks · Production RAG · Global exchange integrations · AI/ML pipelines · Quant tooling · ';
 
 export default function MarqueeBanner() {
   return (

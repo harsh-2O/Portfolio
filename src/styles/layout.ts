@@ -59,27 +59,31 @@ export const cardSurface = css`
   -webkit-backdrop-filter: blur(12px);
 `;
 
-/** Responsive heading scale */
+/** Responsive heading scale — display serif for editorial luxury feel */
 export const headingHero = css`
+  font-family: var(--font-display);
   font-size: var(--text-hero);
-  font-weight: 700;
-  line-height: 1.12;
-  letter-spacing: -0.045em;
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
 `;
 
-/** Hero role subline — extra line-height for descenders + gradient text clip */
+/** Hero role subline */
 export const headingRole = css`
-  font-size: clamp(1rem, 4.5vw, 2.5rem);
-  font-weight: 600;
-  line-height: 1.3;
-  letter-spacing: -0.02em;
+  font-family: var(--font-display);
+  font-size: clamp(1.125rem, 4.5vw, 2.75rem);
+  font-weight: 500;
+  font-style: italic;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
 `;
 
 export const headingSection = css`
+  font-family: var(--font-display);
   font-size: var(--text-h1);
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
 `;
 
 export const bodyText = css`

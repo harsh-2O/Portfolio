@@ -8,31 +8,43 @@ export const GlobalStyles = css`
   }
 
   :root {
-    --accent: #0071e3;
-    --accent-purple: #5856d6;
-    --accent-teal: #32ade6;
-    --accent-violet: #af52de;
-    --accent-green: #34c759;
-    --accent-gradient: linear-gradient(135deg, #0071e3 0%, #5856d6 55%, #af52de 100%);
-    --primary: #1d1d1f;
-    --primary-rgb: 29, 29, 31;
-    --secondary: #fbfbfd;
-    --text-primary: #1d1d1f;
-    --text-secondary: #f5f5f7;
-    --text-muted: #86868b;
-    --background: #f5f5f7;
-    --background-top: #fbfbfd;
-    --surface: rgba(255, 255, 255, 0.78);
-    --surface-elevated: rgba(255, 255, 255, 0.92);
-    --glow-color: rgba(0, 113, 227, 0.12);
-    --accent-subtle: rgba(0, 113, 227, 0.07);
-    --accent-line: rgba(0, 113, 227, 0.28);
-    --header-bg: rgba(251, 251, 253, 0.82);
-    --header-shadow: rgba(0, 0, 0, 0.06);
-    --nav-bg: #1d1d1f;
-    --nav-text: #f5f5f7;
-    --transition: 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
-    --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    /* Old-money palette — parchment, charcoal, champagne gold */
+    --gold: #b8956a;
+    --gold-light: #d4b87a;
+    --gold-muted: rgba(184, 149, 106, 0.55);
+    --navy: #1a2744;
+    --navy-deep: #0f1829;
+
+    --accent: var(--gold);
+    --accent-light: var(--gold-light);
+    --accent-purple: #4a5568;
+    --accent-teal: #5c6b7a;
+    --accent-violet: #6b5b4f;
+    --accent-green: #5a7a62;
+    --accent-gradient: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 55%, #8a7048 100%);
+
+    --primary: #141210;
+    --primary-rgb: 20, 18, 16;
+    --secondary: #f5f0e8;
+    --text-primary: #141210;
+    --text-secondary: #f5f0e8;
+    --text-muted: #6b6560;
+    --background: #f3ede4;
+    --background-top: #faf7f2;
+    --surface: rgba(255, 252, 247, 0.82);
+    --surface-elevated: rgba(255, 253, 249, 0.94);
+    --glow-color: rgba(184, 149, 106, 0.1);
+    --accent-subtle: rgba(184, 149, 106, 0.08);
+    --accent-line: rgba(184, 149, 106, 0.35);
+    --header-bg: rgba(250, 247, 242, 0.88);
+    --header-shadow: rgba(20, 18, 16, 0.08);
+    --nav-bg: var(--navy-deep);
+    --nav-text: #f5f0e8;
+    --transition: 0.45s cubic-bezier(0.25, 0.1, 0.25, 1);
+
+    --font-display: 'Cormorant Garamond', 'Georgia', 'Times New Roman', serif;
+    --font-primary: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
     --header-height: 52px;
     --header-height-scrolled: 48px;
     --hamburger-color: var(--text-primary);
@@ -41,65 +53,69 @@ export const GlobalStyles = css`
     --section-padding-y: clamp(2.5rem, 7vw, 6rem);
     --section-padding-y-md: clamp(2rem, 5vw, 3.5rem);
     --section-gap: clamp(1.5rem, 4vw, 4rem);
-    --text-hero: clamp(2.25rem, calc(5vw + 1.5rem), 7rem);
-    --text-h1: clamp(1.75rem, calc(2vw + 1.25rem), 3rem);
+    --text-hero: clamp(2.5rem, calc(5.5vw + 1.5rem), 7.5rem);
+    --text-h1: clamp(1.875rem, calc(2vw + 1.25rem), 3.25rem);
     --text-h2: clamp(1.25rem, calc(1.5vw + 1rem), 2.25rem);
-    --text-body: clamp(0.9375rem, calc(0.5vw + 0.875rem), 1.125rem);
-    --text-small: clamp(0.8125rem, calc(0.4vw + 0.75rem), 0.9375rem);
-    --tech-item-bg: rgba(0, 0, 0, 0.03);
-    --tech-item-hover-bg: rgba(0, 0, 0, 0.06);
-    --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.03), 0 8px 32px rgba(0, 113, 227, 0.07);
-    --card-shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.04), 0 16px 48px rgba(0, 113, 227, 0.12);
-    --card-border: rgba(0, 0, 0, 0.07);
-    --card-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+    --text-body: clamp(0.9375rem, calc(0.5vw + 0.875rem), 1.0625rem);
+    --text-small: clamp(0.75rem, calc(0.4vw + 0.7rem), 0.8125rem);
+    --text-label: 0.6875rem;
+
+    --tech-item-bg: rgba(20, 18, 16, 0.03);
+    --tech-item-hover-bg: rgba(20, 18, 16, 0.06);
+    --card-shadow: 0 1px 2px rgba(20, 18, 16, 0.04), 0 8px 32px rgba(20, 18, 16, 0.06);
+    --card-shadow-hover: 0 4px 16px rgba(20, 18, 16, 0.06), 0 16px 48px rgba(184, 149, 106, 0.12);
+    --card-border: rgba(20, 18, 16, 0.09);
+    --card-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.9);
     --section-band: linear-gradient(
       135deg,
-      rgba(0, 113, 227, 0.045) 0%,
-      rgba(88, 86, 214, 0.035) 45%,
-      rgba(50, 173, 230, 0.03) 100%
+      rgba(184, 149, 106, 0.04) 0%,
+      rgba(26, 39, 68, 0.03) 50%,
+      rgba(184, 149, 106, 0.025) 100%
     );
-    --marquee-bg: linear-gradient(135deg, #0071e3 0%, #5856d6 50%, #1d1d1f 100%);
-    --divider: linear-gradient(90deg, transparent, var(--accent-line) 20%, var(--accent-line) 80%, transparent);
-    --focus-ring: 0 0 0 3px rgba(0, 113, 227, 0.4);
-    --scrollbar-thumb: rgba(0, 0, 0, 0.18);
-    --scrollbar-thumb-hover: rgba(0, 0, 0, 0.32);
+    --marquee-bg: linear-gradient(180deg, #0f0e0c 0%, #141210 100%);
+    --divider: linear-gradient(90deg, transparent, var(--accent-line) 15%, var(--accent-line) 85%, transparent);
+    --focus-ring: 0 0 0 2px rgba(184, 149, 106, 0.45);
+    --scrollbar-thumb: rgba(20, 18, 16, 0.18);
+    --scrollbar-thumb-hover: rgba(20, 18, 16, 0.32);
+    --radius-sharp: 2px;
+    --radius-soft: 0.5rem;
   }
 
   :root.dark {
-    --primary: #f5f5f7;
-    --primary-rgb: 245, 245, 247;
-    --secondary: #000000;
-    --text-primary: #f5f5f7;
-    --text-secondary: #1d1d1f;
-    --text-muted: #a1a1a6;
-    --background: #000000;
-    --background-top: #000000;
-    --surface: rgba(28, 28, 30, 0.72);
-    --surface-elevated: rgba(38, 38, 40, 0.9);
-    --glow-color: rgba(0, 113, 227, 0.12);
-    --accent-subtle: rgba(0, 113, 227, 0.1);
-    --accent-line: rgba(0, 113, 227, 0.35);
-    --header-bg: rgba(0, 0, 0, 0.8);
-    --header-shadow: rgba(255, 255, 255, 0.04);
-    --nav-bg: #f5f5f7;
-    --nav-text: #1d1d1f;
-    --tech-item-bg: rgba(255, 255, 255, 0.06);
-    --tech-item-hover-bg: rgba(255, 255, 255, 0.1);
-    --card-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
-    --card-shadow-hover: 0 12px 40px rgba(0, 113, 227, 0.15);
-    --card-border: rgba(255, 255, 255, 0.08);
-    --card-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    --primary: #f5f0e8;
+    --primary-rgb: 245, 240, 232;
+    --secondary: #080808;
+    --text-primary: #f5f0e8;
+    --text-secondary: #141210;
+    --text-muted: #9a948c;
+    --background: #080808;
+    --background-top: #0a0a0a;
+    --surface: rgba(18, 17, 15, 0.85);
+    --surface-elevated: rgba(24, 22, 19, 0.94);
+    --glow-color: rgba(212, 184, 122, 0.08);
+    --accent-subtle: rgba(212, 184, 122, 0.1);
+    --accent-line: rgba(212, 184, 122, 0.32);
+    --header-bg: rgba(8, 8, 8, 0.92);
+    --header-shadow: rgba(212, 184, 122, 0.12);
+    --nav-bg: #f5f0e8;
+    --nav-text: #141210;
+    --tech-item-bg: rgba(245, 240, 232, 0.04);
+    --tech-item-hover-bg: rgba(245, 240, 232, 0.07);
+    --card-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
+    --card-shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(212, 184, 122, 0.15);
+    --card-border: rgba(212, 184, 122, 0.12);
+    --card-highlight: inset 0 1px 0 rgba(212, 184, 122, 0.08);
     --section-band: linear-gradient(
       135deg,
-      rgba(0, 113, 227, 0.07) 0%,
-      rgba(88, 86, 214, 0.05) 45%,
-      rgba(175, 82, 222, 0.04) 100%
+      rgba(212, 184, 122, 0.04) 0%,
+      rgba(26, 39, 68, 0.06) 50%,
+      rgba(212, 184, 122, 0.03) 100%
     );
-    --marquee-bg: linear-gradient(135deg, #0071e3 0%, #5856d6 45%, #000000 100%);
-    --divider: linear-gradient(90deg, transparent, var(--accent-line) 20%, var(--accent-line) 80%, transparent);
-    --focus-ring: 0 0 0 3px rgba(0, 113, 227, 0.5);
-    --scrollbar-thumb: rgba(255, 255, 255, 0.18);
-    --scrollbar-thumb-hover: rgba(255, 255, 255, 0.32);
+    --marquee-bg: linear-gradient(180deg, #050505 0%, #0a0a0a 100%);
+    --divider: linear-gradient(90deg, transparent, var(--accent-line) 15%, var(--accent-line) 85%, transparent);
+    --focus-ring: 0 0 0 2px rgba(212, 184, 122, 0.5);
+    --scrollbar-thumb: rgba(245, 240, 232, 0.16);
+    --scrollbar-thumb-hover: rgba(245, 240, 232, 0.28);
   }
 
   html {
@@ -122,20 +138,21 @@ export const GlobalStyles = css`
     font-family: var(--font-primary);
     background-color: var(--background);
     background-image:
-      radial-gradient(ellipse 100% 70% at 50% -15%, var(--glow-color), transparent 60%),
-      radial-gradient(ellipse 45% 35% at 0% 30%, rgba(88, 86, 214, 0.05), transparent 55%),
-      radial-gradient(ellipse 40% 30% at 100% 60%, rgba(0, 113, 227, 0.04), transparent 50%),
-      linear-gradient(180deg, var(--background-top) 0%, var(--background) 55%, var(--background) 100%);
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E"),
+      radial-gradient(ellipse 90% 60% at 50% -10%, var(--glow-color), transparent 55%),
+      radial-gradient(ellipse 40% 30% at 100% 20%, rgba(26, 39, 68, 0.06), transparent 50%),
+      linear-gradient(180deg, var(--background-top) 0%, var(--background) 60%, var(--background) 100%);
     background-attachment: fixed;
     color: var(--text-primary);
-    line-height: 1.5;
+    line-height: 1.55;
     width: 100%;
     max-width: 100%;
     overflow-x: clip;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     transition: background-color var(--transition), color var(--transition);
-    letter-spacing: -0.02em;
+    letter-spacing: 0.01em;
+    font-weight: 400;
     scrollbar-width: none;
     -ms-overflow-style: none;
   }
@@ -147,10 +164,10 @@ export const GlobalStyles = css`
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-primary);
-    font-weight: 700;
-    line-height: 1.1;
-    letter-spacing: -0.03em;
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
   }
 
   a {
@@ -171,7 +188,7 @@ export const GlobalStyles = css`
   a:focus-visible {
     outline: none;
     box-shadow: var(--focus-ring);
-    border-radius: 4px;
+    border-radius: var(--radius-sharp);
   }
 
   img {
@@ -181,11 +198,10 @@ export const GlobalStyles = css`
   }
 
   ::selection {
-    background-color: var(--accent);
-    color: #fff;
+    background-color: var(--gold);
+    color: #141210;
   }
 
-  /* Subtle scrollbars — thin, fade-in on hover */
   * {
     scrollbar-width: thin;
     scrollbar-color: transparent transparent;
@@ -224,10 +240,13 @@ export const GlobalStyles = css`
     left: 1rem;
     z-index: 1000;
     padding: 0.75rem 1.25rem;
-    background: var(--accent);
-    color: #fff;
-    border-radius: 0.5rem;
+    background: var(--gold);
+    color: #141210;
+    border-radius: var(--radius-sharp);
     font-weight: 500;
+    font-size: var(--text-small);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
   }
 
   .skip-link:focus {
@@ -253,7 +272,7 @@ export const GlobalStyles = css`
 
   @media (max-width: 1024px) {
     :root {
-      --text-hero: clamp(2rem, calc(5vw + 1.25rem), 3rem);
+      --text-hero: clamp(2.25rem, calc(5vw + 1.25rem), 3.25rem);
     }
   }
 
@@ -261,7 +280,7 @@ export const GlobalStyles = css`
     :root {
       --header-height: calc(48px + env(safe-area-inset-top, 0px));
       --text-hero: clamp(2.125rem, calc(7vw + 1.1rem), 2.75rem);
-      --text-h1: clamp(1.5rem, calc(4vw + 1rem), 2rem);
+      --text-h1: clamp(1.625rem, calc(4vw + 1rem), 2rem);
       --text-h2: clamp(1.125rem, calc(2vw + 0.9rem), 1.5rem);
       --text-body: 1rem;
       --section-padding-x: 1.125rem;
@@ -272,8 +291,8 @@ export const GlobalStyles = css`
 
   @media (max-width: 480px) {
     :root {
-      --text-hero: clamp(1.875rem, calc(8vw + 0.85rem), 2.25rem);
-      --text-h1: clamp(1.375rem, calc(5vw + 0.85rem), 1.75rem);
+      --text-hero: clamp(2rem, calc(8vw + 0.85rem), 2.25rem);
+      --text-h1: clamp(1.5rem, calc(5vw + 0.85rem), 1.75rem);
       --section-padding-x: 1rem;
       --section-padding-y: 2rem;
       --section-gap: 1.25rem;

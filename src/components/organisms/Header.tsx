@@ -64,10 +64,12 @@ const HeaderContainer = styled.header<{ $scrolled: boolean }>`
 
 const Logo = styled.button`
   justify-self: start;
-  font-size: clamp(0.75rem, 2.5vw, 0.8125rem);
-  font-weight: 500;
+  font-family: var(--font-display);
+  font-size: clamp(0.875rem, 2.5vw, 1rem);
+  font-weight: 600;
   color: var(--text-primary);
-  letter-spacing: -0.01em;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   opacity: 0.88;
   transition: opacity var(--transition);
   background: none;
@@ -94,9 +96,11 @@ const DesktopNav = styled.nav`
 `;
 
 const NavLink = styled.button<{ $active?: boolean; $mobile?: boolean }>`
-  font-size: ${({ $mobile }) => ($mobile ? 'clamp(1.25rem, 5vw, 1.65rem)' : '0.75rem')};
-  font-weight: ${({ $mobile }) => ($mobile ? 500 : 400)};
-  letter-spacing: ${({ $mobile }) => ($mobile ? '-0.03em' : '-0.01em')};
+  font-size: ${({ $mobile }) => ($mobile ? 'clamp(1.25rem, 5vw, 1.65rem)' : 'var(--text-label)')};
+  font-weight: ${({ $mobile }) => ($mobile ? 500 : 600)};
+  letter-spacing: ${({ $mobile }) => ($mobile ? '-0.02em' : '0.12em')};
+  text-transform: ${({ $mobile }) => ($mobile ? 'none' : 'uppercase')};
+  font-family: var(--font-primary);
   color: var(--text-primary);
   opacity: ${({ $active, $mobile }) => {
     if ($mobile) return $active ? 1 : 0.4;
@@ -123,7 +127,7 @@ const NavLink = styled.button<{ $active?: boolean; $mobile?: boolean }>`
     left: 0;
     right: 0;
     height: 1px;
-    background: var(--accent-gradient);
+    background: var(--accent);
     transform: scaleX(${({ $active }) => ($active ? 1 : 0)});
     transition: transform 0.3s ease;
   }

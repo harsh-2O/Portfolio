@@ -25,6 +25,7 @@ Pages live in `src/pages/` and wire templates + organisms together.
 |-----------|------|
 | `SectionHeader` | Label + title + subtitle block |
 | `LazyWhenVisible` | IntersectionObserver lazy-mount gate |
+| `CredibilityStrip` | Finance-style metrics stat bar |
 
 ## Organisms
 

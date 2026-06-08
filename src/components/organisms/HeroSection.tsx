@@ -5,12 +5,13 @@ import styled from '@emotion/styled';
 import { keyframes } from '@emotion/react';
 import { CONTACT } from '../../config/site';
 import type { useHeroAnimation } from '../../hooks/useHeroAnimation';
+import CredibilityStrip from '../molecules/CredibilityStrip';
 import { sectionContainer, headingHero, headingRole } from '../../styles/layout';
 import { media } from '../../styles/mixins';
 
 type HeroRefs = ReturnType<typeof useHeroAnimation>;
 
-const HERO_BADGES = ['Graviton Research', 'MS AI · Texas A&M', '2× GCP Certified'];
+const HERO_BADGES = ['Low-Latency Systems', 'Production AI / RAG', 'Quant Infrastructure'];
 
 const heroFadeUp = keyframes`
   from { opacity: 0; transform: translateY(12px); }
@@ -94,10 +95,12 @@ const Orb = styled.div<{ $x: string; $y: string; $size: string; $delay: string; 
 const Grid = styled.div`
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(circle, var(--card-border) 1px, transparent 1px);
-  background-size: 28px 28px;
-  opacity: 0.35;
-  mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 20%, transparent 75%);
+  background-image:
+    linear-gradient(var(--card-border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--card-border) 1px, transparent 1px);
+  background-size: 48px 48px;
+  opacity: 0.25;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 15%, transparent 75%);
 `;
 
 const Content = styled.div`
@@ -112,11 +115,11 @@ const Content = styled.div`
 const Eyebrow = styled.div`
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: var(--text-small);
-  font-weight: 500;
+  gap: 0.65rem;
+  font-size: var(--text-label);
+  font-weight: 600;
   color: var(--accent);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   width: fit-content;
   animation: ${heroFadeUp} 0.6s ease 0.1s both;
@@ -127,10 +130,11 @@ const Eyebrow = styled.div`
 `;
 
 const LiveDot = styled.span`
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background: var(--accent);
+  box-shadow: 0 0 6px var(--accent);
   animation: pulse 2s ease-in-out infinite;
 
   @keyframes pulse {
@@ -188,7 +192,7 @@ const ChangingText = styled.span`
   word-break: break-word;
   line-height: 1.25;
   padding-bottom: 0.1em;
-  background: linear-gradient(135deg, var(--text-primary) 30%, var(--accent) 100%);
+  background: linear-gradient(135deg, var(--text-primary) 20%, var(--accent-light) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -204,25 +208,25 @@ const BadgeRow = styled.div`
   margin-top: 0.25rem;
 `;
 
-const BADGE_ACCENTS = ['#0071e3', '#5856d6', '#32ade6'];
+const BADGE_ACCENTS = ['#d4b87a', '#b8956a', '#8a7048'];
 
 const Badge = styled.span<{ $accent: string }>`
-  font-size: var(--text-small);
-  font-weight: 500;
-  padding: 0.4rem 0.75rem;
+  font-size: var(--text-label);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.45rem 0.85rem;
   max-width: 100%;
-  border-radius: 100px;
-  border: 1px solid ${({ $accent }) => `${$accent}35`};
-  background: ${({ $accent }) => `${$accent}10`};
+  border-radius: var(--radius-sharp);
+  border: 1px solid ${({ $accent }) => `${$accent}40`};
+  background: transparent;
   color: var(--text-muted);
-  backdrop-filter: blur(8px);
-  box-shadow: var(--card-highlight);
-  transition: border-color var(--transition), color var(--transition), box-shadow var(--transition);
+  transition: border-color var(--transition), color var(--transition), background var(--transition);
 
   &:hover {
     border-color: ${({ $accent }) => $accent};
     color: ${({ $accent }) => $accent};
-    box-shadow: 0 2px 12px ${({ $accent }) => `${$accent}25`}, var(--card-highlight);
+    background: ${({ $accent }) => `${$accent}08`};
   }
 `;
 
@@ -258,10 +262,11 @@ const ContactInfo = styled.div`
   min-width: 0;
 
   h3 {
+    font-family: var(--font-display);
     font-size: var(--text-h2);
-    font-weight: 600;
+    font-weight: 500;
     margin-bottom: 0.75rem;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.01em;
   }
 `;
 
@@ -307,15 +312,15 @@ export default function HeroSection(refs: HeroRefs) {
     <MainContent id="main-section">
       <Ambient aria-hidden="true">
         <Grid />
-        <Orb $x="75%" $y="5%" $size="min(420px, 55vw)" $delay="0s" $color="rgba(0, 113, 227, 0.14)" />
-        <Orb $x="-5%" $y="60%" $size="min(300px, 40vw)" $delay="-4s" $color="rgba(88, 86, 214, 0.1)" />
-        <Orb $x="40%" $y="80%" $size="min(200px, 30vw)" $delay="-8s" $color="rgba(0, 113, 227, 0.08)" className="hero-orb-third" />
+        <Orb $x="75%" $y="5%" $size="min(420px, 55vw)" $delay="0s" $color="rgba(212, 184, 122, 0.1)" />
+        <Orb $x="-5%" $y="60%" $size="min(300px, 40vw)" $delay="-4s" $color="rgba(26, 39, 68, 0.12)" />
+        <Orb $x="40%" $y="80%" $size="min(200px, 30vw)" $delay="-8s" $color="rgba(184, 149, 106, 0.07)" className="hero-orb-third" />
       </Ambient>
 
       <Content>
         <Eyebrow>
           <LiveDot />
-          Portfolio · 2026
+          Finance · AI · Systems
         </Eyebrow>
 
         <Title>
@@ -333,6 +338,8 @@ export default function HeroSection(refs: HeroRefs) {
             </Badge>
           ))}
         </BadgeRow>
+
+        <CredibilityStrip />
       </Content>
 
       <ContactSection>
@@ -344,8 +351,8 @@ export default function HeroSection(refs: HeroRefs) {
           </ContactLinks>
         </ContactInfo>
         <Description ref={refs.descriptionRef}>
-          Quant Tools Developer at Graviton Research Capital — building trading systems,
-          market data infrastructure, and AI-powered tooling across 12 global exchanges.
+          Building the infrastructure behind modern markets — low-latency trading systems,
+          production AI pipelines, and quant tooling across global exchanges.
         </Description>
       </ContactSection>
     </MainContent>

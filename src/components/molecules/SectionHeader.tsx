@@ -27,7 +27,7 @@ const Wrapper = styled.div`
 const TextGroup = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.75rem;
   max-width: 640px;
   min-width: 0;
 `;
@@ -35,36 +35,34 @@ const TextGroup = styled.div`
 const Label = styled.span`
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: var(--text-small);
+  gap: 0.65rem;
+  font-family: var(--font-primary);
+  font-size: var(--text-label);
   font-weight: 600;
   color: var(--accent);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   width: fit-content;
 
   &::before {
     content: '';
-    width: 20px;
-    height: 2px;
-    border-radius: 2px;
-    background: var(--accent-gradient);
+    width: 24px;
+    height: 1px;
+    background: var(--accent);
   }
 `;
 
 const Title = styled.h2`
   ${headingSection};
-  background: linear-gradient(135deg, var(--text-primary) 70%, var(--accent) 160%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--text-primary);
   padding-bottom: 0.04em;
 `;
 
 const Subtitle = styled.p`
   font-size: var(--text-body);
   color: var(--text-muted);
-  line-height: 1.6;
+  line-height: 1.65;
+  max-width: 52ch;
 `;
 
 const ActionSlot = styled.div`

@@ -33,7 +33,7 @@ const Grid = styled.div`
 const Card = styled(motion.div)<{ $accent: string }>`
   display: flex;
   flex-direction: column;
-  border-radius: 1.5rem;
+  border-radius: var(--radius-soft);
   border: 1px solid var(--card-border);
   background: var(--surface-elevated);
   box-shadow: var(--card-shadow), var(--card-highlight);

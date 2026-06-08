@@ -30,7 +30,7 @@ const Grid = styled(motion.div)`
 
 const Category = styled(motion.div)<{ $accent: string }>`
   padding: clamp(1.25rem, 3vw, 2rem);
-  border-radius: 1.5rem;
+  border-radius: var(--radius-soft);
   background: var(--surface-elevated);
   border: 1px solid var(--card-border);
   box-shadow: var(--card-shadow);
