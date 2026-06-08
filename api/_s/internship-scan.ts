@@ -27,9 +27,9 @@ export default async function handler(req: Req, res: Res) {
     });
   }
 
-  if (!process.env.RESEND_API_KEY && !process.env.MS_CLIENT_ID) {
+  if (!process.env.RESEND_API_KEY) {
     return res.status(500).json({
-      error: 'Missing email config. Set RESEND_API_KEY or Microsoft Graph credentials.',
+      error: 'Missing RESEND_API_KEY on Vercel. Emails go to hdmehta406@gmail.com via Resend.',
     });
   }
 
@@ -42,7 +42,7 @@ export default async function handler(req: Req, res: Res) {
     let fresh = splitNewJobs(jobs, seen);
 
     if (!hasDedupStore) {
-      const cutoff = Date.now() - 3 * 60 * 60 * 1000;
+      const cutoff = Date.now() - 24 * 60 * 60 * 1000;
       fresh = fresh.filter((job) => {
         if (!job.postedAt) return false;
         return new Date(job.postedAt).getTime() >= cutoff;

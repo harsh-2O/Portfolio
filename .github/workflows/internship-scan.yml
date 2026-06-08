@@ -1,3 +1,4 @@
+# Hourly scan via GitHub Actions (Vercel Hobby only allows daily crons).
 name: Internship scan
 
 on:
