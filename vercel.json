@@ -1,9 +1,4 @@
 {
-  "functions": {
-    "api/internship-scan.ts": {
-      "maxDuration": 60
-    }
-  },
   "headers": [
     {
       "source": "/assets/(.*)",

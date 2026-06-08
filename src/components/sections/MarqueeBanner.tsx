@@ -1,5 +1,10 @@
 import styled from '@emotion/styled';
-import { media } from '../../styles/mixins';
+import { keyframes } from '@emotion/react';
+
+const marqueeScroll = keyframes`
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+`;
 
 const Banner = styled.div`
   width: 100%;
@@ -39,13 +44,8 @@ const Banner = styled.div`
 const Track = styled.div`
   display: flex;
   width: max-content;
-  animation: marquee 80s linear infinite;
+  animation: ${marqueeScroll} 80s linear infinite;
   will-change: transform;
-
-  @keyframes marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
 
   @media (prefers-reduced-motion: reduce) {
     animation: none;
@@ -63,7 +63,7 @@ const Text = styled.span`
   padding-right: 3rem;
   flex-shrink: 0;
 
-  ${media.sm} {
+  @media (max-width: 480px) {
     font-size: clamp(0.85rem, 3.5vw, 1.1rem);
     padding-right: 2rem;
   }
