@@ -242,6 +242,17 @@ export const GlobalStyles = css`
     top: 1rem;
   }
 
+  /* Global marquee keyframes — Safari/WebKit needs a document-level name, not Emotion-scoped hashes */
+  @keyframes marquee-scroll {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); }
+  }
+
+  @-webkit-keyframes marquee-scroll {
+    0% { -webkit-transform: translate3d(0, 0, 0); transform: translate3d(0, 0, 0); }
+    100% { -webkit-transform: translate3d(-50%, 0, 0); transform: translate3d(-50%, 0, 0); }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
