@@ -204,7 +204,7 @@ export default function ProjectsSection() {
         <SectionHeader
           label="Selected work"
           title="Projects"
-          subtitle="Click any card to explore architecture, tech stack, and impact metrics. Built across ML, production AI, and data engineering."
+          subtitle="13 projects from production AI and quant work to open-source repos on GitHub — click any card for full details and repo links."
         />
 
         <Grid>
