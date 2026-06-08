@@ -1,17 +1,14 @@
-import { findInternships } from '../_lib/internship/search';
-import { sendInternshipAlert } from '../_lib/internship/email';
-import { loadSeenIds, rememberIds, splitNewJobs } from '../_lib/internship/store';
-import type { ScanResult } from '../_lib/internship/types';
+import { findInternships } from './_lib/internship/search';
+import { sendInternshipAlert } from './_lib/internship/email';
+import { loadSeenIds, rememberIds, splitNewJobs } from './_lib/internship/store';
+import type { ScanResult } from './_lib/internship/types';
 
 type Req = { headers: Record<string, string | string[] | undefined> };
 type Res = {
   status: (code: number) => { json: (body: unknown) => void };
 };
 
-/**
- * Server-only hourly internship scanner.
- * Not bundled into the React app — does not appear in browser DevTools on normal page visits.
- */
+/** Server-only internship scanner — triggered by GitHub Actions cron. */
 export default async function handler(req: Req, res: Res) {
   const secret = process.env.CRON_SECRET;
   if (secret) {
