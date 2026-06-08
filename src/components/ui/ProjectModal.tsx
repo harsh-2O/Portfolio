@@ -80,6 +80,27 @@ const Thumb = styled.div<{ $accent: string }>`
     object-fit: contain;
     filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.08));
   }
+
+  span {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    color: ${({ $accent }) => $accent};
+    opacity: 0.85;
+  }
+`;
+
+const RepoLink = styled.a`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 1rem;
+  font-size: var(--text-small);
+  font-weight: 500;
+  color: var(--accent);
+  transition: opacity var(--transition);
+
+  &:hover { opacity: 0.75; }
 `;
 
 const Meta = styled.div`
@@ -242,13 +263,23 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
             <CloseButton onClick={onClose} aria-label="Close">×</CloseButton>
 
             <Thumb $accent={project.accent}>
-              <img src={project.image} alt={project.title} />
+              {project.image ? (
+                <img src={project.image} alt={project.title} />
+              ) : (
+                <span aria-hidden="true">{project.title.slice(0, 2).toUpperCase()}</span>
+              )}
             </Thumb>
 
             <Meta><Year>{project.year}</Year></Meta>
             <Title>{project.title}</Title>
             <Subtitle>{project.subtitle}</Subtitle>
             <Description>{project.description}</Description>
+
+            {project.repoUrl && (
+              <RepoLink href={project.repoUrl} target="_blank" rel="noopener noreferrer">
+                View on GitHub →
+              </RepoLink>
+            )}
 
             <Metrics>
               {project.highlights.map((h) => (

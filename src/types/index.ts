@@ -22,13 +22,15 @@ export interface Project {
   title: string;
   subtitle: string;
   description: string;
-  image: string;
+  image?: string;
   year: string;
   tags: string[];
   highlights: ProjectHighlight[];
   bullets: string[];
   /** Accent used for card thumbnail backdrop */
   accent: string;
+  /** Public GitHub repository URL, when available */
+  repoUrl?: string;
 }
 
 export interface Testimonial {

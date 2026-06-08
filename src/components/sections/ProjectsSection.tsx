@@ -76,6 +76,14 @@ const Thumb = styled.div<{ $accent: string; $hovered?: boolean }>`
     `linear-gradient(160deg, ${$accent}20 0%, ${$accent}06 60%, transparent 100%)`};
   border-bottom: 1px solid var(--card-border);
 
+  span {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    color: ${({ $accent }) => $accent};
+    opacity: 0.85;
+  }
+
   img {
     max-width: 80%;
     max-height: 100px;
@@ -222,14 +230,18 @@ export default function ProjectsSection() {
               }}
             >
               <Thumb $accent={project.accent} $hovered={hoveredId === project.id}>
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  loading="lazy"
-                  decoding="async"
-                  width={320}
-                  height={220}
-                />
+                {project.image ? (
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    loading="lazy"
+                    decoding="async"
+                    width={320}
+                    height={220}
+                  />
+                ) : (
+                  <span aria-hidden="true">{project.title.slice(0, 2).toUpperCase()}</span>
+                )}
               </Thumb>
 
               <CardBody>
