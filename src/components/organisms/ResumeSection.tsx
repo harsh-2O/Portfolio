@@ -26,13 +26,13 @@ const DownloadButton = styled.button`
   font-weight: 500;
   cursor: pointer;
   box-shadow: var(--card-shadow);
-  transition: all var(--transition);
+  transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
 
   &:hover {
     background: var(--accent);
     color: #fff;
     border-color: var(--accent);
-    box-shadow: var(--card-shadow-hover);
+    box-shadow: 0 4px 16px rgba(0, 113, 227, 0.3);
     transform: translateY(-2px);
   }
 

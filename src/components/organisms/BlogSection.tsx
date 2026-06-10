@@ -41,18 +41,20 @@ const Grid = styled.div`
 const Card = styled(motion.article)<{ $accent: string }>`
   display: flex;
   flex-direction: column;
-  border-radius: 1.25rem;
+  border-radius: var(--card-radius, 1.25rem);
   background: var(--surface-elevated);
   border: 1px solid var(--card-border);
   box-shadow: var(--card-shadow), var(--card-highlight);
-  transition: all var(--transition);
+  transition: box-shadow 0.5s cubic-bezier(0.25, 0.1, 0.25, 1),
+    border-color 0.5s cubic-bezier(0.25, 0.1, 0.25, 1),
+    transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
   position: relative;
   overflow: hidden;
   min-height: 420px;
 
   ${media.md} {
     min-height: auto;
-    border-radius: 1rem;
+    border-radius: var(--card-radius, 1rem);
   }
 
   &::before {
@@ -64,12 +66,16 @@ const Card = styled(motion.article)<{ $accent: string }>`
     height: 3px;
     background: linear-gradient(90deg, ${({ $accent }) => $accent}, transparent);
     z-index: 2;
+    transition: height 0.4s ease;
   }
 
   @media (hover: hover) {
     &:hover {
       box-shadow: var(--card-shadow-hover);
       border-color: ${({ $accent }) => `${$accent}40`};
+      transform: translateY(-6px);
+
+      &::before { height: 4px; }
     }
   }
 `;
@@ -104,7 +110,7 @@ const CardDate = styled.span`
 `;
 
 const CardTitle = styled.h3`
-  font-size: var(--text-h2);
+  font-size: clamp(1.0625rem, 2vw, 1.375rem);
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.3;
@@ -116,9 +122,9 @@ const CardSubtitle = styled.p`
 `;
 
 const ReadHint = styled.span`
-  font-size: 0.7rem;
+  font-size: 0.6875rem;
   color: var(--accent);
-  opacity: 0.7;
+  opacity: 0.6;
   transition: opacity var(--transition);
 `;
 

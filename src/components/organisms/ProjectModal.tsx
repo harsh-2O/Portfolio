@@ -35,7 +35,7 @@ const Detail = styled(motion.div)`
   padding: clamp(1.25rem, 4vw, 2rem);
   padding-top: clamp(1.5rem, 4vw, 2rem);
   border: 1px solid var(--card-border);
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 113, 227, 0.06);
   max-height: 92dvh;
   overflow-y: auto;
   overflow-x: hidden;
@@ -47,7 +47,6 @@ const Detail = styled(motion.div)`
     max-height: 90vh;
   }
 
-  /* Always-visible but ultra-subtle thumb inside modal */
   scrollbar-color: var(--scrollbar-thumb) transparent;
 
   &::-webkit-scrollbar {

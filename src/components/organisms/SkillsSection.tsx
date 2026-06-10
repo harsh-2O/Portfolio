@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from '../../lib/motion';
 import SectionHeader from '../molecules/SectionHeader';
 import { skillCategories } from '../../data/skills';
 import type { Skill } from '../../data/skills';
-import { fadeUp, staggerContainer } from '../../styles/animations';
+import { fadeUp, staggerContainer, staggerItem } from '../../styles/animations';
 import { sectionBand, sectionCentered } from '../../styles/layout';
 
 type SelectedSkill = {
@@ -30,11 +30,13 @@ const Grid = styled(motion.div)`
 
 const Category = styled(motion.div)<{ $accent: string }>`
   padding: clamp(1.25rem, 3vw, 2rem);
-  border-radius: 1.5rem;
+  border-radius: var(--card-radius, 1.5rem);
   background: var(--surface-elevated);
   border: 1px solid var(--card-border);
-  box-shadow: var(--card-shadow);
-  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+  box-shadow: var(--card-shadow), var(--card-highlight);
+  transition: transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1),
+    box-shadow 0.5s cubic-bezier(0.25, 0.1, 0.25, 1),
+    border-color 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -49,24 +51,27 @@ const Category = styled(motion.div)<{ $accent: string }>`
     background: linear-gradient(90deg, ${({ $accent }) => $accent} 0%, ${({ $accent }) => `${$accent}66`} 55%, transparent 100%);
     border-radius: inherit;
     pointer-events: none;
+    transition: height 0.4s ease;
   }
 
   @media (hover: hover) {
     &:hover {
-      transform: translateY(-4px);
+      transform: translateY(-6px);
       box-shadow: var(--card-shadow-hover);
-      border-color: var(--accent-line);
+      border-color: ${({ $accent }) => `${$accent}40`};
+
+      &::before { height: 4px; }
     }
   }
 `;
 
 const CategoryTitle = styled.h4<{ $accent: string }>`
-  font-size: 0.8rem;
+  font-size: 0.6875rem;
   font-weight: 600;
   color: ${({ $accent }) => $accent};
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
 `;
 
 const Pills = styled.div`
@@ -76,10 +81,10 @@ const Pills = styled.div`
 `;
 
 const Pill = styled.button<{ $active?: boolean; $accent: string }>`
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 500;
-  padding: 0.45rem 0.9rem;
-  min-height: 36px;
+  padding: 0.375rem 0.8rem;
+  min-height: 34px;
   border-radius: 100px;
   background: ${({ $active, $accent }) => ($active ? $accent : `${$accent}14`)};
   color: ${({ $active }) => ($active ? '#fff' : 'var(--text-primary)')};
@@ -122,10 +127,7 @@ const DetailText = styled.p`
   color: var(--text-primary);
 `;
 
-const itemVariant = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-};
+const itemVariant = staggerItem;
 
 const detailVariant = {
   hidden: { opacity: 0, height: 0, marginTop: 0 },

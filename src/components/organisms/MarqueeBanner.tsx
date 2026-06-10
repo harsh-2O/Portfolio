@@ -12,6 +12,8 @@ const Banner = styled.div`
   margin: 0;
   position: relative;
   isolation: isolate;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 
   &::before,
   &::after {
@@ -19,19 +21,19 @@ const Banner = styled.div`
     position: absolute;
     top: 0;
     bottom: 0;
-    width: clamp(2rem, 8vw, 5rem);
+    width: clamp(3rem, 10vw, 6rem);
     z-index: 1;
     pointer-events: none;
   }
 
   &::before {
     left: 0;
-    background: linear-gradient(90deg, rgba(0, 0, 0, 0.35), transparent);
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.45), transparent);
   }
 
   &::after {
     right: 0;
-    background: linear-gradient(270deg, rgba(0, 0, 0, 0.35), transparent);
+    background: linear-gradient(270deg, rgba(0, 0, 0, 0.45), transparent);
   }
 `;
 

@@ -96,7 +96,7 @@ const DesktopNav = styled.nav`
 
 const NavLink = styled.button<{ $active?: boolean; $mobile?: boolean }>`
   font-size: ${({ $mobile }) => ($mobile ? 'clamp(1.35rem, 5vw, 1.75rem)' : 'var(--text-nav)')};
-  font-weight: ${({ $mobile }) => ($mobile ? 500 : 500)};
+  font-weight: 500;
   letter-spacing: ${({ $mobile }) => ($mobile ? '-0.02em' : '-0.01em')};
   color: var(--text-primary);
   opacity: ${({ $active, $mobile }) => {
@@ -123,10 +123,11 @@ const NavLink = styled.button<{ $active?: boolean; $mobile?: boolean }>`
     bottom: -4px;
     left: 0;
     right: 0;
-    height: 1px;
+    height: 1.5px;
     background: var(--accent-gradient);
     transform: scaleX(${({ $active }) => ($active ? 1 : 0)});
     transition: transform 0.3s ease;
+    border-radius: 1px;
   }
 
   ${({ $mobile }) =>
@@ -171,7 +172,9 @@ const MobileNavOverlay = styled.div<{ $isOpen: boolean }>`
     position: fixed;
     inset: 0;
     z-index: 98;
-    background: rgba(0, 0, 0, 0.35);
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     opacity: ${({ $isOpen }) => ($isOpen ? 1 : 0)};
     visibility: ${({ $isOpen }) => ($isOpen ? 'visible' : 'hidden')};
     pointer-events: ${({ $isOpen }) => ($isOpen ? 'auto' : 'none')};
@@ -195,6 +198,8 @@ const MobileNav = styled.nav<{ $isOpen: boolean }>`
     padding: calc(var(--header-height) + 1.5rem) var(--section-padding-x)
       max(2rem, env(safe-area-inset-bottom, 0px));
     background: var(--header-bg);
+    backdrop-filter: saturate(180%) blur(24px);
+    -webkit-backdrop-filter: saturate(180%) blur(24px);
     border-left: 1px solid var(--header-shadow);
     box-shadow: -8px 0 32px rgba(0, 0, 0, 0.12);
     z-index: 99;
@@ -206,6 +211,15 @@ const MobileNav = styled.nav<{ $isOpen: boolean }>`
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
+`;
+
+const MobileNavIndex = styled.span`
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--accent);
+  opacity: 0.5;
+  margin-right: 0.75rem;
+  font-variant-numeric: tabular-nums;
 `;
 
 function scrollToSection(id: string) {
@@ -251,17 +265,27 @@ export default function Header({ activeSection, isMenuOpen, onMenuToggle }: Head
     document.body.style.overflow = 'auto';
   };
 
-  const navLinks = (mobile: boolean) =>
-    NAV_ITEMS.map(({ section, label, targetId }) => (
-      <NavLink
-        key={section}
-        $active={activeSection === section}
-        $mobile={mobile}
-        onClick={() => navigate(targetId)}
-      >
-        {label}
-      </NavLink>
-    ));
+  const desktopLinks = NAV_ITEMS.map(({ section, label, targetId }) => (
+    <NavLink
+      key={section}
+      $active={activeSection === section}
+      onClick={() => navigate(targetId)}
+    >
+      {label}
+    </NavLink>
+  ));
+
+  const mobileLinks = NAV_ITEMS.map(({ section, label, targetId }, i) => (
+    <NavLink
+      key={section}
+      $active={activeSection === section}
+      $mobile
+      onClick={() => navigate(targetId)}
+    >
+      <MobileNavIndex>0{i + 1}</MobileNavIndex>
+      {label}
+    </NavLink>
+  ));
 
   return (
     <>
@@ -272,7 +296,7 @@ export default function Header({ activeSection, isMenuOpen, onMenuToggle }: Head
           Harsh Mehta
         </Logo>
 
-        <DesktopNav aria-label="Main navigation">{navLinks(false)}</DesktopNav>
+        <DesktopNav aria-label="Main navigation">{desktopLinks}</DesktopNav>
 
         <RightSlot>
           <ThemeToggle />
@@ -297,7 +321,7 @@ export default function Header({ activeSection, isMenuOpen, onMenuToggle }: Head
       <MobileNavOverlay $isOpen={isMenuOpen} onClick={closeMenu} aria-hidden="true" />
 
       <MobileNav $isOpen={isMenuOpen} aria-label="Mobile navigation" aria-hidden={!isMenuOpen}>
-        {navLinks(true)}
+        {mobileLinks}
       </MobileNav>
     </>
   );

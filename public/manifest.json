@@ -4,7 +4,7 @@
   "description": "Portfolio of Harsh Mehta — quant tools developer and software engineer.",
   "icons": [
     {
-      "src": "vite.svg",
+      "src": "favicon.svg",
       "type": "image/svg+xml",
       "sizes": "any"
     }

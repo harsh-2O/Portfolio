@@ -19,12 +19,12 @@ export const GlobalStyles = css`
     --secondary: #fbfbfd;
     --text-primary: #1d1d1f;
     --text-secondary: #f5f5f7;
-    --text-muted: #86868b;
+    --text-muted: #6e6e73;
     --background: #f5f5f7;
     --background-top: #fbfbfd;
     --surface: rgba(255, 255, 255, 0.78);
     --surface-elevated: rgba(255, 255, 255, 0.92);
-    --glow-color: rgba(0, 113, 227, 0.12);
+    --glow-color: rgba(0, 113, 227, 0.08);
     --accent-subtle: rgba(0, 113, 227, 0.07);
     --accent-line: rgba(0, 113, 227, 0.28);
     --header-bg: rgba(251, 251, 253, 0.82);
@@ -32,39 +32,41 @@ export const GlobalStyles = css`
     --nav-bg: #1d1d1f;
     --nav-text: #f5f5f7;
     --transition: 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+    --transition-fast: 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
     --font-display: 'Cormorant Garamond', 'Georgia', 'Times New Roman', serif;
-    --font-primary: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-primary: 'Inter', 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     --header-height: 60px;
     --header-height-scrolled: 56px;
-    --text-nav: 1.125rem;
+    --text-nav: 0.9375rem;
     --hamburger-color: var(--text-primary);
-    --content-max: 1200px;
-    --section-padding-x: clamp(1rem, 4vw, 3rem);
-    --section-padding-top: clamp(3rem, 5.5vw, 4.5rem);
-    --section-padding-bottom: clamp(2.25rem, 4vw, 3.25rem);
+    --content-max: 1120px;
+    --section-padding-x: clamp(1.25rem, 5vw, 3.5rem);
+    --section-padding-top: clamp(3.5rem, 6vw, 5rem);
+    --section-padding-bottom: clamp(2.5rem, 4.5vw, 3.5rem);
     --section-padding-y-md: clamp(2.5rem, 4vw, 3.25rem);
-    --section-header-space: clamp(1.5rem, 3vw, 2.5rem);
+    --section-header-space: clamp(1.75rem, 3.5vw, 2.75rem);
     --section-inner-gap: clamp(1.25rem, 2.5vw, 1.75rem);
     --section-gap: clamp(1.25rem, 2.5vw, 2rem);
     --block-gap: clamp(1rem, 2vw, 1.35rem);
-    --footer-padding-top: clamp(2.5rem, 4.5vw, 3.75rem);
-    --footer-padding-bottom: clamp(1.75rem, 3vw, 2.5rem);
-    --text-hero: clamp(2.75rem, calc(6vw + 1.75rem), 8.5rem);
-    --text-h1: clamp(1.875rem, calc(2.2vw + 1.35rem), 3.25rem);
-    --text-h2: clamp(1.375rem, calc(1.75vw + 1rem), 2.5rem);
-    --text-body: clamp(1rem, calc(0.55vw + 0.9rem), 1.1875rem);
-    --text-small: clamp(0.875rem, calc(0.45vw + 0.8rem), 1rem);
-    --tech-item-bg: rgba(0, 0, 0, 0.03);
-    --tech-item-hover-bg: rgba(0, 0, 0, 0.06);
-    --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.03), 0 8px 32px rgba(0, 113, 227, 0.07);
-    --card-shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.04), 0 16px 48px rgba(0, 113, 227, 0.12);
-    --card-border: rgba(0, 0, 0, 0.07);
+    --footer-padding-top: clamp(3rem, 5vw, 4.5rem);
+    --footer-padding-bottom: clamp(2rem, 3.5vw, 3rem);
+    --text-hero: clamp(2.5rem, calc(5vw + 1.5rem), 7rem);
+    --text-h1: clamp(1.625rem, calc(1.8vw + 1.15rem), 2.75rem);
+    --text-h2: clamp(1.25rem, calc(1.4vw + 0.9rem), 2rem);
+    --text-body: clamp(0.9375rem, calc(0.3vw + 0.875rem), 1.0625rem);
+    --text-small: clamp(0.8125rem, calc(0.25vw + 0.75rem), 0.9375rem);
+    --tech-item-bg: rgba(0, 0, 0, 0.04);
+    --tech-item-hover-bg: rgba(0, 0, 0, 0.07);
+    --card-radius: 1.25rem;
+    --card-shadow: 0 1px 4px rgba(0, 0, 0, 0.03), 0 6px 24px rgba(0, 0, 0, 0.05);
+    --card-shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.06), 0 16px 48px rgba(0, 113, 227, 0.1);
+    --card-border: rgba(0, 0, 0, 0.08);
     --card-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.85);
     --section-band: linear-gradient(
       135deg,
-      rgba(0, 113, 227, 0.045) 0%,
-      rgba(88, 86, 214, 0.035) 45%,
-      rgba(50, 173, 230, 0.03) 100%
+      rgba(0, 113, 227, 0.03) 0%,
+      rgba(88, 86, 214, 0.025) 45%,
+      rgba(50, 173, 230, 0.02) 100%
     );
     --marquee-bg: linear-gradient(135deg, #0071e3 0%, #5856d6 50%, #1d1d1f 100%);
     --divider: linear-gradient(90deg, transparent, var(--accent-line) 20%, var(--accent-line) 80%, transparent);
@@ -79,14 +81,14 @@ export const GlobalStyles = css`
     --secondary: #000000;
     --text-primary: #f5f5f7;
     --text-secondary: #1d1d1f;
-    --text-muted: #a1a1a6;
+    --text-muted: #98989d;
     --background: #000000;
     --background-top: #000000;
     --surface: rgba(28, 28, 30, 0.72);
     --surface-elevated: rgba(38, 38, 40, 0.9);
-    --glow-color: rgba(0, 113, 227, 0.12);
+    --glow-color: rgba(0, 113, 227, 0.1);
     --accent-subtle: rgba(0, 113, 227, 0.1);
-    --accent-line: rgba(0, 113, 227, 0.35);
+    --accent-line: rgba(0, 113, 227, 0.3);
     --header-bg: rgba(0, 0, 0, 0.8);
     --header-shadow: rgba(255, 255, 255, 0.04);
     --nav-bg: #f5f5f7;
@@ -94,14 +96,14 @@ export const GlobalStyles = css`
     --tech-item-bg: rgba(255, 255, 255, 0.06);
     --tech-item-hover-bg: rgba(255, 255, 255, 0.1);
     --card-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
-    --card-shadow-hover: 0 12px 40px rgba(0, 113, 227, 0.15);
+    --card-shadow-hover: 0 12px 40px rgba(0, 113, 227, 0.15), 0 6px 20px rgba(0, 0, 0, 0.25);
     --card-border: rgba(255, 255, 255, 0.08);
     --card-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.06);
     --section-band: linear-gradient(
       135deg,
-      rgba(0, 113, 227, 0.07) 0%,
-      rgba(88, 86, 214, 0.05) 45%,
-      rgba(175, 82, 222, 0.04) 100%
+      rgba(0, 113, 227, 0.05) 0%,
+      rgba(88, 86, 214, 0.04) 45%,
+      rgba(175, 82, 222, 0.03) 100%
     );
     --marquee-bg: linear-gradient(135deg, #0071e3 0%, #5856d6 45%, #000000 100%);
     --divider: linear-gradient(90deg, transparent, var(--accent-line) 20%, var(--accent-line) 80%, transparent);
@@ -130,20 +132,20 @@ export const GlobalStyles = css`
     font-family: var(--font-primary);
     background-color: var(--background);
     background-image:
-      radial-gradient(ellipse 100% 70% at 50% -15%, var(--glow-color), transparent 60%),
-      radial-gradient(ellipse 45% 35% at 0% 30%, rgba(88, 86, 214, 0.05), transparent 55%),
-      radial-gradient(ellipse 40% 30% at 100% 60%, rgba(0, 113, 227, 0.04), transparent 50%),
-      linear-gradient(180deg, var(--background-top) 0%, var(--background) 55%, var(--background) 100%);
+      radial-gradient(ellipse 80% 60% at 50% -10%, var(--glow-color), transparent 55%),
+      radial-gradient(ellipse 40% 30% at 0% 30%, rgba(88, 86, 214, 0.035), transparent 50%),
+      radial-gradient(ellipse 35% 25% at 100% 55%, rgba(0, 113, 227, 0.03), transparent 45%),
+      linear-gradient(180deg, var(--background-top) 0%, var(--background) 50%, var(--background) 100%);
     background-attachment: fixed;
     color: var(--text-primary);
-    line-height: 1.5;
+    line-height: 1.6;
     width: 100%;
     max-width: 100%;
     overflow-x: clip;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     transition: background-color var(--transition), color var(--transition);
-    letter-spacing: -0.02em;
+    letter-spacing: -0.011em;
     scrollbar-width: none;
     -ms-overflow-style: none;
   }
@@ -154,11 +156,28 @@ export const GlobalStyles = css`
     display: none;
   }
 
+  /* Noise texture overlay for premium depth */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0.022;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 256px 256px;
+  }
+
+  :root.dark body::before {
+    opacity: 0.035;
+  }
+
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
     font-weight: 700;
     line-height: 1.1;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.025em;
   }
 
   a {
@@ -242,7 +261,20 @@ export const GlobalStyles = css`
     top: 1rem;
   }
 
-  /* Global marquee keyframes — Safari/WebKit needs a document-level name, not Emotion-scoped hashes */
+  /* Scroll progress bar at the top */
+  #scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: var(--accent-gradient);
+    z-index: 200;
+    pointer-events: none;
+    transition: none;
+    will-change: width;
+  }
+
   @keyframes marquee-scroll {
     0% { transform: translate3d(0, 0, 0); }
     100% { transform: translate3d(-50%, 0, 0); }
@@ -272,52 +304,73 @@ export const GlobalStyles = css`
 
   @media (max-width: 1024px) {
     :root {
-      --text-hero: clamp(2.5rem, calc(5.5vw + 1.5rem), 3.5rem);
-      --text-nav: 1rem;
+      --text-hero: clamp(2.25rem, calc(5vw + 1.25rem), 3.25rem);
+      --text-nav: 0.875rem;
     }
   }
 
   @media (max-width: 768px) {
     :root {
       --header-height: calc(56px + env(safe-area-inset-top, 0px));
-      --text-hero: clamp(2.375rem, calc(7.5vw + 1.25rem), 3rem);
-      --text-h1: clamp(1.5rem, calc(4vw + 1rem), 2rem);
-      --text-h2: clamp(1.125rem, calc(2vw + 0.9rem), 1.5rem);
-      --text-body: 1rem;
-      --section-padding-x: 1.125rem;
-      --section-padding-top: clamp(2.5rem, 6vw, 3.25rem);
+      --text-hero: clamp(2rem, calc(6vw + 1rem), 2.75rem);
+      --text-h1: clamp(1.375rem, calc(3vw + 0.9rem), 1.75rem);
+      --text-h2: clamp(1.0625rem, calc(1.5vw + 0.85rem), 1.375rem);
+      --text-body: 0.9375rem;
+      --section-padding-x: 1.25rem;
+      --section-padding-top: clamp(2.75rem, 6vw, 3.5rem);
       --section-padding-bottom: clamp(2rem, 5vw, 2.75rem);
       --section-padding-y-md: clamp(2.25rem, 5vw, 3rem);
-      --section-header-space: clamp(1.25rem, 3.5vw, 2rem);
+      --section-header-space: clamp(1.5rem, 3.5vw, 2rem);
       --section-inner-gap: 1.25rem;
       --section-gap: clamp(1rem, 3vw, 1.5rem);
       --block-gap: 1rem;
-      --footer-padding-top: clamp(2rem, 5vw, 2.5rem);
-      --footer-padding-bottom: clamp(1.5rem, 4vw, 2rem);
+      --footer-padding-top: clamp(2.5rem, 5vw, 3rem);
+      --footer-padding-bottom: clamp(1.75rem, 4vw, 2.25rem);
     }
   }
 
   @media (max-width: 480px) {
     :root {
-      --text-hero: clamp(1.875rem, calc(8vw + 0.85rem), 2.25rem);
-      --text-h1: clamp(1.375rem, calc(5vw + 0.85rem), 1.75rem);
+      --text-hero: clamp(1.75rem, calc(7vw + 0.75rem), 2.125rem);
+      --text-h1: clamp(1.25rem, calc(4vw + 0.8rem), 1.5rem);
       --section-padding-x: 1rem;
-      --section-padding-top: 2.25rem;
+      --section-padding-top: 2.5rem;
       --section-padding-bottom: 2rem;
       --section-padding-y-md: 2rem;
       --section-header-space: 1.25rem;
       --section-inner-gap: 1rem;
       --section-gap: 1.125rem;
       --block-gap: 0.875rem;
-      --footer-padding-top: 2rem;
-      --footer-padding-bottom: 1.5rem;
+      --footer-padding-top: 2.25rem;
+      --footer-padding-bottom: 1.75rem;
+      --card-radius: 1rem;
+    }
+  }
+
+  @media (max-width: 374px) {
+    :root {
+      --text-hero: clamp(1.5rem, calc(6vw + 0.65rem), 1.875rem);
+      --text-h1: clamp(1.125rem, calc(3.5vw + 0.75rem), 1.375rem);
+      --text-h2: clamp(0.9375rem, calc(1.5vw + 0.8rem), 1.125rem);
+      --section-padding-x: 0.875rem;
+      --card-radius: 0.875rem;
     }
   }
 
   @media (min-width: 1536px) {
     :root {
-      --content-max: 1320px;
-      --section-padding-x: 3rem;
+      --content-max: 1240px;
+      --section-padding-x: 3.5rem;
+    }
+  }
+
+  @media (min-width: 2000px) {
+    :root {
+      --content-max: 1360px;
+      --section-padding-x: 4rem;
+      --text-hero: clamp(3.5rem, 5.5vw, 8rem);
+      --text-h1: clamp(2rem, 2.2vw, 3.25rem);
+      --text-body: 1.0625rem;
     }
   }
 `;

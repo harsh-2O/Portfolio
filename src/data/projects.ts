@@ -10,7 +10,7 @@ export const projects: Project[] = [
     subtitle: 'LLMs · FastAPI · BigQuery · Stock Data',
     year: '2024',
     description:
-      'A production-grade Retrieval-Augmented Generation system built at SEARCE — enabling natural-language queries over large-scale stock market datasets with 30+ real-time backend APIs.',
+      'A production-grade Retrieval-Augmented Generation system built at SEARCE — enabling natural-language queries over large-scale stock market datasets. Architected hybrid retrieval (dense vectors + BM25 + SQL routing), event-aware chunking with financial metadata, and cross-encoder reranking across 30+ real-time backend APIs. Shipped from prototype to production in 22 days.',
     accent: '#0071e3',
     tags: ['Python', 'LangChain', 'FastAPI', 'BigQuery', 'RAG', 'LLMs', 'Docker'],
     highlights: [
@@ -22,6 +22,8 @@ export const projects: Project[] = [
       'Architected cloud-agnostic, interface-driven deployment for AWS Lambda transformations.',
       'Exposed 30+ REST APIs enabling conversational analytics over stock market data.',
       'Integrated vector retrieval with LLM orchestration for accurate, context-aware responses.',
+      'Implemented hybrid retrieval with query classification — routing numeric lookups to SQL/BigQuery directly.',
+      'Built a cross-encoder reranker stage that cut hallucination rates more than upgrading the embedding model.',
       'Partnered with cross-functional teams to deliver from prototype to production in 3 weeks.',
     ],
   },
@@ -31,7 +33,7 @@ export const projects: Project[] = [
     subtitle: 'Node.js · Express · MongoDB · React',
     year: '2023',
     description:
-      'A full-stack social media REST API with React frontend — user accounts, posts, follows, likes, comments, and JWT authentication. Built with Node.js, Express, and MongoDB.',
+      'A full-stack social media platform with React frontend and Node.js/Express backend — featuring user accounts, posts, follows, likes, comments, and JWT authentication. Built with MongoDB for social graph persistence and designed with RESTful architecture supporting full CRUD operations across 4 resource types.',
     image: sociobuzzLogo,
     accent: '#ff6b35',
     repoUrl: 'https://github.com/harsh-2O/Sociabuzz',
@@ -77,7 +79,7 @@ export const projects: Project[] = [
     subtitle: 'NLP · Web Scraping · Extractive Summarization',
     year: '2023',
     description:
-      'An extractive summarizer that scrapes web pages and condenses content using NLP — reducing reading time by 30–40% with graph-based sentence ranking (NetworkX) and Trafilatura extraction.',
+      'An extractive summarization pipeline that scrapes web pages and condenses long-form content using NLP — reducing reading time by 30–40%. Uses graph-based sentence ranking (NetworkX TextRank) with Trafilatura for robust content extraction from any URL, producing concise summaries in seconds.',
     accent: '#5856d6',
     repoUrl: 'https://github.com/harsh-2O/Summeriz-IT',
     tags: ['Python', 'NLTK', 'NetworkX', 'BeautifulSoup', 'Trafilatura', 'NLP'],
@@ -99,7 +101,7 @@ export const projects: Project[] = [
     subtitle: 'ML · Audio Processing · Voice Synthesis',
     year: '2023',
     description:
-      'A machine learning system that learns user-specific voice characteristics from audio samples and reproduces personalized speech patterns — bridging signal processing and generative AI.',
+      'A machine learning system that learns user-specific voice characteristics from audio samples and reproduces personalized speech patterns. Bridges digital signal processing and generative AI — extracting MFCC features from audio, training regression models for voice characteristic prediction, with architecture designed for GAN-based voice synthesis.',
     image: apeLogo,
     accent: '#af52de',
     tags: ['Python', 'Librosa', 'Scikit-learn', 'MFCC', 'Regression', 'GAN (planned)'],

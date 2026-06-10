@@ -14,12 +14,13 @@ const Section = styled(motion.section)`
 
 const QuoteCard = styled.div`
   padding: clamp(1.5rem, 4vw, 2.5rem);
-  border-radius: 1.5rem;
+  border-radius: var(--card-radius, 1.5rem);
   background: var(--surface-elevated);
   border: 1px solid var(--card-border);
   box-shadow: var(--card-shadow), var(--card-highlight);
   border-left: 3px solid var(--accent);
   position: relative;
+  transition: box-shadow 0.5s ease;
 
   &::before {
     content: '\u201C';
@@ -35,12 +36,12 @@ const QuoteCard = styled.div`
 
   ${media.md} {
     padding: 1.25rem;
-    border-radius: 1.25rem;
+    border-radius: var(--card-radius, 1.25rem);
   }
 `;
 
 const Quote = styled(motion.blockquote)`
-  font-size: clamp(0.9rem, 2vw, 1.2rem);
+  font-size: clamp(0.875rem, 1.5vw, 1.0625rem);
   line-height: 1.7;
   font-weight: 400;
   max-width: 920px;
@@ -110,7 +111,7 @@ const Dot = styled.button<{ $active: boolean }>`
   border: none;
   padding: 0;
   background: ${({ $active }) => ($active ? 'var(--accent)' : 'var(--text-muted)')};
-  opacity: ${({ $active }) => ($active ? 1 : 0.3)};
+  opacity: ${({ $active }) => ($active ? 1 : 0.45)};
   cursor: pointer;
   transition: all var(--transition);
 `;

@@ -44,19 +44,17 @@ const Label = styled.span`
 
   &::before {
     content: '';
-    width: 20px;
+    width: 24px;
     height: 2px;
     border-radius: 2px;
     background: var(--accent-gradient);
+    flex-shrink: 0;
   }
 `;
 
 const Title = styled.h2`
   ${headingSection};
-  background: linear-gradient(135deg, var(--text-primary) 70%, var(--accent) 160%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--text-primary);
   padding-bottom: 0.04em;
 `;
 

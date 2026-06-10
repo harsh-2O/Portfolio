@@ -19,12 +19,39 @@ const Page = styled.div`
   overflow-x: clip;
 `;
 
+function useScrollProgress() {
+  useEffect(() => {
+    const bar = document.getElementById('scroll-progress');
+    if (!bar) return;
+
+    let ticking = false;
+    const update = () => {
+      const scrollH = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = scrollH > 0 ? (window.scrollY / scrollH) * 100 : 0;
+      bar.style.width = `${pct}%`;
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(update);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    update();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+}
+
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showBelowFold, setShowBelowFold] = useState(false);
   const heroRefs = useHeroAnimation();
   const activeSection = useScrollSpy(isMenuOpen);
   const chromeRefs = useScrollChrome();
+  useScrollProgress();
 
   useEffect(() => {
     const reveal = () => setShowBelowFold(true);
@@ -53,6 +80,7 @@ export default function Home() {
 
   return (
     <>
+      <div id="scroll-progress" aria-hidden="true" />
       <Page>
         <Header
           activeSection={activeSection}

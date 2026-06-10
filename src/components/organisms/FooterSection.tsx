@@ -1,9 +1,16 @@
 import styled from '@emotion/styled';
+import { keyframes } from '@emotion/react';
 import { motion } from '../../lib/motion';
 import { CONTACT } from '../../config/site';
 import { fadeUp } from '../../styles/animations';
 import { sectionContainer } from '../../styles/layout';
 import { media } from '../../styles/mixins';
+
+const gradientShift = keyframes`
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+`;
 
 const Footer = styled(motion.footer)`
   ${sectionContainer};
@@ -56,11 +63,33 @@ const Top = styled.div`
 `;
 
 const Title = styled.h2`
-  font-size: clamp(2rem, 10vw, 6.5rem);
+  font-size: clamp(1.75rem, 8vw, 5rem);
   font-weight: 600;
   letter-spacing: -0.04em;
   line-height: 1.08;
   padding-bottom: 0.04em;
+  background: linear-gradient(
+    135deg,
+    var(--text-primary) 0%,
+    var(--text-primary) 40%,
+    var(--accent) 100%
+  );
+  background-size: 200% 200%;
+  animation: ${gradientShift} 8s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+`;
+
+const Subtitle = styled.p`
+  font-size: var(--text-small);
+  color: var(--text-muted);
+  max-width: 420px;
+  line-height: 1.6;
 `;
 
 const EmailButton = styled.a`
@@ -72,14 +101,22 @@ const EmailButton = styled.a`
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
-  font-size: clamp(0.8rem, 2.5vw, 1.05rem);
+  font-size: clamp(0.8rem, 2vw, 0.9375rem);
   font-weight: 500;
   max-width: min(100%, 420px);
   text-align: center;
   word-break: break-word;
-  transition: transform var(--transition), opacity var(--transition);
+  transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
+    opacity 0.4s ease,
+    box-shadow 0.4s ease;
+  box-shadow: 0 4px 16px rgba(0, 113, 227, 0.25);
 
-  &:hover { transform: scale(1.04); opacity: 0.92; }
+  &:hover {
+    transform: scale(1.04) translateY(-2px);
+    opacity: 0.92;
+    box-shadow: 0 8px 28px rgba(0, 113, 227, 0.35);
+  }
+
   svg { width: 16px; height: 16px; flex-shrink: 0; }
 `;
 
@@ -115,8 +152,12 @@ const SocialLinks = styled.div`
 const SocialLink = styled.a`
   font-size: var(--text-small);
   color: var(--text-muted);
-  transition: color var(--transition);
-  &:hover { color: var(--accent); }
+  transition: color var(--transition), transform var(--transition-fast);
+
+  &:hover {
+    color: var(--accent);
+    transform: translateY(-1px);
+  }
 `;
 
 export default function FooterSection() {
@@ -130,6 +171,9 @@ export default function FooterSection() {
     >
       <Top>
         <Title>Let's talk.</Title>
+        <Subtitle>
+          Open to new opportunities and collaborations. Drop me a line and let's build something great.
+        </Subtitle>
         <EmailButton href={`mailto:${CONTACT.email}`}>
           {CONTACT.email}
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -140,7 +184,7 @@ export default function FooterSection() {
       </Top>
 
       <Bottom>
-        <Copyright>© 2026 Harsh Mehta</Copyright>
+        <Copyright>&copy; 2026 Harsh Mehta</Copyright>
         <SocialLinks>
           <SocialLink href={CONTACT.github} target="_blank" rel="noopener noreferrer">GitHub</SocialLink>
           <SocialLink href={CONTACT.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</SocialLink>

@@ -51,13 +51,21 @@ export const sectionBand = css`
   }
 `;
 
-/** Shared elevated card surface — glass highlight + shadow */
+/** Shared elevated card surface — glass highlight + shadow + animated border on hover */
 export const cardSurface = css`
   background: var(--surface-elevated);
   border: 1px solid var(--card-border);
   box-shadow: var(--card-shadow), var(--card-highlight);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  transition: box-shadow var(--transition), transform var(--transition), border-color var(--transition);
+
+  @media (hover: hover) {
+    &:hover {
+      box-shadow: var(--card-shadow-hover), var(--card-highlight);
+      border-color: var(--accent-line);
+    }
+  }
 `;
 
 /** Responsive heading scale */
@@ -72,7 +80,7 @@ export const headingHero = css`
 /** Hero role subline — extra line-height for descenders + gradient text clip */
 export const headingRole = css`
   font-family: var(--font-display);
-  font-size: clamp(1.25rem, 5vw, 3rem);
+  font-size: clamp(1.125rem, 4vw, 2.5rem);
   font-weight: 600;
   line-height: 1.3;
   letter-spacing: -0.02em;

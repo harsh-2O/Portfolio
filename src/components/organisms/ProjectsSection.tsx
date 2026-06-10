@@ -5,7 +5,7 @@ import { projects } from '../../data/projects';
 
 const ProjectModal = lazy(() => import('./ProjectModal'));
 import SectionHeader from '../molecules/SectionHeader';
-import { fadeUp } from '../../styles/animations';
+import { fadeUp, staggerContainer, staggerItem } from '../../styles/animations';
 import { sectionBand, sectionCentered } from '../../styles/layout';
 import type { Project } from '../../types';
 
@@ -14,7 +14,7 @@ const Section = styled(motion.section)`
   ${sectionBand};
 `;
 
-const Grid = styled.div`
+const Grid = styled(motion.div)`
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--block-gap);
@@ -32,13 +32,15 @@ const Grid = styled.div`
 const Card = styled(motion.div)<{ $accent: string }>`
   display: flex;
   flex-direction: column;
-  border-radius: 1.5rem;
+  border-radius: var(--card-radius, 1.5rem);
   border: 1px solid var(--card-border);
   background: var(--surface-elevated);
   box-shadow: var(--card-shadow), var(--card-highlight);
   overflow: hidden;
   cursor: pointer;
-  transition: box-shadow var(--transition), transform var(--transition), border-color var(--transition);
+  transition: box-shadow 0.5s cubic-bezier(0.25, 0.1, 0.25, 1),
+    transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1),
+    border-color 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
   position: relative;
 
   &::before {
@@ -49,13 +51,18 @@ const Card = styled(motion.div)<{ $accent: string }>`
     right: 0;
     height: 3px;
     background: linear-gradient(90deg, ${({ $accent }) => $accent}, transparent);
+    transition: height 0.4s ease;
   }
 
   @media (hover: hover) {
     &:hover {
       box-shadow: var(--card-shadow-hover);
-      transform: translateY(-6px);
+      transform: translateY(-8px);
       border-color: ${({ $accent }) => `${$accent}40`};
+
+      &::before {
+        height: 4px;
+      }
     }
   }
 
@@ -74,6 +81,21 @@ const Thumb = styled.div<{ $accent: string; $hovered?: boolean }>`
   background: ${({ $accent }) =>
     `linear-gradient(160deg, ${$accent}20 0%, ${$accent}06 60%, transparent 100%)`};
   border-bottom: 1px solid var(--card-border);
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      circle at 50% 120%,
+      ${({ $accent }) => `${$accent}12`} 0%,
+      transparent 60%
+    );
+    opacity: ${({ $hovered }) => ($hovered ? 1 : 0)};
+    transition: opacity 0.5s ease;
+  }
 
   span {
     font-size: clamp(1.5rem, 4vw, 2rem);
@@ -81,15 +103,19 @@ const Thumb = styled.div<{ $accent: string; $hovered?: boolean }>`
     letter-spacing: -0.04em;
     color: ${({ $accent }) => $accent};
     opacity: 0.85;
+    position: relative;
+    z-index: 1;
   }
 
   img {
     max-width: 80%;
     max-height: 100px;
     object-fit: contain;
-    transition: transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+    transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
     filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.06));
-    transform: ${({ $hovered }) => ($hovered ? 'scale(1.06)' : 'scale(1)')};
+    transform: ${({ $hovered }) => ($hovered ? 'scale(1.08)' : 'scale(1)')};
+    position: relative;
+    z-index: 1;
   }
 `;
 
@@ -119,24 +145,26 @@ const ViewLabel = styled.span<{ $visible?: boolean }>`
   color: var(--accent);
   font-weight: 500;
   opacity: ${({ $visible }) => ($visible ? 1 : 0)};
-  transition: opacity var(--transition);
+  transform: translateX(${({ $visible }) => ($visible ? '0' : '4px')});
+  transition: opacity var(--transition), transform var(--transition);
 
   @media (hover: none) {
     opacity: 0.7;
+    transform: none;
   }
 `;
 
 const CardTitle = styled.h3`
-  font-size: 1.15rem;
+  font-size: 1rem;
   font-weight: 600;
   letter-spacing: -0.01em;
   line-height: 1.3;
 `;
 
 const CardSubtitle = styled.p`
-  font-size: 0.85rem;
+  font-size: 0.8125rem;
   color: var(--text-muted);
-  line-height: 1.4;
+  line-height: 1.45;
 `;
 
 const TagRow = styled.div`
@@ -206,15 +234,12 @@ export default function ProjectsSection() {
           subtitle="13 projects from production AI and quant work to open-source repos on GitHub — click any card for full details and repo links."
         />
 
-        <Grid>
-          {projects.map((project, i) => (
+        <Grid variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+          {projects.map((project) => (
             <Card
               key={project.id}
               $accent={project.accent}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
+              variants={staggerItem}
               onClick={() => open(project)}
               onMouseEnter={() => setHoveredId(project.id)}
               onMouseLeave={() => setHoveredId(null)}

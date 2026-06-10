@@ -212,9 +212,9 @@ const Tabs = styled.div`
 `;
 
 const Tab = styled.button<{ $active?: boolean }>`
-  font-size: var(--text-small);
+  font-size: 0.8125rem;
   font-weight: 500;
-  padding: 0.4rem 0.75rem;
+  padding: 0.35rem 0.7rem;
   border-radius: 0.5rem;
   flex-shrink: 0;
   white-space: nowrap;

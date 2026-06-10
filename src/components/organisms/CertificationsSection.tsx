@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { motion } from '../../lib/motion';
 import SectionHeader from '../molecules/SectionHeader';
 import { certifications } from '../../data/certifications';
-import { fadeUp, staggerContainer } from '../../styles/animations';
+import { fadeUp, staggerContainer, staggerItem } from '../../styles/animations';
 import { sectionCentered } from '../../styles/layout';
 
 const Section = styled(motion.section)`
@@ -27,20 +27,22 @@ const Card = styled(motion.a)<{ $accent: string }>`
   flex-direction: column;
   gap: 0.35rem;
   padding: 1.25rem 1.35rem;
-  border-radius: 1rem;
+  border-radius: var(--card-radius, 1rem);
   border: 1px solid var(--card-border);
   border-left: 3px solid ${({ $accent }) => $accent};
   background: linear-gradient(135deg, ${({ $accent }) => `${$accent}08`} 0%, var(--surface-elevated) 55%);
-  box-shadow: var(--card-shadow);
+  box-shadow: var(--card-shadow), var(--card-highlight);
   text-decoration: none;
   color: inherit;
-  transition: all var(--transition);
+  transition: all 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
 
-  &:hover {
-    background: var(--surface);
-    border-color: ${({ $accent }) => `${$accent}55`};
-    box-shadow: var(--card-shadow-hover);
-    transform: translateY(-3px);
+  @media (hover: hover) {
+    &:hover {
+      background: var(--surface);
+      border-color: ${({ $accent }) => `${$accent}55`};
+      box-shadow: var(--card-shadow-hover);
+      transform: translateY(-5px);
+    }
   }
 `;
 
@@ -56,10 +58,7 @@ const Meta = styled.span`
   color: var(--text-muted);
 `;
 
-const itemVariant = {
-  hidden: { opacity: 0, y: 16 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-};
+const itemVariant = staggerItem;
 
 export default function CertificationsSection() {
   return (

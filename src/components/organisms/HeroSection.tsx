@@ -1,5 +1,5 @@
 /**
- * Hero — typewriter name, crossfading roles, ambient glow, status badges.
+ * Hero — typewriter name, crossfading roles, aurora gradient mesh, status badges.
  */
 import styled from '@emotion/styled';
 import { keyframes } from '@emotion/react';
@@ -15,6 +15,12 @@ const HERO_BADGES = ['Graviton Research', 'MS AI · Texas A&M', '2× GCP Certifi
 const heroFadeUp = keyframes`
   from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
+`;
+
+const auroraShift = keyframes`
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 `;
 
 const MainContent = styled.section`
@@ -54,6 +60,37 @@ const Ambient = styled.div`
   pointer-events: none;
   z-index: 0;
   overflow: hidden;
+`;
+
+const AuroraMesh = styled.div`
+  position: absolute;
+  inset: -20%;
+  background: linear-gradient(
+    -45deg,
+    rgba(0, 113, 227, 0.15),
+    rgba(88, 86, 214, 0.12),
+    rgba(175, 82, 222, 0.1),
+    rgba(50, 173, 230, 0.12),
+    rgba(0, 113, 227, 0.08)
+  );
+  background-size: 400% 400%;
+  animation: ${auroraShift} 20s ease infinite;
+  filter: blur(80px);
+  opacity: 0.6;
+
+  :root.dark & {
+    opacity: 0.4;
+  }
+
+  @media (max-width: 768px) {
+    filter: blur(50px);
+    opacity: 0.5;
+    :root.dark & { opacity: 0.3; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
 `;
 
 const Orb = styled.div<{ $x: string; $y: string; $size: string; $delay: string; $color: string }>`
@@ -112,7 +149,7 @@ const Eyebrow = styled.div`
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: var(--text-body);
+  font-size: var(--text-small);
   font-weight: 500;
   color: var(--accent);
   letter-spacing: 0.08em;
@@ -130,11 +167,12 @@ const LiveDot = styled.span`
   height: 6px;
   border-radius: 50%;
   background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
   animation: pulse 2s ease-in-out infinite;
 
   @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.85); }
+    0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 8px var(--accent); }
+    50% { opacity: 0.5; transform: scale(0.85); box-shadow: 0 0 4px var(--accent); }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -153,7 +191,6 @@ const NameLine = styled.span`
   ${headingHero};
   display: block;
   overflow-wrap: anywhere;
-  /* Prevent descender clip on large display type */
   padding-bottom: 0.04em;
 `;
 
@@ -191,7 +228,6 @@ const ChangingText = styled.span`
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  /* background-clip:text often clips descenders — pad the paint box */
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
 `;
@@ -206,22 +242,24 @@ const BadgeRow = styled.div`
 const BADGE_ACCENTS = ['#0071e3', '#5856d6', '#32ade6'];
 
 const Badge = styled.span<{ $accent: string }>`
-  font-size: var(--text-body);
+  font-size: var(--text-small);
   font-weight: 500;
-  padding: 0.4rem 0.75rem;
+  padding: 0.35rem 0.7rem;
   max-width: 100%;
   border-radius: 100px;
-  border: 1px solid ${({ $accent }) => `${$accent}35`};
-  background: ${({ $accent }) => `${$accent}10`};
-  color: var(--text-muted);
+  border: 1px solid ${({ $accent }) => `${$accent}30`};
+  background: ${({ $accent }) => `${$accent}0c`};
+  color: var(--text-primary);
+  opacity: 0.7;
   backdrop-filter: blur(8px);
-  box-shadow: var(--card-highlight);
-  transition: border-color var(--transition), color var(--transition), box-shadow var(--transition);
+  transition: border-color var(--transition), opacity var(--transition), transform var(--transition-fast);
 
-  &:hover {
-    border-color: ${({ $accent }) => $accent};
-    color: ${({ $accent }) => $accent};
-    box-shadow: 0 2px 12px ${({ $accent }) => `${$accent}25`}, var(--card-highlight);
+  @media (hover: hover) {
+    &:hover {
+      border-color: ${({ $accent }) => `${$accent}60`};
+      opacity: 1;
+      transform: translateY(-1px);
+    }
   }
 `;
 
@@ -262,9 +300,9 @@ const ContactInfo = styled.div`
   min-width: 0;
 
   h3 {
-    font-size: var(--text-h2);
+    font-size: clamp(1.125rem, 2.5vw, 1.5rem);
     font-weight: 600;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
     letter-spacing: -0.02em;
   }
 `;
@@ -289,9 +327,9 @@ const ContactLink = styled.a`
 const Description = styled.p`
   flex: 1;
   min-width: 0;
-  max-width: 480px;
-  font-size: clamp(1.0625rem, calc(0.6vw + 0.95rem), 1.25rem);
-  line-height: 1.6;
+  max-width: 440px;
+  font-size: var(--text-body);
+  line-height: 1.65;
   text-align: right;
   color: var(--text-muted);
   letter-spacing: -0.01em;
@@ -310,6 +348,7 @@ export default function HeroSection(refs: HeroRefs) {
   return (
     <MainContent id="main-section">
       <Ambient aria-hidden="true">
+        <AuroraMesh />
         <Grid />
         <Orb $x="75%" $y="5%" $size="min(420px, 55vw)" $delay="0s" $color="rgba(0, 113, 227, 0.14)" />
         <Orb $x="-5%" $y="60%" $size="min(300px, 40vw)" $delay="-4s" $color="rgba(88, 86, 214, 0.1)" />
