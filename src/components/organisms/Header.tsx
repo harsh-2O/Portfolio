@@ -9,6 +9,8 @@ interface HeaderProps {
   onMenuToggle: (open: boolean) => void;
 }
 
+const MONO = "'IBM Plex Mono', 'SF Mono', monospace";
+
 const NAV_ITEMS: { section: NavSection; label: string; targetId?: string }[] = [
   { section: 'home', label: 'Home' },
   { section: 'resume', label: 'Resume', targetId: 'resume-section' },
@@ -17,7 +19,6 @@ const NAV_ITEMS: { section: NavSection; label: string; targetId?: string }[] = [
   { section: 'contact', label: 'Contact', targetId: 'footer-section' },
 ];
 
-/** Frosted bar only — backdrop on a pseudo-element so fixed menus aren't trapped inside. */
 const HeaderContainer = styled.header<{ $scrolled: boolean }>`
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -34,7 +35,7 @@ const HeaderContainer = styled.header<{ $scrolled: boolean }>`
   min-height: 48px;
   background: ${({ $scrolled }) => ($scrolled ? 'var(--header-bg)' : 'transparent')};
   border-bottom: 1px solid
-    ${({ $scrolled }) => ($scrolled ? 'var(--header-shadow)' : 'transparent')};
+    ${({ $scrolled }) => ($scrolled ? 'var(--card-border)' : 'transparent')};
   transition: background 0.35s cubic-bezier(0.25, 0.1, 0.25, 1),
     border-color 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
 
@@ -53,7 +54,7 @@ const HeaderContainer = styled.header<{ $scrolled: boolean }>`
   @media (max-width: 1024px) {
     grid-template-columns: 1fr auto;
     background: var(--header-bg);
-    border-bottom: 1px solid var(--header-shadow);
+    border-bottom: 1px solid var(--card-border);
 
     &::before {
       backdrop-filter: saturate(180%) blur(20px);
@@ -64,13 +65,9 @@ const HeaderContainer = styled.header<{ $scrolled: boolean }>`
 
 const Logo = styled.button`
   justify-self: start;
-  font-family: var(--font-display);
-  font-size: clamp(1rem, 2.5vw, 1.2rem);
-  font-weight: 600;
-  color: var(--text-primary);
-  letter-spacing: 0.01em;
-  opacity: 0.88;
-  transition: opacity var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   background: none;
   border: none;
   cursor: pointer;
@@ -80,14 +77,48 @@ const Logo = styled.button`
   text-overflow: ellipsis;
   white-space: nowrap;
 
-  &:hover { opacity: 1; }
+  &:hover span:first-of-type {
+    opacity: 1;
+  }
+`;
+
+const LogoName = styled.span`
+  font-family: var(--font-display);
+  font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  opacity: 0.9;
+  transition: opacity var(--transition);
+`;
+
+const LogoTag = styled.span`
+  font-family: ${MONO};
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  padding: 0.15rem 0.4rem;
+  border-radius: 3px;
+  border: 1px solid var(--accent-line);
+  background: var(--accent-subtle);
+  opacity: 0.8;
+
+  @media (max-width: 480px) {
+    display: none;
+  }
 `;
 
 const DesktopNav = styled.nav`
   display: flex;
   align-items: center;
-  gap: clamp(1.25rem, 3vw, 2rem);
+  gap: 0.25rem;
   justify-self: center;
+  padding: 0.3rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--card-border);
+  background: var(--surface);
 
   @media (max-width: 1024px) {
     display: none;
@@ -95,75 +126,94 @@ const DesktopNav = styled.nav`
 `;
 
 const NavLink = styled.button<{ $active?: boolean; $mobile?: boolean }>`
-  font-size: ${({ $mobile }) => ($mobile ? 'clamp(1.35rem, 5vw, 1.75rem)' : 'var(--text-nav)')};
-  font-weight: 500;
-  letter-spacing: ${({ $mobile }) => ($mobile ? '-0.02em' : '-0.01em')};
-  color: var(--text-primary);
-  opacity: ${({ $active, $mobile }) => {
-    if ($mobile) return $active ? 1 : 0.4;
-    return $active ? 1 : 0.55;
+  font-family: ${({ $mobile }) => ($mobile ? 'var(--font-primary)' : MONO)};
+  font-size: ${({ $mobile }) => ($mobile ? 'clamp(1.25rem, 5vw, 1.5rem)' : '0.72rem')};
+  font-weight: ${({ $active }) => ($active ? 600 : 500)};
+  letter-spacing: ${({ $mobile }) => ($mobile ? '-0.02em' : '0.02em')};
+  color: ${({ $active }) => ($active ? 'var(--text-primary)' : 'var(--text-muted)')};
+  background: ${({ $active, $mobile }) => {
+    if ($mobile) return 'none';
+    return $active ? 'var(--accent-subtle)' : 'transparent';
   }};
-  background: none;
-  border: none;
+  border: ${({ $active, $mobile }) => {
+    if ($mobile) return 'none';
+    return $active ? '1px solid var(--accent-line)' : '1px solid transparent';
+  }};
+  border-radius: 0.35rem;
   cursor: pointer;
-  padding: ${({ $mobile }) => ($mobile ? '0.75rem 0' : '0')};
+  padding: ${({ $mobile }) => ($mobile ? '0.75rem 0' : '0.35rem 0.65rem')};
   min-height: ${({ $mobile }) => ($mobile ? '48px' : 'auto')};
   width: ${({ $mobile }) => ($mobile ? '100%' : 'auto')};
-  text-align: ${({ $mobile }) => ($mobile ? 'left' : 'inherit')};
-  display: ${({ $mobile }) => ($mobile ? 'flex' : 'inline')};
+  text-align: ${({ $mobile }) => ($mobile ? 'left' : 'center')};
+  display: flex;
   align-items: center;
-  transition: opacity var(--transition);
-  position: relative;
+  transition: all var(--transition-fast);
 
-  &:hover { opacity: 0.85; }
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -4px;
-    left: 0;
-    right: 0;
-    height: 1.5px;
-    background: var(--accent-gradient);
-    transform: scaleX(${({ $active }) => ($active ? 1 : 0)});
-    transition: transform 0.3s ease;
-    border-radius: 1px;
+  @media (hover: hover) {
+    &:hover {
+      color: var(--text-primary);
+      background: ${({ $mobile }) => ($mobile ? 'transparent' : 'var(--tech-item-bg)')};
+    }
   }
+`;
 
-  ${({ $mobile }) =>
-    $mobile &&
-    `
-    &::after { display: none; }
-  `}
+const NavIndex = styled.span<{ $active?: boolean }>`
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: ${({ $active }) => ($active ? 'var(--accent)' : 'var(--text-muted)')};
+  margin-right: 0.35rem;
+  opacity: ${({ $active }) => ($active ? 1 : 0.5)};
+  font-variant-numeric: tabular-nums;
+  font-family: ${MONO};
+  transition: color var(--transition-fast), opacity var(--transition-fast);
 `;
 
 const RightSlot = styled.div`
   justify-self: end;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
+`;
+
+const StatusDot = styled.span`
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 6px var(--accent);
+
+  @media (max-width: 480px) {
+    display: none;
+  }
 `;
 
 const MenuButton = styled.button`
   display: none;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   align-items: center;
   justify-content: center;
-  background: none;
-  border: none;
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: 0.4rem;
   cursor: pointer;
   color: var(--text-primary);
-  opacity: 0.8;
+  transition: all var(--transition-fast);
 
   @media (max-width: 1024px) {
     display: flex;
   }
 
-  svg { width: 18px; height: 18px; }
+  @media (hover: hover) {
+    &:hover {
+      border-color: var(--accent-line);
+      background: var(--accent-subtle);
+    }
+  }
+
+  svg { width: 16px; height: 16px; }
 `;
 
-/** Outside header — viewport-fixed, not clipped by header backdrop-filter. */
 const MobileNavOverlay = styled.div<{ $isOpen: boolean }>`
   display: none;
 
@@ -172,7 +222,7 @@ const MobileNavOverlay = styled.div<{ $isOpen: boolean }>`
     position: fixed;
     inset: 0;
     z-index: 98;
-    background: rgba(0, 0, 0, 0.45);
+    background: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
     opacity: ${({ $isOpen }) => ($isOpen ? 1 : 0)};
@@ -200,8 +250,8 @@ const MobileNav = styled.nav<{ $isOpen: boolean }>`
     background: var(--header-bg);
     backdrop-filter: saturate(180%) blur(24px);
     -webkit-backdrop-filter: saturate(180%) blur(24px);
-    border-left: 1px solid var(--header-shadow);
-    box-shadow: -8px 0 32px rgba(0, 0, 0, 0.12);
+    border-left: 1px solid var(--card-border);
+    box-shadow: -8px 0 32px rgba(0, 0, 0, 0.15);
     z-index: 99;
     transform: translateX(${({ $isOpen }) => ($isOpen ? '0' : '100%')});
     visibility: ${({ $isOpen }) => ($isOpen ? 'visible' : 'hidden')};
@@ -213,13 +263,18 @@ const MobileNav = styled.nav<{ $isOpen: boolean }>`
   }
 `;
 
-const MobileNavIndex = styled.span`
-  font-size: 0.7rem;
+const MobileNavLabel = styled.span`
+  font-family: ${MONO};
+  font-size: 0.6rem;
   font-weight: 600;
-  color: var(--accent);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
   opacity: 0.5;
-  margin-right: 0.75rem;
-  font-variant-numeric: tabular-nums;
+  padding: 0 0 0.75rem;
+  border-bottom: 1px solid var(--card-border);
+  width: 100%;
+  margin-bottom: 0.5rem;
 `;
 
 function scrollToSection(id: string) {
@@ -265,40 +320,33 @@ export default function Header({ activeSection, isMenuOpen, onMenuToggle }: Head
     document.body.style.overflow = 'auto';
   };
 
-  const desktopLinks = NAV_ITEMS.map(({ section, label, targetId }) => (
-    <NavLink
-      key={section}
-      $active={activeSection === section}
-      onClick={() => navigate(targetId)}
-    >
-      {label}
-    </NavLink>
-  ));
-
-  const mobileLinks = NAV_ITEMS.map(({ section, label, targetId }, i) => (
-    <NavLink
-      key={section}
-      $active={activeSection === section}
-      $mobile
-      onClick={() => navigate(targetId)}
-    >
-      <MobileNavIndex>0{i + 1}</MobileNavIndex>
-      {label}
-    </NavLink>
-  ));
-
   return (
     <>
       <HeaderContainer $scrolled={scrolled}>
         <a href="#main-section" className="skip-link">Skip to content</a>
 
         <Logo onClick={() => navigate()} aria-label="Scroll to top">
-          Harsh Mehta
+          <LogoName>Harsh Mehta</LogoName>
+          <LogoTag>DEV</LogoTag>
         </Logo>
 
-        <DesktopNav aria-label="Main navigation">{desktopLinks}</DesktopNav>
+        <DesktopNav aria-label="Main navigation">
+          {NAV_ITEMS.map(({ section, label, targetId }, i) => (
+            <NavLink
+              key={section}
+              $active={activeSection === section}
+              onClick={() => navigate(targetId)}
+            >
+              <NavIndex $active={activeSection === section}>
+                {String(i + 1).padStart(2, '0')}
+              </NavIndex>
+              {label}
+            </NavLink>
+          ))}
+        </DesktopNav>
 
         <RightSlot>
+          <StatusDot title="Online" />
           <ThemeToggle />
           <MenuButton
             onClick={toggleMenu}
@@ -320,8 +368,22 @@ export default function Header({ activeSection, isMenuOpen, onMenuToggle }: Head
 
       <MobileNavOverlay $isOpen={isMenuOpen} onClick={closeMenu} aria-hidden="true" />
 
-      <MobileNav $isOpen={isMenuOpen} aria-label="Mobile navigation" aria-hidden={!isMenuOpen}>
-        {mobileLinks}
+      {/* @ts-expect-error inert is a valid HTML attribute */}
+      <MobileNav $isOpen={isMenuOpen} aria-label="Mobile navigation" inert={!isMenuOpen ? '' : undefined}>
+        <MobileNavLabel>Navigation</MobileNavLabel>
+        {NAV_ITEMS.map(({ section, label, targetId }, i) => (
+          <NavLink
+            key={section}
+            $active={activeSection === section}
+            $mobile
+            onClick={() => navigate(targetId)}
+          >
+            <NavIndex $active={activeSection === section}>
+              {String(i + 1).padStart(2, '0')}
+            </NavIndex>
+            {label}
+          </NavLink>
+        ))}
       </MobileNav>
     </>
   );

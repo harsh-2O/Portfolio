@@ -340,7 +340,6 @@ export default function ProjectsSection() {
   return (
     <>
       <Section
-        id="projects-section"
         variants={fadeUp}
         initial="hidden"
         whileInView="visible"

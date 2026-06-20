@@ -271,7 +271,6 @@ export default function BlogSection() {
   return (
     <>
       <Section
-        id="blog-section"
         variants={fadeUp}
         initial="hidden"
         whileInView="visible"

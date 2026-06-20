@@ -4,6 +4,7 @@ interface LazyWhenVisibleProps {
   children: ReactNode;
   minHeight?: number;
   rootMargin?: string;
+  id?: string;
 }
 
 /**
@@ -14,6 +15,7 @@ export default function LazyWhenVisible({
   children,
   minHeight = 280,
   rootMargin = '300px 0px',
+  id,
 }: LazyWhenVisibleProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -42,7 +44,7 @@ export default function LazyWhenVisible({
   }, [visible, rootMargin]);
 
   return (
-    <div ref={ref} style={{ minHeight: visible ? undefined : minHeight }}>
+    <div ref={ref} id={id} style={{ minHeight: visible ? undefined : minHeight }}>
       {visible ? children : null}
     </div>
   );

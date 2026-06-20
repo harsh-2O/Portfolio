@@ -42,7 +42,6 @@ const DownloadButton = styled.button`
 export default function ResumeSection() {
   return (
     <Section
-      id="resume-section"
       variants={fadeUp}
       initial="hidden"
       whileInView="visible"

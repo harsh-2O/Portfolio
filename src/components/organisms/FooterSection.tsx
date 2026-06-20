@@ -163,7 +163,6 @@ const SocialLink = styled.a`
 export default function FooterSection() {
   return (
     <Footer
-      id="footer-section"
       variants={fadeUp}
       initial="hidden"
       whileInView="visible"

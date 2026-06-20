@@ -2,6 +2,7 @@ import { useCallback, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { motion, AnimatePresence } from '../../lib/motion';
 import SectionHeader from '../molecules/SectionHeader';
+import RadarChart from '../molecules/RadarChart';
 import { skillCategories } from '../../data/skills';
 import type { Skill } from '../../data/skills';
 import { fadeUp, staggerContainer } from '../../styles/animations';
@@ -34,12 +35,12 @@ const Layout = styled.div`
   }
 `;
 
-/* ── Category sidebar ────────────────────────────────────────────── */
+/* ── Category sidebar (Orage-inspired terminal tabs) ─────────────── */
 
 const CategoryNav = styled.nav`
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.35rem;
   position: sticky;
   top: calc(var(--header-height) + 1.5rem);
 
@@ -57,69 +58,78 @@ const CategoryNav = styled.nav`
 const CategoryTab = styled.button<{ $active: boolean; $accent: string }>`
   display: flex;
   align-items: center;
-  gap: 0.65rem;
-  padding: 0.75rem 1rem;
-  border-radius: 1rem;
+  gap: 0.6rem;
+  padding: 0.65rem 0.9rem;
+  border-radius: 0.5rem;
   border: 1px solid
-    ${({ $active, $accent }) => ($active ? `${$accent}45` : 'var(--card-border)')};
+    ${({ $active, $accent }) => ($active ? `${$accent}50` : 'var(--card-border)')};
   background: ${({ $active, $accent }) =>
-    $active ? `${$accent}12` : 'var(--surface)'};
+    $active ? `${$accent}0e` : 'transparent'};
   color: ${({ $active }) =>
     $active ? 'var(--text-primary)' : 'var(--text-muted)'};
   cursor: pointer;
   text-align: left;
   white-space: nowrap;
   transition: all var(--transition-fast);
+  font-family: 'IBM Plex Mono', 'SF Mono', monospace;
+
+  ${({ $active, $accent }) =>
+    $active &&
+    `box-shadow: inset 3px 0 0 ${$accent};`}
 
   @media (hover: hover) {
     &:hover {
       border-color: ${({ $accent }) => `${$accent}35`};
-      background: ${({ $accent }) => `${$accent}0a`};
+      background: ${({ $accent }) => `${$accent}08`};
       color: var(--text-primary);
     }
   }
 
   ${media.lg} {
     flex-shrink: 0;
-    padding: 0.6rem 0.9rem;
-    border-radius: 100px;
+    padding: 0.55rem 0.8rem;
+    border-radius: 0.4rem;
+    box-shadow: none !important;
   }
 `;
 
-const TabIcon = styled.span`
-  font-size: 1.15rem;
-  line-height: 1;
+const TabIndex = styled.span<{ $accent: string }>`
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: ${({ $accent }) => $accent};
+  opacity: 0.7;
+  font-variant-numeric: tabular-nums;
 `;
 
 const TabLabel = styled.span`
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   font-weight: 550;
   letter-spacing: -0.01em;
 `;
 
 const TabCount = styled.span<{ $accent: string }>`
-  font-size: 0.7rem;
+  font-size: 0.6rem;
   font-weight: 600;
   margin-left: auto;
-  padding: 0.15rem 0.45rem;
-  border-radius: 100px;
-  background: ${({ $accent }) => `${$accent}18`};
+  padding: 0.12rem 0.4rem;
+  border-radius: 3px;
+  background: ${({ $accent }) => `${$accent}14`};
   color: ${({ $accent }) => $accent};
+  font-variant-numeric: tabular-nums;
 
   ${media.lg} {
-    margin-left: 0.25rem;
+    margin-left: 0.2rem;
   }
 `;
 
-/* ── 3D tilt container ───────────────────────────────────────────── */
+/* ── Main card (Orage system-panel aesthetic) ────────────────────── */
 
 const TiltContainer = styled.div`
   perspective: 1200px;
 `;
 
-const TiltCard = styled(motion.div)<{ $accent: string }>`
-  padding: clamp(1.25rem, 3vw, 2rem);
-  border-radius: 1.5rem;
+const SystemPanel = styled(motion.div)<{ $accent: string }>`
+  border-radius: 1rem;
   background: var(--surface-elevated);
   border: 1px solid var(--card-border);
   box-shadow: var(--card-shadow), var(--card-highlight);
@@ -136,11 +146,11 @@ const TiltCard = styled(motion.div)<{ $accent: string }>`
     top: 0;
     left: 0;
     right: 0;
-    height: 3px;
+    height: 2px;
     background: linear-gradient(
       90deg,
       ${({ $accent }) => $accent},
-      ${({ $accent }) => `${$accent}66`} 55%,
+      ${({ $accent }) => `${$accent}44`} 60%,
       transparent
     );
   }
@@ -150,6 +160,36 @@ const TiltCard = styled(motion.div)<{ $accent: string }>`
   }
 `;
 
+const PanelHeader = styled.div<{ $accent: string }>`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid var(--card-border);
+  font-family: 'IBM Plex Mono', 'SF Mono', monospace;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.75rem;
+
+  ${media.sm} {
+    padding: 0.6rem 0.85rem;
+  }
+`;
+
+const PanelTitle = styled.span`
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+`;
+
+const PanelMeta = styled.span<{ $accent: string }>`
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: ${({ $accent }) => $accent};
+  font-variant-numeric: tabular-nums;
+`;
+
 const GlowOrb = styled.div<{ $x: number; $y: number; $accent: string; $visible: boolean }>`
   position: absolute;
   width: 260px;
@@ -157,7 +197,7 @@ const GlowOrb = styled.div<{ $x: number; $y: number; $accent: string; $visible: 
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    ${({ $accent }) => `${$accent}18`} 0%,
+    ${({ $accent }) => `${$accent}14`} 0%,
     transparent 70%
   );
   pointer-events: none;
@@ -169,40 +209,60 @@ const GlowOrb = styled.div<{ $x: number; $y: number; $accent: string; $visible: 
   transition: opacity 0.3s ease;
 `;
 
-/* ── Skill bars ──────────────────────────────────────────────────── */
+/* ── Dual-pane content: radar + skill list ───────────────────────── */
 
-const CategoryLabel = styled.div`
+const ContentGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+
+  ${media.md} {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const RadarPane = styled.div`
+  padding: clamp(0.75rem, 2vw, 1.25rem);
+  border-right: 1px solid var(--card-border);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1.25rem;
+  justify-content: center;
   position: relative;
   z-index: 1;
+
+  ${media.md} {
+    border-right: none;
+    border-bottom: 1px solid var(--card-border);
+    padding: clamp(0.5rem, 2vw, 1rem);
+  }
 `;
 
-const CategoryTitle = styled.h4<{ $accent: string }>`
-  font-family: var(--font-display);
-  font-size: clamp(1.1rem, calc(1vw + 0.85rem), 1.35rem);
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  color: var(--text-primary);
+const ListPane = styled.div`
+  padding: clamp(0.5rem, 2vw, 1.25rem);
+  position: relative;
+  z-index: 1;
+  max-height: 520px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+
+  &::-webkit-scrollbar { width: 4px; }
+  &::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 4px;
+  }
+
+  ${media.md} {
+    max-height: none;
+  }
 `;
 
-const SkillCount = styled.span<{ $accent: string }>`
-  font-size: 0.7rem;
-  font-weight: 600;
-  padding: 0.2rem 0.5rem;
-  border-radius: 100px;
-  background: ${({ $accent }) => `${$accent}14`};
-  color: ${({ $accent }) => $accent};
-`;
+/* ── Skill rows (data-terminal style) ────────────────────────────── */
 
 const SkillList = styled(motion.div)`
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-  position: relative;
-  z-index: 1;
+  gap: 0.2rem;
 `;
 
 const SkillRow = styled(motion.button)<{
@@ -210,24 +270,26 @@ const SkillRow = styled(motion.button)<{
   $accent: string;
 }>`
   display: grid;
-  grid-template-columns: minmax(100px, 140px) 1fr auto;
+  grid-template-columns: minmax(80px, 130px) 1fr auto;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.55rem 0.75rem;
-  border-radius: 0.75rem;
+  gap: 0.65rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: 0.4rem;
   border: 1px solid
     ${({ $active, $accent }) =>
       $active ? `${$accent}40` : 'transparent'};
   background: ${({ $active, $accent }) =>
-    $active ? `${$accent}0c` : 'transparent'};
+    $active ? `${$accent}0a` : 'transparent'};
   cursor: pointer;
   text-align: left;
   transition: all var(--transition-fast);
+  font-family: 'IBM Plex Mono', 'SF Mono', monospace;
+  width: 100%;
 
   @media (hover: hover) {
     &:hover {
-      background: ${({ $accent }) => `${$accent}08`};
-      border-color: ${({ $accent }) => `${$accent}20`};
+      background: ${({ $accent }) => `${$accent}06`};
+      border-color: ${({ $accent }) => `${$accent}18`};
     }
   }
 
@@ -238,12 +300,13 @@ const SkillRow = styled(motion.button)<{
 
   ${media.sm} {
     grid-template-columns: 1fr auto;
-    gap: 0.5rem;
+    gap: 0.4rem;
+    padding: 0.45rem 0.4rem;
   }
 `;
 
 const SkillName = styled.span<{ $active: boolean }>`
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   font-weight: ${({ $active }) => ($active ? 600 : 500)};
   color: var(--text-primary);
   letter-spacing: -0.01em;
@@ -251,7 +314,7 @@ const SkillName = styled.span<{ $active: boolean }>`
 `;
 
 const BarTrack = styled.div`
-  height: 6px;
+  height: 4px;
   border-radius: 100px;
   background: var(--tech-item-bg);
   overflow: hidden;
@@ -268,52 +331,127 @@ const BarFill = styled(motion.div)<{ $accent: string }>`
   background: linear-gradient(
     90deg,
     ${({ $accent }) => $accent},
-    ${({ $accent }) => `${$accent}88`}
+    ${({ $accent }) => `${$accent}66`}
   );
 `;
 
 const LevelLabel = styled.span<{ $accent: string }>`
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   font-weight: 700;
   color: ${({ $accent }) => $accent};
-  min-width: 30px;
+  min-width: 28px;
   text-align: right;
   font-variant-numeric: tabular-nums;
 `;
 
-/* ── Skill detail panel ──────────────────────────────────────────── */
+/* ── Skill detail panel (expandable) ─────────────────────────────── */
 
 const DetailPanel = styled(motion.div)<{ $accent: string }>`
-  margin-top: 0.75rem;
-  padding: 0.85rem 1rem;
-  border-radius: 0.85rem;
-  background: ${({ $accent }) => `${$accent}0c`};
-  border: 1px solid ${({ $accent }) => `${$accent}30`};
-  position: relative;
-  z-index: 1;
+  margin-top: 0.35rem;
+  margin-bottom: 0.25rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 0.5rem;
+  background: ${({ $accent }) => `${$accent}08`};
+  border: 1px solid ${({ $accent }) => `${$accent}22`};
+  border-left: 2px solid ${({ $accent }) => $accent};
+  font-family: 'IBM Plex Mono', 'SF Mono', monospace;
 `;
 
 const DetailTitle = styled.p<{ $accent: string }>`
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   font-weight: 600;
   color: ${({ $accent }) => $accent};
-  margin-bottom: 0.3rem;
-  letter-spacing: -0.01em;
+  margin-bottom: 0.25rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
 `;
 
 const DetailText = styled.p`
-  font-size: var(--text-small);
+  font-size: 0.78rem;
   line-height: 1.55;
   color: var(--text-primary);
 `;
 
-/* ── Summary stats ───────────────────────────────────────────────── */
+const DetailExpand = styled(motion.div)`
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed var(--card-border);
+`;
+
+const DetailExpandLabel = styled.button<{ $accent: string }>`
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: ${({ $accent }) => $accent};
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 0.35rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-family: 'IBM Plex Mono', 'SF Mono', monospace;
+
+  &:hover { opacity: 0.8; }
+`;
+
+const DetailExpandText = styled.p`
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+`;
+
+const MetaGrid = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-bottom: 0.5rem;
+`;
+
+const MetaRow = styled.div<{ $accent: string }>`
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: 0.7rem;
+  line-height: 1.5;
+  font-family: 'IBM Plex Mono', 'SF Mono', monospace;
+
+  ${media.xs} {
+    flex-wrap: wrap;
+    gap: 0.15rem 0.4rem;
+  }
+`;
+
+const MetaKey = styled.span<{ $accent: string }>`
+  font-weight: 700;
+  color: ${({ $accent }) => $accent};
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  min-width: 80px;
+  flex-shrink: 0;
+  opacity: 0.8;
+
+  &::after {
+    content: ' :';
+  }
+
+  ${media.xs} {
+    min-width: 60px;
+    font-size: 0.6rem;
+  }
+`;
+
+const MetaValue = styled.span`
+  color: var(--text-primary);
+  font-weight: 500;
+`;
+
+/* ── System stats bar (Orage terminal readout) ───────────────────── */
 
 const StatBar = styled(motion.div)`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--block-gap);
-  margin-bottom: 0.5rem;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
 
   ${media.sm} {
     grid-template-columns: repeat(2, 1fr);
@@ -321,43 +459,43 @@ const StatBar = styled(motion.div)`
 `;
 
 const StatCard = styled(motion.div)<{ $accent: string }>`
-  padding: clamp(0.75rem, 2vw, 1rem) clamp(0.75rem, 2vw, 1.15rem);
-  border-radius: 1rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 0.5rem;
   background: var(--surface);
   border: 1px solid var(--card-border);
-  text-align: center;
+  font-family: 'IBM Plex Mono', 'SF Mono', monospace;
   transition: border-color var(--transition-fast);
 
   @media (hover: hover) {
     &:hover {
-      border-color: ${({ $accent }) => `${$accent}35`};
+      border-color: ${({ $accent }) => `${$accent}30`};
     }
   }
 `;
 
 const StatValue = styled.div<{ $accent: string }>`
-  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-size: clamp(1.25rem, 2.5vw, 1.6rem);
   font-weight: 700;
-  font-family: var(--font-display);
   color: ${({ $accent }) => $accent};
   letter-spacing: -0.03em;
   line-height: 1.1;
+  font-variant-numeric: tabular-nums;
 `;
 
 const StatLabel = styled.div`
-  font-size: 0.7rem;
+  font-size: 0.6rem;
   font-weight: 500;
   color: var(--text-muted);
-  margin-top: 0.25rem;
+  margin-top: 0.2rem;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
 `;
 
 /* ── Animation variants ──────────────────────────────────────────── */
 
 const itemVariant = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
 const detailVariant = {
@@ -365,7 +503,7 @@ const detailVariant = {
   visible: {
     opacity: 1,
     height: 'auto' as const,
-    marginTop: '0.75rem',
+    marginTop: '0.35rem',
     transition: { duration: 0.25, ease: 'easeOut' },
   },
   exit: {
@@ -381,6 +519,7 @@ const detailVariant = {
 export default function SkillsSection() {
   const [activeCategory, setActiveCategory] = useState(0);
   const [selected, setSelected] = useState<SelectedSkill | null>(null);
+  const [expandedDetail, setExpandedDetail] = useState(false);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [glowPos, setGlowPos] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
@@ -392,10 +531,8 @@ export default function SkillsSection() {
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    const rotateX = ((y - centerY) / centerY) * -6;
-    const rotateY = ((x - centerX) / centerX) * 6;
+    const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -4;
+    const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 4;
     setTilt({ x: rotateX, y: rotateY });
     setGlowPos({ x, y });
   }, []);
@@ -406,13 +543,15 @@ export default function SkillsSection() {
   }, []);
 
   const currentCat = skillCategories[activeCategory];
-  const totalSkills = skillCategories.reduce((sum, c) => sum + c.skills.length, 0);
-  const avgLevel = Math.round(
-    skillCategories.flatMap((c) => c.skills).reduce((s, sk) => s + sk.level, 0) / totalSkills,
+  const allSkills = skillCategories.flatMap((c) => c.skills);
+  const totalSkills = allSkills.length;
+  const coverage = Math.round(
+    allSkills.reduce((s, sk) => s + Math.min(sk.level / sk.demand, 1) * 100, 0) / totalSkills,
   );
-  const topSkillCount = skillCategories.flatMap((c) => c.skills).filter((s) => s.level >= 85).length;
+  const topSkillCount = allSkills.filter((s) => s.level >= 85).length;
 
   const toggleSkill = (skill: Skill) => {
+    setExpandedDetail(false);
     setSelected((prev) =>
       prev?.skill.name === skill.name && prev.category === currentCat.title
         ? null
@@ -441,9 +580,9 @@ export default function SkillsSection() {
         viewport={{ once: true }}
       >
         {[
-          { value: `${totalSkills}+`, label: 'Technologies', accent: '#0071e3' },
+          { value: `${totalSkills}`, label: 'Technologies', accent: '#0071e3' },
           { value: `${skillCategories.length}`, label: 'Domains', accent: '#5856d6' },
-          { value: `${avgLevel}%`, label: 'Avg Proficiency', accent: '#af52de' },
+          { value: `${coverage}%`, label: 'Demand Coverage', accent: '#af52de' },
           { value: `${topSkillCount}`, label: 'Expert-level', accent: '#32ade6' },
         ].map((stat) => (
           <StatCard key={stat.label} $accent={stat.accent} variants={itemVariant}>
@@ -463,10 +602,11 @@ export default function SkillsSection() {
               onClick={() => {
                 setActiveCategory(i);
                 setSelected(null);
+                setExpandedDetail(false);
               }}
               aria-pressed={activeCategory === i}
             >
-              <TabIcon>{cat.icon}</TabIcon>
+              <TabIndex $accent={cat.accent}>{String(i + 1).padStart(2, '0')}</TabIndex>
               <TabLabel>{cat.title}</TabLabel>
               <TabCount $accent={cat.accent}>{cat.skills.length}</TabCount>
             </CategoryTab>
@@ -475,7 +615,7 @@ export default function SkillsSection() {
 
         <TiltContainer>
           <AnimatePresence mode="wait">
-            <TiltCard
+            <SystemPanel
               key={currentCat.title}
               ref={cardRef}
               $accent={currentCat.accent}
@@ -504,74 +644,130 @@ export default function SkillsSection() {
                 $visible={isHovering}
               />
 
-              <CategoryLabel>
-                <CategoryTitle $accent={currentCat.accent}>
+              <PanelHeader $accent={currentCat.accent}>
+                <PanelTitle>
                   {currentCat.icon} {currentCat.title}
-                </CategoryTitle>
-                <SkillCount $accent={currentCat.accent}>
-                  {currentCat.skills.length} skills
-                </SkillCount>
-              </CategoryLabel>
+                </PanelTitle>
+                <PanelMeta $accent={currentCat.accent}>
+                  {currentCat.skills.length} skills // avg {Math.round(
+                    currentCat.skills.reduce((s, sk) => s + sk.level, 0) / currentCat.skills.length,
+                  )}%
+                </PanelMeta>
+              </PanelHeader>
 
-              <SkillList
-                variants={staggerContainer}
-                initial="hidden"
-                animate="visible"
-              >
-                {currentCat.skills.map((skill) => {
-                  const isActive =
-                    selected?.skill.name === skill.name &&
-                    selected.category === currentCat.title;
-                  return (
-                    <div key={skill.name}>
-                      <SkillRow
-                        $active={isActive}
-                        $accent={currentCat.accent}
-                        variants={itemVariant}
-                        onClick={() => toggleSkill(skill)}
-                        aria-pressed={isActive}
-                        aria-label={`${skill.name}: ${skill.level}% — ${skill.description}`}
-                      >
-                        <SkillName $active={isActive}>{skill.name}</SkillName>
-                        <BarTrack>
-                          <BarFill
-                            $accent={currentCat.accent}
-                            initial={{ width: 0 }}
-                            animate={{ width: `${skill.level}%` }}
-                            transition={{
-                              duration: 0.8,
-                              ease: [0.25, 0.1, 0.25, 1],
-                            }}
-                          />
-                        </BarTrack>
-                        <LevelLabel $accent={currentCat.accent}>
-                          {skill.level}%
-                        </LevelLabel>
-                      </SkillRow>
+              <ContentGrid>
+                <RadarPane>
+                  <RadarChart
+                    skills={currentCat.skills}
+                    accent={currentCat.accent}
+                  />
+                </RadarPane>
 
-                      <AnimatePresence initial={false}>
-                        {isActive && (
-                          <DetailPanel
+                <ListPane>
+                  <SkillList
+                    variants={staggerContainer}
+                    initial="hidden"
+                    animate="visible"
+                  >
+                    {currentCat.skills.map((skill) => {
+                      const isActive =
+                        selected?.skill.name === skill.name &&
+                        selected.category === currentCat.title;
+                      return (
+                        <div key={skill.name}>
+                          <SkillRow
+                            $active={isActive}
                             $accent={currentCat.accent}
-                            variants={detailVariant}
-                            initial="hidden"
-                            animate="visible"
-                            exit="exit"
-                            role="region"
-                            aria-live="polite"
+                            variants={itemVariant}
+                            onClick={() => toggleSkill(skill)}
+                            aria-pressed={isActive}
+                            aria-label={`${skill.name}: ${skill.level}% — ${skill.description}`}
                           >
-                            <DetailTitle $accent={currentCat.accent}>
-                              {skill.name}
-                            </DetailTitle>
-                            <DetailText>{skill.description}</DetailText>
-                          </DetailPanel>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  );
-                })}
-              </SkillList>
-            </TiltCard>
+                            <SkillName $active={isActive}>{skill.name}</SkillName>
+                            <BarTrack>
+                              <BarFill
+                                $accent={currentCat.accent}
+                                initial={{ width: 0 }}
+                                animate={{ width: `${skill.level}%` }}
+                                transition={{
+                                  duration: 0.8,
+                                  ease: [0.25, 0.1, 0.25, 1],
+                                }}
+                              />
+                            </BarTrack>
+                            <LevelLabel $accent={currentCat.accent}>
+                              {skill.level}
+                            </LevelLabel>
+                          </SkillRow>
+
+                          <AnimatePresence initial={false}>
+                            {isActive && (
+                              <DetailPanel
+                                $accent={currentCat.accent}
+                                variants={detailVariant}
+                                initial="hidden"
+                                animate="visible"
+                                exit="exit"
+                                role="region"
+                                aria-live="polite"
+                              >
+                                <DetailTitle $accent={currentCat.accent}>
+                                  {skill.name} // {skill.level} vs {skill.demand} demand
+                                </DetailTitle>
+                                <DetailText>{skill.description}</DetailText>
+
+                                {(skill.detail || skill.meta) && (
+                                  <DetailExpand>
+                                    {!expandedDetail ? (
+                                      <DetailExpandLabel
+                                        $accent={currentCat.accent}
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setExpandedDetail(true);
+                                        }}
+                                      >
+                                        [+] Show workflow detail
+                                      </DetailExpandLabel>
+                                    ) : (
+                                      <>
+                                        <DetailExpandLabel
+                                          $accent={currentCat.accent}
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            setExpandedDetail(false);
+                                          }}
+                                        >
+                                          [-] Hide detail
+                                        </DetailExpandLabel>
+                                        {skill.meta && skill.meta.length > 0 && (
+                                          <MetaGrid>
+                                            {skill.meta.map((m) => (
+                                              <MetaRow key={m.key} $accent={currentCat.accent}>
+                                                <MetaKey $accent={currentCat.accent}>{m.key}</MetaKey>
+                                                <MetaValue>{m.value}</MetaValue>
+                                              </MetaRow>
+                                            ))}
+                                          </MetaGrid>
+                                        )}
+                                        {skill.detail && (
+                                          <DetailExpandText>
+                                            {skill.detail}
+                                          </DetailExpandText>
+                                        )}
+                                      </>
+                                    )}
+                                  </DetailExpand>
+                                )}
+                              </DetailPanel>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      );
+                    })}
+                  </SkillList>
+                </ListPane>
+              </ContentGrid>
+            </SystemPanel>
           </AnimatePresence>
         </TiltContainer>
       </Layout>
