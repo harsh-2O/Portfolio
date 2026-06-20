@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
 type ThemeContextType = {
   isDarkMode: boolean;
@@ -9,9 +9,6 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 const THEME_STORAGE_KEY = 'theme';
 
-/**
- * Resolves initial theme: localStorage wins; defaults to dark on first visit.
- */
 function getInitialTheme(): boolean {
   const saved = localStorage.getItem(THEME_STORAGE_KEY);
   if (saved === 'light') return false;
@@ -30,12 +27,12 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
       root.classList.remove('dark');
       localStorage.setItem(THEME_STORAGE_KEY, 'light');
     }
-
-    const themeMeta = document.querySelector('meta[name="theme-color"]');
-    themeMeta?.setAttribute('content', isDarkMode ? '#000000' : '#fbfbfd');
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', isDarkMode ? '#111111' : '#F7F7F7');
   }, [isDarkMode]);
 
-  const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
+  const toggleDarkMode = useCallback(() => setIsDarkMode((p) => !p), []);
 
   return (
     <ThemeContext.Provider value={{ isDarkMode, toggleDarkMode }}>

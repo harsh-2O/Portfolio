@@ -7,39 +7,37 @@ export const GlobalStyles = css`
     box-sizing: border-box;
   }
 
+  /* ── Ash Light (default) ────────────────────────────────────────── */
   :root {
-    --accent: #0071e3;
-    --accent-purple: #5856d6;
-    --accent-teal: #32ade6;
-    --accent-violet: #af52de;
-    --accent-green: #34c759;
-    --accent-gradient: linear-gradient(135deg, #0071e3 0%, #5856d6 55%, #af52de 100%);
-    --primary: #1d1d1f;
-    --primary-rgb: 29, 29, 31;
-    --secondary: #fbfbfd;
-    --text-primary: #1d1d1f;
-    --text-secondary: #f5f5f7;
-    --text-muted: #86868b;
-    --background: #f5f5f7;
-    --background-top: #fbfbfd;
-    --surface: rgba(255, 255, 255, 0.78);
-    --surface-elevated: rgba(255, 255, 255, 0.92);
-    --glow-color: rgba(0, 113, 227, 0.12);
-    --accent-subtle: rgba(0, 113, 227, 0.07);
-    --accent-line: rgba(0, 113, 227, 0.28);
-    --header-bg: rgba(251, 251, 253, 0.82);
-    --header-shadow: rgba(0, 0, 0, 0.06);
-    --nav-bg: #1d1d1f;
-    --nav-text: #f5f5f7;
+    --accent: #C06000;
+    --accent-gradient: linear-gradient(135deg, #C06000 0%, #767676 55%, #111111 100%);
+    --primary: #111111;
+    --primary-rgb: 17, 17, 17;
+    --secondary: #FFFFFF;
+    --text-primary: #111111;
+    --text-secondary: #F7F7F7;
+    --text-muted: #767676;
+    --background: #F7F7F7;
+    --background-top: #FFFFFF;
+    --surface: rgba(255, 255, 255, 0.85);
+    --surface-elevated: rgba(255, 255, 255, 0.95);
+    --glow-color: rgba(192, 96, 0, 0.08);
+    --accent-subtle: rgba(192, 96, 0, 0.06);
+    --accent-line: rgba(192, 96, 0, 0.22);
+    --header-bg: rgba(255, 255, 255, 0.88);
+    --header-shadow: rgba(17, 17, 17, 0.05);
+    --nav-bg: #111111;
+    --nav-text: #F7F7F7;
     --transition: 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+    --transition-fast: 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
     --font-display: 'Cormorant Garamond', 'Georgia', 'Times New Roman', serif;
     --font-primary: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     --header-height: 60px;
     --header-height-scrolled: 56px;
     --text-nav: 1.125rem;
     --hamburger-color: var(--text-primary);
-    --content-max: 1200px;
-    --section-padding-x: clamp(1rem, 4vw, 3rem);
+    --content-max: 100%;
+    --section-padding-x: clamp(1.25rem, 3vw, 2.5rem);
     --section-padding-top: clamp(3rem, 5.5vw, 4.5rem);
     --section-padding-bottom: clamp(2.25rem, 4vw, 3.25rem);
     --section-padding-y-md: clamp(2.5rem, 4vw, 3.25rem);
@@ -54,60 +52,52 @@ export const GlobalStyles = css`
     --text-h2: clamp(1.375rem, calc(1.75vw + 1rem), 2.5rem);
     --text-body: clamp(1rem, calc(0.55vw + 0.9rem), 1.1875rem);
     --text-small: clamp(0.875rem, calc(0.45vw + 0.8rem), 1rem);
-    --tech-item-bg: rgba(0, 0, 0, 0.03);
-    --tech-item-hover-bg: rgba(0, 0, 0, 0.06);
-    --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.03), 0 8px 32px rgba(0, 113, 227, 0.07);
-    --card-shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.04), 0 16px 48px rgba(0, 113, 227, 0.12);
-    --card-border: rgba(0, 0, 0, 0.07);
-    --card-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.85);
-    --section-band: linear-gradient(
-      135deg,
-      rgba(0, 113, 227, 0.045) 0%,
-      rgba(88, 86, 214, 0.035) 45%,
-      rgba(50, 173, 230, 0.03) 100%
-    );
-    --marquee-bg: linear-gradient(135deg, #0071e3 0%, #5856d6 50%, #1d1d1f 100%);
-    --divider: linear-gradient(90deg, transparent, var(--accent-line) 20%, var(--accent-line) 80%, transparent);
-    --focus-ring: 0 0 0 3px rgba(0, 113, 227, 0.4);
-    --scrollbar-thumb: rgba(0, 0, 0, 0.18);
-    --scrollbar-thumb-hover: rgba(0, 0, 0, 0.32);
+    --tech-item-bg: rgba(17, 17, 17, 0.03);
+    --tech-item-hover-bg: rgba(17, 17, 17, 0.06);
+    --card-shadow: 0 2px 8px rgba(17, 17, 17, 0.03), 0 8px 32px rgba(192, 96, 0, 0.06);
+    --card-shadow-hover: 0 4px 16px rgba(17, 17, 17, 0.04), 0 16px 48px rgba(192, 96, 0, 0.1);
+    --card-border: #E0E0E0;
+    --card-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    --card-radius: 1.25rem;
+    --section-band: linear-gradient(135deg, rgba(192, 96, 0, 0.035) 0%, rgba(118, 118, 118, 0.025) 100%);
+    --marquee-bg: linear-gradient(135deg, #C06000 0%, #111111 100%);
+    --divider: linear-gradient(90deg, transparent, #E0E0E0 20%, #E0E0E0 80%, transparent);
+    --focus-ring: 0 0 0 3px rgba(192, 96, 0, 0.35);
+    --scrollbar-thumb: rgba(17, 17, 17, 0.14);
+    --scrollbar-thumb-hover: rgba(17, 17, 17, 0.28);
   }
 
+  /* ── Ash Dark ─────────────────────────────────────────────────── */
   :root.dark {
-    --primary: #f5f5f7;
-    --primary-rgb: 245, 245, 247;
-    --secondary: #000000;
-    --text-primary: #f5f5f7;
-    --text-secondary: #1d1d1f;
-    --text-muted: #a1a1a6;
-    --background: #000000;
-    --background-top: #000000;
-    --surface: rgba(28, 28, 30, 0.72);
-    --surface-elevated: rgba(38, 38, 40, 0.9);
-    --glow-color: rgba(0, 113, 227, 0.12);
-    --accent-subtle: rgba(0, 113, 227, 0.1);
-    --accent-line: rgba(0, 113, 227, 0.35);
-    --header-bg: rgba(0, 0, 0, 0.8);
-    --header-shadow: rgba(255, 255, 255, 0.04);
-    --nav-bg: #f5f5f7;
-    --nav-text: #1d1d1f;
-    --tech-item-bg: rgba(255, 255, 255, 0.06);
-    --tech-item-hover-bg: rgba(255, 255, 255, 0.1);
-    --card-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
-    --card-shadow-hover: 0 12px 40px rgba(0, 113, 227, 0.15);
-    --card-border: rgba(255, 255, 255, 0.08);
-    --card-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.06);
-    --section-band: linear-gradient(
-      135deg,
-      rgba(0, 113, 227, 0.07) 0%,
-      rgba(88, 86, 214, 0.05) 45%,
-      rgba(175, 82, 222, 0.04) 100%
-    );
-    --marquee-bg: linear-gradient(135deg, #0071e3 0%, #5856d6 45%, #000000 100%);
-    --divider: linear-gradient(90deg, transparent, var(--accent-line) 20%, var(--accent-line) 80%, transparent);
-    --focus-ring: 0 0 0 3px rgba(0, 113, 227, 0.5);
-    --scrollbar-thumb: rgba(255, 255, 255, 0.18);
-    --scrollbar-thumb-hover: rgba(255, 255, 255, 0.32);
+    --primary: #F7F7F7;
+    --primary-rgb: 247, 247, 247;
+    --secondary: #111111;
+    --text-primary: #F7F7F7;
+    --text-secondary: #111111;
+    --text-muted: #999999;
+    --background: #111111;
+    --background-top: #181818;
+    --surface: rgba(32, 32, 32, 0.78);
+    --surface-elevated: rgba(40, 40, 40, 0.92);
+    --glow-color: rgba(192, 96, 0, 0.1);
+    --accent-subtle: rgba(192, 96, 0, 0.08);
+    --accent-line: rgba(192, 96, 0, 0.3);
+    --header-bg: rgba(17, 17, 17, 0.85);
+    --header-shadow: rgba(247, 247, 247, 0.04);
+    --nav-bg: #F7F7F7;
+    --nav-text: #111111;
+    --tech-item-bg: rgba(247, 247, 247, 0.06);
+    --tech-item-hover-bg: rgba(247, 247, 247, 0.1);
+    --card-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+    --card-shadow-hover: 0 12px 40px rgba(192, 96, 0, 0.15);
+    --card-border: rgba(247, 247, 247, 0.08);
+    --card-highlight: inset 0 1px 0 rgba(247, 247, 247, 0.05);
+    --section-band: linear-gradient(135deg, rgba(192, 96, 0, 0.06) 0%, rgba(40, 40, 40, 0.04) 100%);
+    --marquee-bg: linear-gradient(135deg, #C06000 0%, #111111 100%);
+    --divider: linear-gradient(90deg, transparent, rgba(192, 96, 0, 0.2) 20%, rgba(192, 96, 0, 0.2) 80%, transparent);
+    --focus-ring: 0 0 0 3px rgba(192, 96, 0, 0.45);
+    --scrollbar-thumb: rgba(247, 247, 247, 0.16);
+    --scrollbar-thumb-hover: rgba(247, 247, 247, 0.3);
   }
 
   html {
@@ -284,7 +274,7 @@ export const GlobalStyles = css`
       --text-h1: clamp(1.5rem, calc(4vw + 1rem), 2rem);
       --text-h2: clamp(1.125rem, calc(2vw + 0.9rem), 1.5rem);
       --text-body: 1rem;
-      --section-padding-x: 1.125rem;
+      --section-padding-x: 1rem;
       --section-padding-top: clamp(2.5rem, 6vw, 3.25rem);
       --section-padding-bottom: clamp(2rem, 5vw, 2.75rem);
       --section-padding-y-md: clamp(2.25rem, 5vw, 3rem);
@@ -301,7 +291,7 @@ export const GlobalStyles = css`
     :root {
       --text-hero: clamp(1.875rem, calc(8vw + 0.85rem), 2.25rem);
       --text-h1: clamp(1.375rem, calc(5vw + 0.85rem), 1.75rem);
-      --section-padding-x: 1rem;
+      --section-padding-x: 0.875rem;
       --section-padding-top: 2.25rem;
       --section-padding-bottom: 2rem;
       --section-padding-y-md: 2rem;
@@ -316,8 +306,19 @@ export const GlobalStyles = css`
 
   @media (min-width: 1536px) {
     :root {
-      --content-max: 1320px;
-      --section-padding-x: 3rem;
+      --section-padding-x: clamp(3rem, 5vw, 6rem);
+    }
+  }
+
+  @media (min-width: 1920px) {
+    :root {
+      --section-padding-x: clamp(4rem, 6vw, 8rem);
+    }
+  }
+
+  @media (min-width: 2560px) {
+    :root {
+      --section-padding-x: clamp(6rem, 8vw, 12rem);
     }
   }
 `;
