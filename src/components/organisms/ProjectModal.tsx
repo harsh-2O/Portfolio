@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import styled from '@emotion/styled';
 import { motion, AnimatePresence } from '../../lib/motion';
 import type { Project } from '../../types';
+import { CATEGORY_META } from '../../data/projects';
 import { hideScrollbar } from '../../styles/hideScrollbar';
 
 interface ProjectModalProps {
@@ -117,6 +118,16 @@ const Year = styled.span`
   padding: 0.3rem 0.75rem;
   border-radius: 100px;
   background: rgba(0, 113, 227, 0.1);
+`;
+
+const CategoryBadge = styled.span<{ $accent: string }>`
+  font-size: 0.75rem;
+  font-weight: 550;
+  padding: 0.3rem 0.75rem;
+  border-radius: 100px;
+  background: ${({ $accent }) => `${$accent}14`};
+  border: 1px solid ${({ $accent }) => `${$accent}30`};
+  color: ${({ $accent }) => $accent};
 `;
 
 const Title = styled.h3`
@@ -270,7 +281,12 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
               )}
             </Thumb>
 
-            <Meta><Year>{project.year}</Year></Meta>
+            <Meta>
+              <Year>{project.year}</Year>
+              <CategoryBadge $accent={CATEGORY_META[project.category].accent}>
+                {CATEGORY_META[project.category].icon} {project.category}
+              </CategoryBadge>
+            </Meta>
             <Title>{project.title}</Title>
             <Subtitle>{project.subtitle}</Subtitle>
             <Description>{project.description}</Description>
