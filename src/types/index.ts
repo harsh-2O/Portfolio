@@ -17,6 +17,12 @@ export interface ProjectHighlight {
   value: string;
 }
 
+export type ProjectCategory =
+  | 'AI & Machine Learning'
+  | 'Data Science & Analytics'
+  | 'Full-Stack & Web'
+  | 'Developer Tools';
+
 export interface Project {
   id: number;
   title: string;
@@ -24,6 +30,7 @@ export interface Project {
   description: string;
   image?: string;
   year: string;
+  category: ProjectCategory;
   tags: string[];
   highlights: ProjectHighlight[];
   bullets: string[];
