@@ -12,5 +12,6 @@ export { default as BlogSection } from './BlogSection';
 export { default as BlogModal } from './BlogModal';
 export { default as TestimonialsSection } from './TestimonialsSection';
 export { default as MarqueeBanner } from './MarqueeBanner';
+export { default as ContactSection } from './ContactSection';
 export { default as FooterSection } from './FooterSection';
 // CommandPalette is code-split — import it lazily from its own path.

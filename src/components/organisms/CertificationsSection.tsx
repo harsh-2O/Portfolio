@@ -1,9 +1,9 @@
-import { useCallback, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { motion } from '../../lib/motion';
+import { fadeUp, staggerContainer, staggerItem } from '../../motion/variants';
 import SectionHeader from '../molecules/SectionHeader';
-import { certifications } from '../../data/certifications';
-import { fadeUp, staggerContainer } from '../../motion/variants';
+import { certifications, type Certification } from '../../data/certifications';
+import { useTilt } from '../../hooks/useTilt';
 import { sectionCentered } from '../../styles/layout';
 import { media } from '../../styles/mixins';
 
@@ -11,208 +11,174 @@ const Section = styled(motion.section)`
   ${sectionCentered};
 `;
 
-const Grid = styled(motion.div)`
+const Grid = styled(motion.ul)`
+  list-style: none;
   display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--block-gap);
-
-  @media (min-width: 640px) {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-  }
-
-  @media (min-width: 1024px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.65rem, 1.2vw, 1rem);
 
   @media (min-width: 1600px) {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  ${media.lg} {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  ${media.sm} {
+    grid-template-columns: minmax(0, 1fr);
   }
 `;
 
-const ACCENT_CYCLE = ['#0071e3', '#5856d6', '#32ade6', '#af52de', '#34c759'];
-
-const TiltWrap = styled.div`
-  perspective: 800px;
+const Cell = styled(motion.li)`
+  perspective: 900px;
+  min-width: 0;
 `;
 
-const Card = styled(motion.a)<{ $accent: string }>`
+const Card = styled(motion.a)`
+  position: relative;
+  height: 100%;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  padding: 1.35rem 1.5rem;
-  border-radius: 1.25rem;
-  border: 1px solid var(--card-border);
-  border-left: 3px solid ${({ $accent }) => $accent};
-  background: linear-gradient(
-    135deg,
-    ${({ $accent }) => `${$accent}08`} 0%,
-    var(--surface-elevated) 55%
-  );
-  box-shadow: var(--card-shadow), var(--card-highlight);
-  text-decoration: none;
-  color: inherit;
-  transition: box-shadow var(--transition), border-color var(--transition);
+  padding: 1.1rem 1.2rem 1.2rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  overflow: hidden;
   transform-style: preserve-3d;
   will-change: transform;
-  position: relative;
-  overflow: hidden;
+  transition: border-color var(--transition-fast);
 
-  &:hover {
-    box-shadow: var(--card-shadow-hover);
-    border-color: ${({ $accent }) => `${$accent}55`};
-  }
-
-  &:focus-visible {
-    outline: none;
-    box-shadow: var(--focus-ring);
+  @media (hover: hover) {
+    &:hover {
+      border-color: var(--border-strong);
+    }
   }
 `;
 
-const CardGlow = styled.div<{ $x: number; $y: number; $accent: string; $show: boolean }>`
+/** Soft specular sweep that follows the pointer across the card face. */
+const Specular = styled.span<{ $x: number; $y: number; $on: boolean }>`
   position: absolute;
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  background: radial-gradient(circle, ${({ $accent }) => `${$accent}15`} 0%, transparent 70%);
+  inset: 0;
   pointer-events: none;
-  z-index: 0;
-  transform: translate(-50%, -50%);
-  left: ${({ $x }) => $x}px;
-  top: ${({ $y }) => $y}px;
-  opacity: ${({ $show }) => ($show ? 1 : 0)};
-  transition: opacity 0.3s ease;
+  opacity: ${({ $on }) => ($on ? 1 : 0)};
+  transition: opacity var(--transition);
+  background: radial-gradient(
+    420px circle at ${({ $x }) => $x}% ${({ $y }) => $y}%,
+    rgba(var(--text-rgb), 0.07),
+    transparent 45%
+  );
 `;
 
-const CertIcon = styled.div<{ $accent: string }>`
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: ${({ $accent }) => `${$accent}14`};
-  border: 1px solid ${({ $accent }) => `${$accent}25`};
+const Head = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 0.9rem;
+  justify-content: space-between;
+  gap: 0.75rem;
+`;
+
+const Issuer = styled.span`
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
+const Verified = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
   flex-shrink: 0;
-  position: relative;
-  z-index: 1;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-text);
 
-  ${media.sm} {
-    width: 28px;
-    height: 28px;
-    font-size: 0.8rem;
+  svg {
+    width: 11px;
+    height: 11px;
+    stroke: currentColor;
+    stroke-width: 2;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 `;
 
-const CertName = styled.span`
-  font-size: 0.95rem;
-  font-weight: 550;
-  line-height: 1.35;
-  letter-spacing: -0.01em;
-  position: relative;
-  z-index: 1;
+const Name = styled.span`
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
 `;
 
-const Meta = styled.span`
-  font-size: 0.8rem;
+const Foot = styled.span`
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: auto;
+  padding-top: 0.65rem;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.04em;
   color: var(--text-muted);
-  position: relative;
-  z-index: 1;
 `;
 
-const VerifyLabel = styled.span<{ $accent: string }>`
-  font-size: 0.7rem;
-  font-weight: 500;
-  color: ${({ $accent }) => $accent};
-  opacity: 0;
-  transition: opacity var(--transition);
-  position: relative;
-  z-index: 1;
-
-  @media (hover: none) {
-    opacity: 0.7;
-  }
+const Action = styled.span`
+  color: var(--accent-text);
 `;
 
-const itemVariant = {
-  hidden: { opacity: 0, y: 16 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-};
-
-function TiltCertCard({
-  cert,
-  accent,
-  index,
-}: {
-  cert: (typeof certifications)[number];
-  accent: string;
-  index: number;
-}) {
-  const ref = useRef<HTMLAnchorElement>(null);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const [glow, setGlow] = useState({ x: 0, y: 0 });
-  const [hovering, setHovering] = useState(false);
-
-  const onMove = useCallback((e: React.MouseEvent) => {
-    const el = ref.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const cx = rect.width / 2;
-    const cy = rect.height / 2;
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    setTilt({
-      x: ((y - cy) / cy) * -5,
-      y: ((x - cx) / cx) * 5,
-    });
-    setGlow({ x, y });
-  }, []);
-
-  const CERT_ICONS = ['\u{1F3C6}', '\u{2601}\u{FE0F}', '\u{1F9E0}', '\u{1F4DC}', '\u{2B50}'];
+function CertCard({ cert }: { cert: Certification }) {
+  const { ref, rotateX, rotateY, glow, active, onPointerMove, onPointerLeave } =
+    useTilt<HTMLAnchorElement>({ max: 6 });
 
   return (
-    <TiltWrap>
+    <Cell variants={staggerItem}>
       <Card
         ref={ref}
-        $accent={accent}
         href={cert.credentialUrl}
         target="_blank"
         rel="noopener noreferrer"
-        variants={itemVariant}
-        aria-label={`${cert.name} from ${cert.issuer}`}
-        style={{
-          transform: hovering
-            ? `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateY(-4px)`
-            : 'rotateX(0) rotateY(0)',
-          transition: hovering ? 'box-shadow 0.4s ease' : 'all 0.4s ease',
-        }}
-        onMouseMove={onMove}
-        onMouseEnter={() => setHovering(true)}
-        onMouseLeave={() => {
-          setHovering(false);
-          setTilt({ x: 0, y: 0 });
-        }}
+        style={{ rotateX, rotateY }}
+        onPointerMove={onPointerMove}
+        onPointerLeave={onPointerLeave}
+        data-cursor="Verify"
       >
-        <CardGlow $x={glow.x} $y={glow.y} $accent={accent} $show={hovering} />
-        <CertIcon $accent={accent}>
-          {CERT_ICONS[index % CERT_ICONS.length]}
-        </CertIcon>
-        <CertName>{cert.name}</CertName>
-        <Meta>
-          {cert.issuer} · {cert.date}
-        </Meta>
-        <VerifyLabel $accent={accent} style={hovering ? { opacity: 1 } : {}}>
-          Verify credential →
-        </VerifyLabel>
+        <Specular $x={glow.x} $y={glow.y} $on={active} aria-hidden="true" />
+        <Head>
+          <Issuer>{cert.issuer}</Issuer>
+          <Verified>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 12.5l4.5 4.5L19 7.5" />
+            </svg>
+            Verified
+          </Verified>
+        </Head>
+        <Name>{cert.name}</Name>
+        <Foot>
+          <span>{cert.date}</span>
+          <Action aria-hidden="true">Credential →</Action>
+        </Foot>
       </Card>
-    </TiltWrap>
+    </Cell>
   );
 }
 
 export default function CertificationsSection() {
   return (
     <Section
+      aria-labelledby="certifications-title"
       variants={fadeUp}
       initial="hidden"
       whileInView="visible"
@@ -221,22 +187,13 @@ export default function CertificationsSection() {
       <SectionHeader
         label="Credentials"
         title="Certifications"
-        subtitle="Google Cloud · LinkedIn Learning (Anthropic) · Coursera. Hover and tap to verify."
+        titleId="certifications-title"
+        subtitle="Google Cloud, Anthropic via LinkedIn Learning, and Coursera coursework. Each card links to its credential."
       />
 
-      <Grid
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-      >
-        {certifications.map((cert, index) => (
-          <TiltCertCard
-            key={cert.id}
-            cert={cert}
-            accent={ACCENT_CYCLE[index % ACCENT_CYCLE.length]}
-            index={index}
-          />
+      <Grid variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+        {certifications.map((cert) => (
+          <CertCard key={cert.id} cert={cert} />
         ))}
       </Grid>
     </Section>

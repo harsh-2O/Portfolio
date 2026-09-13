@@ -88,7 +88,7 @@ export default function CopyChip({ value, label, display }: CopyChipProps) {
   }, [value]);
 
   return (
-    <Chip type="button" onClick={onCopy} aria-label={`Copy ${label}`} data-cursor="Copy" $copied={copied}>
+    <Chip type="button" onClick={onCopy} aria-label={`Copy ${label} ${display ?? value}`} data-cursor="Copy" $copied={copied}>
       <span>{display ?? value}</span>
       <IconSlot aria-hidden="true">
         <AnimatePresence mode="wait" initial={false}>

@@ -103,7 +103,7 @@ export const light: Palette = {
   text: '#111111',
   textRgb: '17, 17, 17',
   textMuted: '#6A6A6A',
-  textFaint: '#9A9A9A',
+  textFaint: '#78736C',
   textOnAccent: '#FFFFFF',
   textInverse: '#F7F7F7',
   accent: '#C06000',
@@ -139,7 +139,7 @@ export const dark: Palette = {
   text: '#F2EDE6',
   textRgb: '242, 237, 230',
   textMuted: '#A39E96',
-  textFaint: '#6E6A64',
+  textFaint: '#8E8880',
   textOnAccent: '#151413',
   textInverse: '#151413',
   accent: '#E07A2E',
@@ -238,23 +238,5 @@ export function paletteToCss(p: Palette): string {
     --code-text: ${p.codeText};
     --focus-ring: 0 0 0 2px ${p.bg}, 0 0 0 4px ${p.accent};
 
-    /* legacy aliases (phased out section by section) */
-    --primary: ${p.text};
-    --primary-rgb: ${p.textRgb};
-    --secondary: ${p.bg};
-    --text-secondary: ${p.textInverse};
-    --nav-bg: ${p.ink};
-    --nav-text: ${p.inkText};
-    --glow-color: transparent;
-    --header-shadow: transparent;
-    --tech-item-bg: ${p.surfaceSunken};
-    --tech-item-hover-bg: ${p.accentSubtle};
-    --card-shadow: ${p.shadowSm};
-    --card-shadow-hover: ${p.shadowMd};
-    --card-highlight: 0 0 0 0 transparent;
-    --section-band: ${p.bandTint};
-    --marquee-bg: ${p.codeBg};
-    --divider: ${p.border};
-    --accent-gradient: ${p.accent};
   `;
 }

@@ -45,7 +45,7 @@ const Panel = styled(motion.div)`
   max-height: 76vh;
   display: flex;
   flex-direction: column;
-  background: var(--surface-elevated);
+  background: var(--surface);
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);

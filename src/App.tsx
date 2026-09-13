@@ -2,7 +2,6 @@ import { lazy, Suspense, useEffect, useState } from 'react';
 import { ThemeProvider as EmotionThemeProvider, Global } from '@emotion/react';
 import { theme } from './styles/theme';
 import { GlobalStyles } from './styles/GlobalStyles';
-import './styles/fonts.css';
 import { ThemeProvider } from './context/ThemeContext';
 import { IntroProvider } from './context/IntroContext';
 import { CommandPaletteProvider } from './context/CommandPaletteContext';

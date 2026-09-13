@@ -47,16 +47,9 @@ export default defineConfig({
           }
           if (id.includes('commonjsHelpers')) return 'vendor-react';
           if (id.includes('/src/data/blog')) return 'content-blog';
-          if (id.includes('/src/components/organisms/CommandPalette')) return 'feature-palette';
-          if (id.includes('/src/components/atoms/CustomCursor')) return 'feature-cursor';
-          if (id.includes('/src/components/molecules/Market')) return 'feature-hero-canvas';
-          if (
-            id.includes('/src/components/organisms/ProjectModal') ||
-            id.includes('/src/components/organisms/BlogModal')
-          ) {
-            return 'feature-modals';
-          }
-          if (id.includes('/src/components/templates/BelowFold')) return 'feature-below-fold';
+          // Application modules are deliberately left to Rollup. Naming them here
+          // merged shared code into a feature chunk, which turned a lazy import
+          // into a static one and pulled ~240 KB of WebGL onto every first paint.
         },
       },
     },

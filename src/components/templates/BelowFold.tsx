@@ -10,6 +10,7 @@ const ProjectsSection = lazy(() => import('../organisms/ProjectsSection'));
 const MarqueeBanner = lazy(() => import('../organisms/MarqueeBanner'));
 const BlogSection = lazy(() => import('../organisms/BlogSection'));
 const TestimonialsSection = lazy(() => import('../organisms/TestimonialsSection'));
+const ContactSection = lazy(() => import('../organisms/ContactSection'));
 const FooterSection = lazy(() => import('../organisms/FooterSection'));
 
 /**
@@ -59,8 +60,9 @@ export default function BelowFold() {
           <TestimonialsSection />
         </Suspense>
       </LazyWhenVisible>
-      <LazyWhenVisible minHeight={200} id="footer-section">
-        <Suspense fallback={<SectionFallback />}>
+      <LazyWhenVisible minHeight={420} id="footer-section">
+        <Suspense fallback={<SectionFallback minHeight={420} />}>
+          <ContactSection />
           <FooterSection />
         </Suspense>
       </LazyWhenVisible>

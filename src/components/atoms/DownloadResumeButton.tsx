@@ -90,7 +90,7 @@ export default function DownloadResumeButton() {
       onPointerEnter={() => setHover(true)}
       onFocus={() => setHover(true)}
       onBlur={() => setHover(false)}
-      aria-label={`Download resume PDF${size ? `, ${size}` : ''}`}
+      aria-label={`Download PDF resume${size ? `, ${size}` : ''}`}
       data-cursor="PDF"
     >
       <Inner style={{ x: labelX, y: labelY }}>

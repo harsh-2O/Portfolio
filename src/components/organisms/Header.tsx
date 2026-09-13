@@ -345,9 +345,14 @@ export default function Header({ activeSection, isMenuOpen, onMenuToggle }: Head
       <Bar $scrolled={scrolled}>
         <Progress style={{ scaleX: scrollYProgress }} aria-hidden="true" />
 
-        <Logo type="button" onClick={() => navigate('main-section')} aria-label="Back to top" data-cursor="Top">
+        <Logo
+          type="button"
+          onClick={() => navigate('main-section')}
+          aria-label="Harsh Mehta, back to top"
+          data-cursor="Top"
+        >
           <LogoName>Harsh Mehta</LogoName>
-          <LogoTag>Dev</LogoTag>
+          <LogoTag aria-hidden="true">Dev</LogoTag>
         </Logo>
 
         <Nav aria-label="Primary">
@@ -378,7 +383,6 @@ export default function Header({ activeSection, isMenuOpen, onMenuToggle }: Head
           <PaletteButton
             type="button"
             onClick={openPalette}
-            aria-label="Open command palette"
             aria-keyshortcuts="Meta+K Control+K"
             data-cursor="Search"
           >
@@ -386,6 +390,7 @@ export default function Header({ activeSection, isMenuOpen, onMenuToggle }: Head
               <circle cx="11" cy="11" r="7" />
               <path d="M20 20l-3.5-3.5" />
             </svg>
+            <span className="sr-only">Search</span>
             <Kbd aria-hidden="true">{isMac ? '⌘K' : 'Ctrl K'}</Kbd>
           </PaletteButton>
           <ThemeToggle />

@@ -20,29 +20,15 @@ const QuoteWrap = styled.div`
 `;
 
 const AmbientGlow = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: min(700px, 100%);
-  height: min(400px, 80%);
-  border-radius: 50%;
-  background: radial-gradient(
-    ellipse,
-    var(--glow-color) 0%,
-    transparent 70%
-  );
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.6;
+  display: none;
 `;
 
 const QuoteCard = styled.div`
   padding: clamp(1.75rem, 4vw, 3rem);
-  border-radius: 1.5rem;
-  background: var(--surface-elevated);
-  border: 1px solid var(--card-border);
-  box-shadow: var(--card-shadow), var(--card-highlight);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
   border-left: 3px solid var(--accent);
   position: relative;
   overflow: hidden;
@@ -63,21 +49,21 @@ const QuoteCard = styled.div`
   }
 
   &:hover {
-    box-shadow: var(--card-shadow-hover);
+    box-shadow: var(--shadow-md);
   }
 
   ${media.md} {
     padding: 1.5rem;
-    border-radius: 1.25rem;
+    border-radius: var(--radius-md);
   }
 `;
 
 const GlowOrb = styled.div<{ $x: number; $y: number; $visible: boolean }>`
   position: absolute;
-  width: 300px;
-  height: 300px;
+  width: 320px;
+  height: 320px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(0, 113, 227, 0.1) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(var(--text-rgb), 0.05) 0%, transparent 70%);
   pointer-events: none;
   z-index: 0;
   transform: translate(-50%, -50%);
@@ -108,7 +94,7 @@ const Author = styled(motion.div)`
   gap: 1.5rem;
   padding-top: 1.25rem;
   margin-top: 1.25rem;
-  border-top: 1px solid var(--card-border);
+  border-top: 1px solid var(--border);
   position: relative;
   z-index: 1;
 
@@ -194,6 +180,7 @@ export default function TestimonialsSection() {
 
   return (
     <Section
+      aria-labelledby="testimonials-title"
       variants={fadeUp}
       initial="hidden"
       whileInView="visible"
@@ -202,6 +189,7 @@ export default function TestimonialsSection() {
       <SectionHeader
         label="Colleagues"
         title="Recommendations"
+        titleId="testimonials-title"
         subtitle="Real LinkedIn recommendations from colleagues I've worked with."
       />
 

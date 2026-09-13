@@ -5,3 +5,8 @@ export { default as ResumeRail } from './ResumeRail';
 export { default as TimelineEntry } from './TimelineEntry';
 export { default as FilterPills } from './FilterPills';
 export { default as CodeBlock } from './CodeBlock';
+export { default as SkillBars } from './SkillBars';
+export { default as ProjectCard } from './ProjectCard';
+export { default as BlogRow } from './BlogRow';
+export { default as ContactForm } from './ContactForm';
+export { default as RadarChart } from './RadarChart';

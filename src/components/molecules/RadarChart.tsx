@@ -10,13 +10,14 @@ interface RadarSkill {
 
 interface RadarChartProps {
   skills: RadarSkill[];
-  accent: string;
 }
+
+const ACCENT = 'var(--accent)';
 
 const Wrapper = styled.div`
   width: 100%;
   margin: 0 auto;
-  font-family: 'IBM Plex Mono', 'SF Mono', 'Fira Code', monospace;
+  font-family: var(--font-mono);
 `;
 
 function polarToCartesian(
@@ -47,7 +48,7 @@ function buildPolygonPoints(
     .join(' ');
 }
 
-export default function RadarChart({ skills, accent }: RadarChartProps) {
+export default function RadarChart({ skills }: RadarChartProps) {
   const top = useMemo(() => {
     const sorted = [...skills].sort((a, b) => b.demand - a.demand);
     return sorted.slice(0, Math.min(8, sorted.length));
@@ -105,7 +106,7 @@ export default function RadarChart({ skills, accent }: RadarChartProps) {
             key={r}
             points={buildPolygonPoints(cx, cy, r, Array(n).fill(100), 100)}
             fill="none"
-            stroke="var(--card-border)"
+            stroke="var(--border)"
             strokeWidth="1"
             opacity="0.5"
           />
@@ -115,7 +116,7 @@ export default function RadarChart({ skills, accent }: RadarChartProps) {
           <line
             key={i}
             x1={cx} y1={cy} x2={a.x} y2={a.y}
-            stroke="var(--card-border)"
+            stroke="var(--border)"
             strokeWidth="1"
             opacity="0.35"
           />
@@ -136,8 +137,8 @@ export default function RadarChart({ skills, accent }: RadarChartProps) {
 
         <motion.polygon
           points={levelPoints}
-          fill={`${accent}18`}
-          stroke={accent}
+          fill="var(--accent-subtle)"
+          stroke={ACCENT}
           strokeWidth="2"
           initial={{ opacity: 0, scale: 0 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -153,8 +154,8 @@ export default function RadarChart({ skills, accent }: RadarChartProps) {
             <motion.circle
               key={skill.name}
               cx={dx} cy={dy} r="3.5"
-              fill={accent}
-              stroke="var(--surface-elevated)"
+              fill={ACCENT}
+              stroke="var(--background)"
               strokeWidth="1.5"
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -171,7 +172,7 @@ export default function RadarChart({ skills, accent }: RadarChartProps) {
             dominantBaseline="central"
             fill="var(--text-muted)"
             fontSize="10.5"
-            fontFamily="'IBM Plex Mono', monospace"
+            fontFamily="var(--font-mono)"
             fontWeight="500"
           >
             {skill.name}
@@ -185,7 +186,7 @@ export default function RadarChart({ skills, accent }: RadarChartProps) {
             fontSize="8"
             fill="var(--text-muted)"
             opacity="0.4"
-            fontFamily="'IBM Plex Mono', monospace"
+            fontFamily="var(--font-mono)"
           >
             {Math.round(((i + 1) / rings) * 100)}
           </text>
@@ -195,12 +196,12 @@ export default function RadarChart({ skills, accent }: RadarChartProps) {
         <line
           x1={totalW / 2 - 82} y1={legendY}
           x2={totalW / 2 - 68} y2={legendY}
-          stroke={accent} strokeWidth="2.5"
+          stroke={ACCENT} strokeWidth="2.5"
         />
         <text
           x={totalW / 2 - 63} y={legendY + 1}
           fontSize="9" fontWeight="600" fill="var(--text-muted)"
-          fontFamily="'IBM Plex Mono', monospace"
+          fontFamily="var(--font-mono)"
           dominantBaseline="central"
           letterSpacing="0.04em"
         >
@@ -216,7 +217,7 @@ export default function RadarChart({ skills, accent }: RadarChartProps) {
         <text
           x={totalW / 2 + 33} y={legendY + 1}
           fontSize="9" fontWeight="600" fill="var(--text-muted)"
-          fontFamily="'IBM Plex Mono', monospace"
+          fontFamily="var(--font-mono)"
           dominantBaseline="central"
           letterSpacing="0.04em"
         >

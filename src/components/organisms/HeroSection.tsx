@@ -2,7 +2,7 @@
  * Hero — h1 in Cormorant, decoded role line, lede, magnetic CTAs, copy chips,
  * status chip and a mono facts row, over a lazy WebGL market-data backdrop.
  */
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { useEffect, useState, type ComponentType } from 'react';
 import styled from '@emotion/styled';
 import { motion } from '../../lib/motion';
 import { heroContainer, heroItem } from '../../motion/variants';
@@ -17,8 +17,6 @@ import ErrorBoundary from '../atoms/ErrorBoundary';
 import MagneticButton from '../atoms/MagneticButton';
 import CopyChip from '../atoms/CopyChip';
 import StatusChip from '../molecules/StatusChip';
-
-const MarketCanvas = lazy(() => import('../molecules/MarketCanvas'));
 
 /* ── Layout ──────────────────────────────────────────────────────── */
 
@@ -172,30 +170,50 @@ const Fact = styled.div`
 export default function HeroSection() {
   const { introDone } = useIntro();
   const { text: role, done: roleDone } = useTextScramble(HERO.role, { start: introDone, delay: 380 });
-  const [mountCanvas, setMountCanvas] = useState(false);
+  // Held in state rather than React.lazy: lazy() components can be warmed
+  // eagerly, which fetched the ~240 KB WebGL chunk even when it never rendered.
+  const [Canvas, setCanvas] = useState<ComponentType | null>(null);
   // If no intro plays (repeat visit, reduced motion) render the settled state at once for LCP.
   const [skipEntrance] = useState(introDone);
 
   useEffect(() => {
     if (!introDone) return;
-    const start = () => setMountCanvas(true);
+
+    // The WebGL backdrop costs ~240 KB gzipped. It is a large-screen flourish:
+    // phones, coarse pointers and data-saver sessions keep the CSS grid alone.
+    const wideEnough = window.matchMedia('(min-width: 1024px)').matches;
+    const connection = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+    const constrained = connection?.saveData === true || /2g/.test(connection?.effectiveType ?? '');
+    if (!wideEnough || constrained) return;
+
+    let alive = true;
+    const start = () => {
+      void import('../molecules/MarketCanvas').then((mod) => {
+        if (alive) setCanvas(() => mod.default);
+      });
+    };
+
     if (window.requestIdleCallback) {
       const id = window.requestIdleCallback(start, { timeout: 1500 });
-      return () => window.cancelIdleCallback(id);
+      return () => {
+        alive = false;
+        window.cancelIdleCallback(id);
+      };
     }
     const id = window.setTimeout(start, 300);
-    return () => window.clearTimeout(id);
+    return () => {
+      alive = false;
+      window.clearTimeout(id);
+    };
   }, [introDone]);
 
   return (
     <Section id="main-section" aria-labelledby="hero-title">
       <Backdrop aria-hidden="true">
         <GridLines />
-        {mountCanvas && (
+        {Canvas && (
           <ErrorBoundary>
-            <Suspense fallback={null}>
-              <MarketCanvas />
-            </Suspense>
+            <Canvas />
           </ErrorBoundary>
         )}
       </Backdrop>

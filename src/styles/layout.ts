@@ -29,7 +29,7 @@ export const sectionBand = css`
     left: 0;
     right: 0;
     width: 100%;
-    background: var(--section-band);
+    background: var(--band-tint);
     pointer-events: none;
     z-index: -1;
   }
@@ -42,25 +42,10 @@ export const sectionBand = css`
     transform: translateX(-50%);
     width: min(480px, 80%);
     height: 1px;
-    background: var(--divider);
+    background: var(--border);
     pointer-events: none;
     z-index: 0;
     opacity: 0.7;
-  }
-`;
-
-/** Shared elevated card surface — glass highlight + shadow + animated border on hover */
-export const cardSurface = css`
-  background: var(--surface-elevated);
-  border: 1px solid var(--card-border);
-  box-shadow: var(--card-shadow), var(--card-highlight);
-  transition: box-shadow var(--transition), transform var(--transition), border-color var(--transition);
-
-  @media (hover: hover) {
-    &:hover {
-      box-shadow: var(--card-shadow-hover), var(--card-highlight);
-      border-color: var(--accent-line);
-    }
   }
 `;
 
