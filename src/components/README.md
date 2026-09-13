@@ -33,6 +33,8 @@ Pages live in `src/pages/` and wire templates + organisms together.
 | `LazyWhenVisible` | IntersectionObserver lazy-mount gate (also mounts on `mount-all`) |
 | `ResumeRail` | Sticky 01/02/03 rail → sticky horizontal tabs below 1024px |
 | `TimelineEntry` | Role, company, mono dates, two bullets + animated "+N more" |
+| `FilterPills` | Segmented filter row with one `layoutId` indicator that morphs between options |
+| `CodeBlock` | Dark code block: line numbers, language tag, copy button |
 | `StatusChip` | Pulsing dot + "Currently: now → next" from one constant |
 | `MarketCanvas` / `MarketScene` | Lazy R3F market-data backdrop: grid, ticks, sparkline, order-book ladder; 30 fps, pauses off-screen |
 

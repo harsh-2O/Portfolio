@@ -1,293 +1,294 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import styled from '@emotion/styled';
-import { motion, AnimatePresence } from '../../lib/motion';
+import { AnimatePresence, motion } from '../../lib/motion';
+import { fadeUp, softSpring, transitions } from '../../motion/variants';
 import SectionHeader from '../molecules/SectionHeader';
-import { workflowCards } from '../../data/devWorkflow';
-import type { WorkflowItem } from '../../data/devWorkflow';
-import { fadeUp, staggerContainer } from '../../motion/variants';
+import FilterPills, { type FilterOption } from '../molecules/FilterPills';
+import CodeBlock from '../molecules/CodeBlock';
+import { workflowCards, WORKFLOW_GROUPS, type WorkflowCard, type WorkflowGroup } from '../../data/devWorkflow';
+import { useDismissable } from '../../hooks/useDismissable';
 import { sectionBand, sectionCentered } from '../../styles/layout';
 import { media } from '../../styles/mixins';
 
-const MONO = "'IBM Plex Mono', 'SF Mono', monospace";
+type Filter = 'All' | WorkflowGroup;
 
 const Section = styled(motion.section)`
   ${sectionCentered};
   ${sectionBand};
 `;
 
-const Grid = styled(motion.div)`
+const Grid = styled(motion.ul)`
+  list-style: none;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.75rem;
 
   @media (min-width: 1600px) {
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   ${media.lg} {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   ${media.sm} {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 `;
 
-/* ── Card ────────────────────────────────────────────────────────── */
+const Cell = styled(motion.li)<{ $open: boolean }>`
+  min-width: 0;
+  ${({ $open }) => $open && 'grid-column: 1 / -1;'}
+`;
 
-const Card = styled(motion.div)<{ $accent: string; $active: boolean }>`
-  border-radius: 0.75rem;
-  border: 1px solid
-    ${({ $active, $accent }) => ($active ? `${$accent}50` : 'var(--card-border)')};
-  background: var(--surface-elevated);
-  overflow: hidden;
-  cursor: pointer;
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+const Panel = styled(motion.div)<{ $open: boolean }>`
   position: relative;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: ${({ $accent }) => $accent};
-    opacity: ${({ $active }) => ($active ? 1 : 0.4)};
-    transition: opacity var(--transition-fast);
-  }
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-md);
+  border: 1px solid ${({ $open }) => ($open ? 'var(--accent-line)' : 'var(--border)')};
+  background: ${({ $open }) => ($open ? 'var(--surface)' : 'transparent')};
+  overflow: hidden;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
 
   @media (hover: hover) {
     &:hover {
-      border-color: ${({ $accent }) => `${$accent}40`};
-      box-shadow: var(--card-shadow-hover);
-
-      &::before { opacity: 1; }
+      border-color: ${({ $open }) => ($open ? 'var(--accent-line)' : 'var(--border-strong)')};
     }
   }
 `;
 
-const CardHeader = styled.div`
-  padding: 0.85rem 1rem 0.65rem;
+const Trigger = styled.button`
   display: flex;
-  align-items: center;
-  gap: 0.6rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 1rem 1.1rem;
+  text-align: left;
 `;
 
-const CardIcon = styled.div<{ $accent: string }>`
-  width: 30px;
-  height: 30px;
-  border-radius: 6px;
-  background: ${({ $accent }) => `${$accent}12`};
-  border: 1px solid ${({ $accent }) => `${$accent}22`};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.9rem;
-  flex-shrink: 0;
-`;
-
-const CardTitles = styled.div`
-  min-width: 0;
-`;
-
-const CardTitle = styled.h4`
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: var(--text-primary);
-  line-height: 1.2;
-`;
-
-const CardSubtitle = styled.span`
-  font-size: 0.65rem;
-  font-weight: 500;
-  color: var(--text-muted);
-  font-family: ${MONO};
-`;
-
-const CardDesc = styled.p`
-  font-size: 0.75rem;
-  line-height: 1.5;
-  color: var(--text-muted);
-  padding: 0 1rem 0.65rem;
-
-  ${media.sm} {
-    padding: 0 0.75rem 0.5rem;
-    font-size: 0.72rem;
-  }
-`;
-
-/* ── Expanded items ──────────────────────────────────────────────── */
-
-const ItemList = styled(motion.div)`
-  border-top: 1px solid var(--card-border);
-  padding: 0.5rem 0;
-`;
-
-const ItemRow = styled.div<{ $accent: string }>`
+const Head = styled.div`
   display: flex;
   align-items: baseline;
-  gap: 0.5rem;
-  padding: 0.3rem 0.75rem;
-  font-family: ${MONO};
-  font-size: 0.7rem;
+  gap: 0.6rem;
+  width: 100%;
+`;
+
+const Index = styled.span`
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--accent-text);
+  font-variant-numeric: tabular-nums;
+`;
+
+const Title = styled.h3`
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--text-primary);
+`;
+
+const Chevron = styled(motion.span)`
+  margin-left: auto;
+  display: inline-grid;
+  place-items: center;
+  color: var(--text-faint);
+
+  svg {
+    width: 12px;
+    height: 12px;
+    stroke: currentColor;
+    stroke-width: 1.75;
+    fill: none;
+    stroke-linecap: round;
+  }
+`;
+
+const Path = styled.span`
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.02em;
+  color: var(--text-faint);
+  overflow-wrap: anywhere;
+`;
+
+const Summary = styled.p`
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+`;
+
+const Body = styled(motion.div)`
+  overflow: hidden;
+`;
+
+const BodyInner = styled.div`
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: clamp(1rem, 2.5vw, 2rem);
+  padding: 0 1.1rem 1.1rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+  margin-top: 0.25rem;
+
+  ${media.lg} {
+    grid-template-columns: minmax(0, 1fr);
+  }
+`;
+
+const Items = styled.dl`
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  min-width: 0;
+  margin: 0;
+`;
+
+const Item = styled.div`
+  display: grid;
+  grid-template-columns: minmax(88px, 108px) minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: baseline;
+  font-size: 0.82rem;
   line-height: 1.5;
 
-  @media (hover: hover) {
-    &:hover {
-      background: ${({ $accent }) => `${$accent}06`};
-    }
+  dt {
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+
+  dd {
+    margin: 0;
+    color: var(--text-primary);
+    overflow-wrap: anywhere;
   }
 
   ${media.xs} {
-    flex-wrap: wrap;
-    gap: 0.15rem 0.35rem;
-    padding: 0.3rem 0.6rem;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.1rem;
   }
 `;
 
-const ItemKey = styled.span<{ $accent: string }>`
-  font-weight: 700;
-  color: ${({ $accent }) => $accent};
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  min-width: 72px;
-  flex-shrink: 0;
-  opacity: 0.85;
-
-  &::after { content: ' :'; }
-
-  ${media.sm} {
-    min-width: 60px;
-  }
-
-  ${media.xs} {
-    min-width: auto;
-    font-size: 0.6rem;
-  }
+const Empty = styled.p`
+  padding: 2rem 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
 `;
 
-const ItemValue = styled.span`
-  color: var(--text-primary);
-  font-weight: 500;
-`;
+interface CardPanelProps {
+  card: WorkflowCard;
+  index: number;
+  isOpen: boolean;
+  onToggle: (id: string) => void;
+}
 
-const CopyBtn = styled.button<{ $accent: string }>`
-  font-size: 0.6rem;
-  font-weight: 600;
-  font-family: ${MONO};
-  padding: 0.15rem 0.4rem;
-  border-radius: 3px;
-  border: 1px solid ${({ $accent }) => `${$accent}30`};
-  background: ${({ $accent }) => `${$accent}0a`};
-  color: ${({ $accent }) => $accent};
-  cursor: pointer;
-  flex-shrink: 0;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  transition: all var(--transition-fast);
-  margin-left: auto;
-
-  &:hover {
-    background: ${({ $accent }) => `${$accent}18`};
-    border-color: ${({ $accent }) => `${$accent}50`};
-  }
-`;
-
-const CopiedToast = styled(motion.span)<{ $accent: string }>`
-  font-size: 0.6rem;
-  font-weight: 600;
-  font-family: ${MONO};
-  color: ${({ $accent }) => $accent};
-  margin-left: auto;
-  letter-spacing: 0.03em;
-`;
-
-const ExpandHint = styled.div<{ $accent: string }>`
-  padding: 0.35rem 1rem 0.5rem;
-  font-family: ${MONO};
-  font-size: 0.6rem;
-  font-weight: 600;
-  color: ${({ $accent }) => $accent};
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  opacity: 0.7;
-`;
-
-/* ── Animation ───────────────────────────────────────────────────── */
-
-const itemVariant = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-};
-
-const expandVariant = {
-  hidden: { opacity: 0, height: 0 },
-  visible: { opacity: 1, height: 'auto' as const, transition: { duration: 0.25, ease: 'easeOut' } },
-  exit: { opacity: 0, height: 0, transition: { duration: 0.2, ease: 'easeIn' } },
-};
-
-/* ── Copyable item sub-component ─────────────────────────────────── */
-
-function CopyableRow({
-  item,
-  accent,
-}: {
-  item: WorkflowItem;
-  accent: string;
-}) {
-  const [copied, setCopied] = useState(false);
-
-  const copy = useCallback(
-    (e: React.MouseEvent) => {
-      e.stopPropagation();
-      if (!item.copyable) return;
-      navigator.clipboard.writeText(item.copyable).then(() => {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 1500);
-      });
-    },
-    [item.copyable],
-  );
+function CardPanel({ card, index, isOpen, onToggle }: CardPanelProps) {
+  const bodyId = `workflow-${card.id}-body`;
 
   return (
-    <ItemRow $accent={accent}>
-      <ItemKey $accent={accent}>{item.label}</ItemKey>
-      <ItemValue>{item.value}</ItemValue>
-      {item.copyable && (
-        <AnimatePresence mode="wait">
-          {copied ? (
-            <CopiedToast
-              key="toast"
-              $accent={accent}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+    <Cell layout $open={isOpen} transition={softSpring}>
+      <Panel layout $open={isOpen} transition={softSpring}>
+        <Trigger
+          type="button"
+          aria-expanded={isOpen}
+          aria-controls={bodyId}
+          onClick={() => onToggle(card.id)}
+          data-cursor={isOpen ? 'Close' : 'Open'}
+        >
+          <Head>
+            <Index aria-hidden="true">{String(index + 1).padStart(2, '0')}</Index>
+            <Title>{card.title}</Title>
+            <Chevron animate={{ rotate: isOpen ? 180 : 0 }} transition={transitions.fast} aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M5 9l7 7 7-7" />
+              </svg>
+            </Chevron>
+          </Head>
+          <Path>{card.subtitle}</Path>
+          <Summary>{card.description}</Summary>
+        </Trigger>
+
+        <AnimatePresence initial={false}>
+          {isOpen && (
+            <Body
+              id={bodyId}
+              key="body"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={transitions.base}
             >
-              COPIED
-            </CopiedToast>
-          ) : (
-            <CopyBtn key="btn" $accent={accent} onClick={copy} title="Copy to clipboard">
-              COPY
-            </CopyBtn>
+              <BodyInner>
+                <Items>
+                  {card.items.map((item) => (
+                    <Item key={item.label}>
+                      <dt>{item.label}</dt>
+                      <dd>{item.value}</dd>
+                    </Item>
+                  ))}
+                </Items>
+                <CodeBlock
+                  code={card.snippet.code}
+                  language={card.snippet.language}
+                  fileName={card.snippet.fileName}
+                />
+              </BodyInner>
+            </Body>
           )}
         </AnimatePresence>
-      )}
-    </ItemRow>
+      </Panel>
+    </Cell>
   );
 }
 
-/* ── Component ───────────────────────────────────────────────────── */
-
 export default function DevWorkflowSection() {
-  const [expanded, setExpanded] = useState<string | null>(null);
+  const [filter, setFilter] = useState<Filter>('All');
+  const [openId, setOpenId] = useState<string | null>(null);
+  const gridRef = useRef<HTMLUListElement>(null);
 
-  const toggle = (id: string) =>
-    setExpanded((prev) => (prev === id ? null : id));
+  const options = useMemo<FilterOption<Filter>[]>(
+    () => [
+      { value: 'All', label: 'All', count: workflowCards.length },
+      ...WORKFLOW_GROUPS.map((group) => ({
+        value: group as Filter,
+        label: group,
+        count: workflowCards.filter((c) => c.group === group).length,
+      })),
+    ],
+    [],
+  );
+
+  const visible = useMemo(
+    () => (filter === 'All' ? workflowCards : workflowCards.filter((c) => c.group === filter)),
+    [filter],
+  );
+
+  const toggle = useCallback((id: string) => setOpenId((prev) => (prev === id ? null : id)), []);
+  const close = useCallback(() => setOpenId(null), []);
+
+  // Dismissal is owned here, not per card: a press on another card's header is
+  // inside the grid, so that card's own click switches panels instead of the
+  // open one closing on pointerdown and shifting the layout mid-click.
+  useDismissable(gridRef, openId !== null, close);
+
+  const onFilterChange = useCallback((value: Filter) => {
+    setFilter(value);
+    setOpenId(null);
+  }, []);
 
   return (
     <Section
+      aria-labelledby="workflow-title"
       variants={fadeUp}
       initial="hidden"
       whileInView="visible"
@@ -296,72 +297,33 @@ export default function DevWorkflowSection() {
       <SectionHeader
         label="Workflow"
         title="Dev Workflow"
-        subtitle="Tools I build with — copy & use. Real configs and patterns from my workflow: Cursor rules, MCP servers, agent skills, and token-saving patterns you can drop into your own projects."
-      />
-
-      <Grid
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
+        titleId="workflow-title"
+        subtitle="How I actually work with AI agents: the rules, servers, skills and patterns. Open any card for the real config."
       >
-        {workflowCards.map((card) => {
-          const isOpen = expanded === card.id;
-          return (
-            <Card
+        <FilterPills
+          options={options}
+          active={filter}
+          onChange={onFilterChange}
+          layoutId="workflow-filter"
+          label="Filter workflow cards"
+        />
+      </SectionHeader>
+
+      <Grid ref={gridRef} layout transition={softSpring}>
+        <AnimatePresence initial={false} mode="popLayout">
+          {visible.map((card) => (
+            <CardPanel
               key={card.id}
-              $accent={card.accent}
-              $active={isOpen}
-              variants={itemVariant}
-              onClick={() => toggle(card.id)}
-              role="button"
-              tabIndex={0}
-              aria-expanded={isOpen}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  toggle(card.id);
-                }
-              }}
-            >
-              <CardHeader>
-                <CardIcon $accent={card.accent}>{card.icon}</CardIcon>
-                <CardTitles>
-                  <CardTitle>{card.title}</CardTitle>
-                  <CardSubtitle>{card.subtitle}</CardSubtitle>
-                </CardTitles>
-              </CardHeader>
-
-              <CardDesc>{card.description}</CardDesc>
-
-              <AnimatePresence initial={false}>
-                {isOpen && (
-                  <ItemList
-                    variants={expandVariant}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                  >
-                    {card.items.map((item) => (
-                      <CopyableRow
-                        key={item.label}
-                        item={item}
-                        accent={card.accent}
-                      />
-                    ))}
-                  </ItemList>
-                )}
-              </AnimatePresence>
-
-              {!isOpen && (
-                <ExpandHint $accent={card.accent}>
-                  [{card.items.length} items] Click to expand
-                </ExpandHint>
-              )}
-            </Card>
-          );
-        })}
+              card={card}
+              index={workflowCards.indexOf(card)}
+              isOpen={openId === card.id}
+              onToggle={toggle}
+            />
+          ))}
+        </AnimatePresence>
       </Grid>
+
+      {visible.length === 0 && <Empty>No cards in this group.</Empty>}
     </Section>
   );
 }

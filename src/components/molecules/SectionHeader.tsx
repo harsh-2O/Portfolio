@@ -72,8 +72,9 @@ const ActionSlot = styled.div`
   ${media.md} {
     width: 100%;
 
-    button,
-    a {
+    /* Direct children only — composite controls (e.g. filter pills) keep their own layout. */
+    > button,
+    > a {
       width: 100%;
       justify-content: center;
     }

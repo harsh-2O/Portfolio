@@ -1,174 +1,169 @@
-export interface WorkflowCard {
-  id: string;
-  title: string;
-  subtitle: string;
-  icon: string;
-  accent: string;
-  description: string;
-  items: WorkflowItem[];
-}
+export type WorkflowGroup = 'Cursor' | 'MCP' | 'Skills' | 'Patterns';
 
 export interface WorkflowItem {
   label: string;
   value: string;
-  copyable?: string;
 }
+
+export interface WorkflowSnippet {
+  /** Shown as the language tag, e.g. "json", "md", "bash". */
+  language: string;
+  /** File name or path shown in the code block header. */
+  fileName: string;
+  code: string;
+}
+
+export interface WorkflowCard {
+  id: string;
+  title: string;
+  subtitle: string;
+  group: WorkflowGroup;
+  description: string;
+  items: WorkflowItem[];
+  snippet: WorkflowSnippet;
+}
+
+export const WORKFLOW_GROUPS: WorkflowGroup[] = ['Cursor', 'MCP', 'Skills', 'Patterns'];
 
 export const workflowCards: WorkflowCard[] = [
   {
     id: 'cursor-rules',
     title: 'Cursor Rules',
     subtitle: '.cursor/rules/',
-    icon: '\u{1F4DC}',
-    accent: '#af52de',
+    group: 'Cursor',
     description:
       'Project-level AI rules that persist across sessions. Every repo gets efficiency, commit, and code quality rules so agents never need re-explaining.',
     items: [
-      {
-        label: 'EFFICIENCY',
-        value: 'Batch tool calls, no re-reads, complexity headers',
-        copyable:
-          '1. Plan FULL set of changes before editing.\n2. Don\'t re-read files already in context.\n3. First response: "Complexity: Low / Medium / High"',
-      },
-      {
-        label: 'COMMITS',
-        value: 'HEREDOC messages, no --amend unless safe, verify HEAD',
-        copyable:
-          'git commit -m "$(cat <<\'EOF\'\nCommit message here.\nEOF\n)"',
-      },
-      {
-        label: 'POST-TASK',
-        value: 'AskQuestion loop with 2\u20134 next steps + Stop',
-        copyable:
-          'After EVERY task: call AskQuestion with 2\u20134 options + "Something else" + "Stop \u2014 I\'m done"',
-      },
-      {
-        label: 'PATH',
-        value: '.cursor/rules/*.mdc',
-      },
+      { label: 'Efficiency', value: 'Batch tool calls, no re-reads, complexity headers' },
+      { label: 'Commits', value: 'HEREDOC messages, no --amend unless safe, verify HEAD' },
+      { label: 'Post-task', value: 'AskQuestion loop with 2–4 next steps' },
+      { label: 'Path', value: '.cursor/rules/*.mdc' },
     ],
+    snippet: {
+      language: 'mdc',
+      fileName: '.cursor/rules/efficiency.mdc',
+      code: `---
+description: Request cost efficiency
+alwaysApply: true
+---
+
+1. Plan the FULL set of changes across all files before editing.
+2. Don't re-read, re-search, or re-list files already in context.
+3. Show diffs, not full file contents, unless asked.
+4. Batch clarifying questions at the start, not one at a time.
+5. First response to a new task: "Complexity: Low / Medium / High".
+6. Batch independent tool calls into a single message.`,
+    },
   },
   {
     id: 'mcp-servers',
     title: 'MCP Servers',
     subtitle: 'Model Context Protocol',
-    icon: '\u{1F50C}',
-    accent: '#32ade6',
+    group: 'MCP',
     description:
       'Connect LLMs to real data instead of hallucinating. Each server gives agents read/write access to external systems.',
     items: [
-      {
-        label: 'ATLASSIAN',
-        value: 'Jira issues + Confluence pages (read/write)',
-        copyable: 'mcp-atlassian: getJiraIssue, searchJiraIssuesUsingJql, createJiraIssue',
-      },
-      {
-        label: 'SLACK',
-        value: 'Daily digests, unresolved threads, meeting prep',
-      },
-      {
-        label: 'GITHUB',
-        value: 'PR creation, code review, branch management',
-      },
-      {
-        label: 'IMPACT',
-        value: 'Biggest single token-saver in agentic flows',
-      },
+      { label: 'Atlassian', value: 'Jira issues + Confluence pages (read/write)' },
+      { label: 'Slack', value: 'Daily digests, unresolved threads, meeting prep' },
+      { label: 'GitHub', value: 'PR creation, code review, branch management' },
+      { label: 'Impact', value: 'Biggest single token-saver in agentic flows' },
     ],
+    snippet: {
+      language: 'json',
+      fileName: '~/.cursor/mcp.json',
+      code: `{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": { "GITHUB_TOKEN": "\${GITHUB_TOKEN}" }
+    },
+    "atlassian": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.atlassian.com/v1/sse"]
+    }
+  }
+}`,
+    },
   },
   {
     id: 'agent-skills',
     title: 'Agent Skills',
     subtitle: '.cursor/skills/',
-    icon: '\u26A1',
-    accent: '#ff9500',
+    group: 'Skills',
     description:
-      'Reusable SKILL.md packs that agents follow instead of improvising. Cuts token waste 30\u201350% vs unguided prompting.',
+      'Reusable SKILL.md packs that agents follow instead of improvising. Cuts token waste 30–50% versus unguided prompting.',
     items: [
-      {
-        label: 'SUPERDEV',
-        value: 'Team simulation \u2014 PM, TL, Engineer, QA roles inline',
-        copyable:
-          'Activate with /superdev. Assembles roles, presents team, executes inline via TodoWrite. Hard cap: 5 roles.',
-      },
-      {
-        label: 'DIGEST',
-        value: 'Slack daily/weekly digest with priority tables',
-      },
-      {
-        label: 'SPLIT-PR',
-        value: 'Split large branches into small reviewable PRs',
-      },
-      {
-        label: 'LOOP',
-        value: 'Run any skill on a recurring interval',
-      },
-      {
-        label: 'TOKEN_SAVE',
-        value: '30\u201350% vs unguided agents',
-      },
+      { label: 'superdev', value: 'Team simulation — PM, TL, Engineer, QA roles inline' },
+      { label: 'digest', value: 'Slack daily/weekly digest with priority tables' },
+      { label: 'split-pr', value: 'Split large branches into small reviewable PRs' },
+      { label: 'loop', value: 'Run any skill on a recurring interval' },
+      { label: 'Token save', value: '30–50% versus unguided agents' },
     ],
+    snippet: {
+      language: 'md',
+      fileName: '.cursor/skills/code-review/SKILL.md',
+      code: `---
+name: code-review
+description: Review a diff for security, performance and scope.
+---
+
+Review this diff for:
+1. Security — secrets, injection, auth bypass
+2. Performance — N+1 queries, unnecessary re-renders
+3. Scope — only touch files already in the PR
+
+Output one line per finding, most severe first:
+  critical · warning · info`,
+    },
   },
   {
     id: 'model-strategy',
     title: 'Model Strategy',
     subtitle: 'When to use which LLM',
-    icon: '\u{1F9E0}',
-    accent: '#5856d6',
+    group: 'Patterns',
     description:
-      'Match the model to the task \u2014 depth vs speed vs cost. No single model wins everything.',
+      'Match the model to the task — depth versus speed versus cost. No single model wins everything.',
     items: [
-      {
-        label: 'CLAUDE',
-        value: 'Multi-file refactors, architecture, 200K context',
-      },
-      {
-        label: 'GPT-4o',
-        value: 'Fast iterations, vision/UI review, batch tasks',
-      },
-      {
-        label: 'GEMINI',
-        value: 'Research, 1M+ context, cross-model comparison',
-      },
-      {
-        label: 'RULE',
-        value: 'Depth \u2192 Claude | Speed \u2192 GPT | Scale \u2192 Gemini',
-        copyable:
-          'Complex refactor = Claude Opus\nQuick fix = GPT-4o\nFull repo analysis = Gemini 1M',
-      },
+      { label: 'Claude', value: 'Multi-file refactors, architecture, long context' },
+      { label: 'GPT-4o', value: 'Fast iterations, vision/UI review, batch tasks' },
+      { label: 'Gemini', value: 'Research, 1M+ context, cross-model comparison' },
+      { label: 'Rule', value: 'Depth → Claude · Speed → GPT · Scale → Gemini' },
     ],
+    snippet: {
+      language: 'txt',
+      fileName: 'model-routing.txt',
+      code: `Complex multi-file refactor   ->  Claude (extended thinking)
+Architecture decision         ->  Claude
+Quick fix / small diff        ->  GPT-4o
+UI screenshot review          ->  GPT-4o (vision)
+Whole-repo analysis           ->  Gemini (1M context)
+Cross-model sanity check      ->  Gemini`,
+    },
   },
   {
     id: 'token-patterns',
     title: 'Token-Saving Patterns',
     subtitle: 'Ship more, spend less',
-    icon: '\u{1F4B0}',
-    accent: '#34c759',
-    description:
-      'Concrete patterns that reduce AI costs without reducing output quality.',
+    group: 'Patterns',
+    description: 'Concrete patterns that reduce AI cost without reducing output quality.',
     items: [
-      {
-        label: 'BATCH',
-        value: 'All independent tool calls in one message',
-        copyable:
-          'Never chain independent reads/searches sequentially. Send parallel tool calls in a single message.',
-      },
-      {
-        label: 'NO_REREAD',
-        value: 'Never re-read files already in context',
-      },
-      {
-        label: 'RULES_FIRST',
-        value: 'Cursor rules prevent re-explaining conventions',
-      },
-      {
-        label: 'SKILL_GUIDE',
-        value: 'SKILL.md gives structure, agents don\'t improvise',
-      },
-      {
-        label: 'COMPACT',
-        value: 'Show diffs not full files, skip obvious comments',
-      },
+      { label: 'Batch', value: 'All independent tool calls in one message' },
+      { label: 'No re-read', value: 'Never re-read files already in context' },
+      { label: 'Rules first', value: 'Cursor rules prevent re-explaining conventions' },
+      { label: 'Skill guide', value: 'SKILL.md gives structure, agents don’t improvise' },
+      { label: 'Compact', value: 'Show diffs not full files, skip obvious comments' },
     ],
+    snippet: {
+      language: 'bash',
+      fileName: 'batching.sh',
+      code: `# One message, three independent reads — not three round trips.
+cat src/config/site.ts
+grep -rn "useScroll" src/
+git log --oneline -10
+
+# Anti-pattern: chaining reads that don't depend on each other
+# read A -> wait -> read B -> wait -> read C`,
+    },
   },
 ];
