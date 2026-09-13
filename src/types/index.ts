@@ -42,6 +42,17 @@ export interface Project {
   accent: string;
   /** Public GitHub repository URL, when available */
   repoUrl?: string;
+  /** Live deployment, when one exists. */
+  liveUrl?: string;
+  /**
+   * Authored case-study copy. When absent the modal falls back to
+   * description / bullets / highlights under Context, Approach and Impact.
+   */
+  caseStudy?: {
+    problem: string;
+    approach: string;
+    impact: string;
+  };
 }
 
 export interface Testimonial {

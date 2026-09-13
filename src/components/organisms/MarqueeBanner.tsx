@@ -1,126 +1,127 @@
-import { useLayoutEffect, useRef } from 'react';
+import { useMemo } from 'react';
 import styled from '@emotion/styled';
+import { projects } from '../../data/projects';
 
-const Banner = styled.div`
-  width: 100%;
-  height: clamp(64px, 10vw, 120px);
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  background: var(--marquee-bg);
-  color: #fff;
-  margin: 0;
+const DURATION_S = 64;
+
+const Banner = styled.section`
   position: relative;
-  isolation: isolate;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  padding: clamp(1rem, 2vw, 1.5rem) 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-sunken);
 
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: clamp(3rem, 10vw, 6rem);
-    z-index: 1;
-    pointer-events: none;
-  }
-
-  &::before {
-    left: 0;
-    background: linear-gradient(90deg, rgba(0, 0, 0, 0.45), transparent);
-  }
-
-  &::after {
-    right: 0;
-    background: linear-gradient(270deg, rgba(0, 0, 0, 0.45), transparent);
-  }
+  /* Edges fade into the page rather than stopping hard. */
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
 `;
+
+const TRACK_CLASS = 'marquee-track';
 
 const Track = styled.div`
   display: flex;
   width: max-content;
-  flex-shrink: 0;
-  animation: marquee-scroll 80s linear infinite;
-  -webkit-animation: marquee-scroll 80s linear infinite;
+  animation: marquee-scroll ${DURATION_S}s linear infinite;
   will-change: transform;
-  transform: translate3d(0, 0, 0);
-  -webkit-transform: translate3d(0, 0, 0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
 
   @media (prefers-reduced-motion: reduce) {
-    animation: none !important;
-    -webkit-animation: none !important;
+    animation: none;
     width: 100%;
+    flex-wrap: wrap;
     justify-content: center;
     padding: 0 var(--section-padding-x);
-    transform: none;
   }
 `;
 
-const Text = styled.span`
-  white-space: nowrap;
-  font-size: clamp(0.9rem, 2.8vw, 3.5rem);
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  padding-right: 3rem;
+const Group = styled.ul`
+  list-style: none;
+  display: flex;
+  align-items: center;
   flex-shrink: 0;
 
-  @media (max-width: 480px) {
-    font-size: clamp(0.85rem, 3.5vw, 1.1rem);
-    padding-right: 2rem;
-  }
-
   @media (prefers-reduced-motion: reduce) {
-    white-space: normal;
-    text-align: center;
-    font-size: var(--text-small);
-    font-weight: 500;
-    line-height: 1.4;
-    padding-right: 0;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    /* One copy is enough when nothing moves. */
+    & + & {
+      display: none;
+    }
   }
 `;
 
-const MARQUEE_TEXT =
-  'Low-latency market data · Production RAG systems · C++ alpha frameworks · Global exchange integrations · AI/ML pipelines · Quant tooling · ';
+const Item = styled.li`
+  display: flex;
+  align-items: center;
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  padding-right: clamp(1.25rem, 3vw, 2.5rem);
+  font-family: var(--font-mono);
+  font-size: clamp(0.72rem, 0.4vw + 0.62rem, 0.85rem);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
 
-/** Restart animation after lazy mount — Safari/WebKit won't start Emotion/lazy-inserted animations reliably. */
-function restartAnimation(el: HTMLElement) {
-  el.style.animation = 'none';
-  el.style.webkitAnimation = 'none';
-  void el.getBoundingClientRect();
-  el.style.removeProperty('animation');
-  el.style.removeProperty('-webkit-animation');
+  /* Separator dot between entries. */
+  &::after {
+    content: '';
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.6;
+  }
+`;
+
+const Count = styled.span`
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+`;
+
+const Wrapper = styled.div`
+  /* Hovering anywhere over the strip pauses the scroll. Targeted by class
+     because component selectors need @emotion/babel-plugin, which this
+     project builds without. */
+  @media (hover: hover) {
+    &:hover .${TRACK_CLASS} {
+      animation-play-state: paused;
+    }
+  }
+`;
+
+/** Technologies used across the project set, most-used first. */
+function useTechnologies() {
+  return useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const project of projects) {
+      for (const tag of project.tags) counts.set(tag, (counts.get(tag) ?? 0) + 1);
+    }
+    return [...counts.entries()]
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .map(([name, count]) => ({ name, count }));
+  }, []);
 }
 
 export default function MarqueeBanner() {
-  const trackRef = useRef<HTMLDivElement>(null);
-
-  useLayoutEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    restartAnimation(track);
-
-    // Safari sometimes pauses animations for off-screen lazy content until visible
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) restartAnimation(track);
-      },
-      { threshold: 0 },
-    );
-    observer.observe(track);
-    return () => observer.disconnect();
-  }, []);
+  const tech = useTechnologies();
 
   return (
-    <Banner aria-hidden="true">
-      <Track ref={trackRef} className="marquee-track">
-        <Text>{MARQUEE_TEXT}</Text>
-        <Text>{MARQUEE_TEXT}</Text>
-      </Track>
+    <Banner aria-label="Technologies used across projects">
+      <Wrapper>
+        <Track className={TRACK_CLASS}>
+          {[0, 1].map((copy) => (
+            <Group key={copy} aria-hidden={copy === 1 ? 'true' : undefined}>
+              {tech.map((t) => (
+                <Item key={`${copy}-${t.name}`}>
+                  {t.name}
+                  {t.count > 1 && <Count>×{t.count}</Count>}
+                </Item>
+              ))}
+            </Group>
+          ))}
+        </Track>
+      </Wrapper>
     </Banner>
   );
 }

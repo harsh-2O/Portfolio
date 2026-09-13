@@ -103,20 +103,17 @@ const Bullet = styled.li`
   }
 `;
 
-const More = styled(motion.ul)`
+const More = styled(motion.div)`
+  grid-column: 1 / -1;
+  overflow: hidden;
+`;
+
+const MoreList = styled.ul`
   list-style: none;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  overflow: hidden;
-
-  ${Bullet} + & {
-    margin-top: 0;
-  }
-
-  > li:first-of-type {
-    margin-top: 0.5rem;
-  }
+  padding-top: 0.5rem;
 `;
 
 const Toggle = styled.button<{ $open: boolean }>`
@@ -180,24 +177,27 @@ export default function TimelineEntry({ title, subtitle, date, gpa, bullets = []
           {head.map((b) => (
             <Bullet key={b.slice(0, 48)}>{b}</Bullet>
           ))}
-          <AnimatePresence initial={false}>
-            {open && (
-              <More
-                key="more"
-                id={listId}
-                variants={expandHeight}
-                initial="collapsed"
-                animate="open"
-                exit="collapsed"
-              >
-                {rest.map((b) => (
-                  <Bullet key={b.slice(0, 48)}>{b}</Bullet>
-                ))}
-              </More>
-            )}
-          </AnimatePresence>
         </Bullets>
       )}
+
+      <AnimatePresence initial={false}>
+        {open && (
+          <More
+            key="more"
+            id={listId}
+            variants={expandHeight}
+            initial="collapsed"
+            animate="open"
+            exit="collapsed"
+          >
+            <MoreList>
+              {rest.map((b) => (
+                <Bullet key={b.slice(0, 48)}>{b}</Bullet>
+              ))}
+            </MoreList>
+          </More>
+        )}
+      </AnimatePresence>
 
       {rest.length > 0 && (
         <Toggle
