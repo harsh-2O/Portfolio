@@ -18,8 +18,6 @@ export const sectionCentered = css`
   padding-top: var(--section-padding-top);
   padding-bottom: var(--section-padding-bottom);
   position: relative;
-  content-visibility: auto;
-  contain-intrinsic-size: auto 500px;
 `;
 
 /** Alternating subtle band — gives light mode visual rhythm between sections. */
@@ -56,8 +54,6 @@ export const cardSurface = css`
   background: var(--surface-elevated);
   border: 1px solid var(--card-border);
   box-shadow: var(--card-shadow), var(--card-highlight);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   transition: box-shadow var(--transition), transform var(--transition), border-color var(--transition);
 
   @media (hover: hover) {
@@ -97,4 +93,15 @@ export const headingSection = css`
 export const bodyText = css`
   font-size: var(--text-body);
   line-height: 1.65;
+`;
+
+/** Mask for the hero market motif: strongest top-right, receding toward the copy. */
+export const motifMask = css`
+  mask-image: radial-gradient(140% 110% at 88% 30%, #000 25%, transparent 78%);
+  -webkit-mask-image: radial-gradient(140% 110% at 88% 30%, #000 25%, transparent 78%);
+
+  @media (max-width: 768px) {
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.55) 45%, #000 70%, #000 100%);
+    -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.55) 45%, #000 70%, #000 100%);
+  }
 `;

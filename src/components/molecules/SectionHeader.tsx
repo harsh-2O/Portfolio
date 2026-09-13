@@ -6,6 +6,8 @@ interface SectionHeaderProps {
   label?: string;
   title: string;
   subtitle?: string;
+  /** Id placed on the heading so the parent section can use `aria-labelledby`. */
+  titleId?: string;
   children?: React.ReactNode;
 }
 
@@ -26,7 +28,7 @@ const Wrapper = styled.div`
 const TextGroup = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.6rem;
   max-width: 640px;
   min-width: 0;
 `;
@@ -34,20 +36,20 @@ const TextGroup = styled.div`
 const Label = styled.span`
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: var(--text-small);
+  gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
   font-weight: 600;
-  color: var(--accent);
-  letter-spacing: 0.08em;
+  color: var(--accent-text);
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   width: fit-content;
 
   &::before {
     content: '';
-    width: 24px;
-    height: 2px;
-    border-radius: 2px;
-    background: var(--accent-gradient);
+    width: 20px;
+    height: 1px;
+    background: var(--accent);
     flex-shrink: 0;
   }
 `;
@@ -62,7 +64,6 @@ const Subtitle = styled.p`
   font-size: var(--text-body);
   color: var(--text-muted);
   line-height: 1.6;
-  margin-top: 0.125rem;
 `;
 
 const ActionSlot = styled.div`
@@ -79,12 +80,12 @@ const ActionSlot = styled.div`
   }
 `;
 
-export default function SectionHeader({ label, title, subtitle, children }: SectionHeaderProps) {
+export default function SectionHeader({ label, title, subtitle, titleId, children }: SectionHeaderProps) {
   return (
     <Wrapper>
       <TextGroup>
         {label && <Label>{label}</Label>}
-        <Title>{title}</Title>
+        <Title id={titleId}>{title}</Title>
         {subtitle && <Subtitle>{subtitle}</Subtitle>}
       </TextGroup>
       {children && <ActionSlot>{children}</ActionSlot>}

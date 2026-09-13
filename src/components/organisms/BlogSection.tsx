@@ -1,11 +1,13 @@
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { motion } from '../../lib/motion';
 import { blogPosts } from '../../data/blog';
+import { on } from '../../lib/events';
+import { lockScroll, unlockScroll } from '../../lib/scroll';
 import SectionHeader from '../molecules/SectionHeader';
 
 const BlogModal = lazy(() => import('./BlogModal'));
-import { fadeUp } from '../../styles/animations';
+import { fadeUp } from '../../motion/variants';
 import { sectionBand, sectionCentered } from '../../styles/layout';
 import { hideScrollbar } from '../../styles/hideScrollbar';
 import { media } from '../../styles/mixins';
@@ -260,13 +262,25 @@ export default function BlogSection() {
 
   const open = (post: BlogPost) => {
     setSelected(post);
-    document.body.style.overflow = 'hidden';
+    lockScroll();
   };
 
   const close = () => {
     setSelected(null);
-    document.body.style.overflow = 'auto';
+    unlockScroll();
   };
+
+  // Command palette → open a post, even if this section mounted after the request.
+  useEffect(
+    () =>
+      on('open-blog', ({ id }) => {
+        const post = blogPosts.find((p) => p.id === id);
+        if (!post) return;
+        setSelected(post);
+        lockScroll();
+      }),
+    [],
+  );
 
   return (
     <>
@@ -307,6 +321,7 @@ export default function BlogSection() {
               </CardHeader>
 
               <CardBody
+                data-lenis-prevent
                 aria-label={`Article preview: ${post.title}`}
                 onWheel={(e) => e.stopPropagation()}
               >

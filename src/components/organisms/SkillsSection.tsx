@@ -5,7 +5,7 @@ import SectionHeader from '../molecules/SectionHeader';
 import RadarChart from '../molecules/RadarChart';
 import { skillCategories } from '../../data/skills';
 import type { Skill } from '../../data/skills';
-import { fadeUp, staggerContainer } from '../../styles/animations';
+import { fadeUp, staggerContainer } from '../../motion/variants';
 import { sectionBand, sectionCentered } from '../../styles/layout';
 import { media } from '../../styles/mixins';
 
@@ -561,7 +561,6 @@ export default function SkillsSection() {
 
   return (
     <Section
-      id="tech-section"
       variants={fadeUp}
       initial="hidden"
       whileInView="visible"
@@ -663,7 +662,7 @@ export default function SkillsSection() {
                   />
                 </RadarPane>
 
-                <ListPane>
+                <ListPane data-lenis-prevent>
                   <SkillList
                     variants={staggerContainer}
                     initial="hidden"

@@ -1,11 +1,13 @@
-import { lazy, Suspense, useMemo, useState } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import styled from '@emotion/styled';
 import { motion, AnimatePresence } from '../../lib/motion';
 import { projects, PROJECT_CATEGORIES, CATEGORY_META } from '../../data/projects';
+import { on } from '../../lib/events';
+import { lockScroll, unlockScroll } from '../../lib/scroll';
 
 const ProjectModal = lazy(() => import('./ProjectModal'));
 import SectionHeader from '../molecules/SectionHeader';
-import { fadeUp } from '../../styles/animations';
+import { fadeUp } from '../../motion/variants';
 import { sectionBand, sectionCentered } from '../../styles/layout';
 import { media } from '../../styles/mixins';
 import type { Project, ProjectCategory } from '../../types';
@@ -329,13 +331,25 @@ export default function ProjectsSection() {
 
   const open = (project: Project) => {
     setSelected(project);
-    document.body.style.overflow = 'hidden';
+    lockScroll();
   };
 
   const close = () => {
     setSelected(null);
-    document.body.style.overflow = 'auto';
+    unlockScroll();
   };
+
+  // Command palette → open a project, even if this section mounted after the request.
+  useEffect(
+    () =>
+      on('open-project', ({ id }) => {
+        const project = projects.find((p) => p.id === id);
+        if (!project) return;
+        setSelected(project);
+        lockScroll();
+      }),
+    [],
+  );
 
   return (
     <>

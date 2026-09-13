@@ -159,6 +159,7 @@ export default function BlogModal({ post, onClose }: BlogModalProps) {
           onClick={onClose}
         >
           <Detail
+            data-lenis-prevent
             onClick={(e) => e.stopPropagation()}
             initial={{ y: 50, opacity: 0, scale: 0.97 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}

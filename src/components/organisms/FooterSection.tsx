@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { keyframes } from '@emotion/react';
 import { motion } from '../../lib/motion';
 import { CONTACT } from '../../config/site';
-import { fadeUp } from '../../styles/animations';
+import { fadeUp } from '../../motion/variants';
 import { sectionContainer } from '../../styles/layout';
 import { media } from '../../styles/mixins';
 

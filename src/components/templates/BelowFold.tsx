@@ -1,5 +1,4 @@
 import { lazy, Suspense } from 'react';
-import { LazyMotion, domAnimation } from '../../lib/motion';
 import SectionFallback from '../atoms/SectionFallback';
 import LazyWhenVisible from '../molecules/LazyWhenVisible';
 
@@ -13,21 +12,24 @@ const BlogSection = lazy(() => import('../organisms/BlogSection'));
 const TestimonialsSection = lazy(() => import('../organisms/TestimonialsSection'));
 const FooterSection = lazy(() => import('../organisms/FooterSection'));
 
-/** Below-fold content — defers framer-motion and section chunks until needed. */
+/**
+ * Below-fold content. Every wrapper carries the section id used by scroll-spy,
+ * the nav and the command palette, so targets exist before the chunk loads.
+ */
 export default function BelowFold() {
   return (
-    <LazyMotion features={domAnimation} strict>
+    <>
       <LazyWhenVisible minHeight={320} id="resume-section">
         <Suspense fallback={<SectionFallback />}>
           <ResumeSection />
         </Suspense>
       </LazyWhenVisible>
-      <LazyWhenVisible minHeight={280}>
+      <LazyWhenVisible minHeight={280} id="certifications-section">
         <Suspense fallback={<SectionFallback />}>
           <CertificationsSection />
         </Suspense>
       </LazyWhenVisible>
-      <LazyWhenVisible minHeight={280}>
+      <LazyWhenVisible minHeight={280} id="tech-section">
         <Suspense fallback={<SectionFallback />}>
           <SkillsSection />
         </Suspense>
@@ -42,7 +44,7 @@ export default function BelowFold() {
           <ProjectsSection />
         </Suspense>
       </LazyWhenVisible>
-      <LazyWhenVisible minHeight={80}>
+      <LazyWhenVisible minHeight={80} id="marquee-section">
         <Suspense fallback={<SectionFallback />}>
           <MarqueeBanner />
         </Suspense>
@@ -52,7 +54,7 @@ export default function BelowFold() {
           <BlogSection />
         </Suspense>
       </LazyWhenVisible>
-      <LazyWhenVisible minHeight={320}>
+      <LazyWhenVisible minHeight={320} id="testimonials-section">
         <Suspense fallback={<SectionFallback />}>
           <TestimonialsSection />
         </Suspense>
@@ -62,6 +64,6 @@ export default function BelowFold() {
           <FooterSection />
         </Suspense>
       </LazyWhenVisible>
-    </LazyMotion>
+    </>
   );
 }

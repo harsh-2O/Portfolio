@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { motion, AnimatePresence } from '../../lib/motion';
 import SectionHeader from '../molecules/SectionHeader';
 import { useTestimonials } from '../../hooks/useTestimonials';
-import { fadeUp } from '../../styles/animations';
+import { fadeUp } from '../../motion/variants';
 import { sectionBand, sectionCentered } from '../../styles/layout';
 import { media } from '../../styles/mixins';
 

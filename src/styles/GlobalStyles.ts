@@ -1,41 +1,23 @@
 import { css } from '@emotion/react';
+import { dark, light, paletteToCss, staticTokensToCss } from '../theme/tokens';
 
 export const GlobalStyles = css`
-  * {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
   }
 
-  /* ── Ash Light (default) ────────────────────────────────────────── */
+  /* ── Tokens ─────────────────────────────────────────────────────── */
   :root {
-    --accent: #C06000;
-    --accent-gradient: linear-gradient(135deg, #C06000 0%, #767676 55%, #111111 100%);
-    --primary: #111111;
-    --primary-rgb: 17, 17, 17;
-    --secondary: #FFFFFF;
-    --text-primary: #111111;
-    --text-secondary: #F7F7F7;
-    --text-muted: #767676;
-    --background: #F7F7F7;
-    --background-top: #FFFFFF;
-    --surface: rgba(255, 255, 255, 0.85);
-    --surface-elevated: rgba(255, 255, 255, 0.95);
-    --glow-color: rgba(192, 96, 0, 0.08);
-    --accent-subtle: rgba(192, 96, 0, 0.06);
-    --accent-line: rgba(192, 96, 0, 0.22);
-    --header-bg: rgba(255, 255, 255, 0.88);
-    --header-shadow: rgba(17, 17, 17, 0.05);
-    --nav-bg: #111111;
-    --nav-text: #F7F7F7;
-    --transition: 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
-    --transition-fast: 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
-    --font-display: 'Cormorant Garamond', 'Georgia', 'Times New Roman', serif;
-    --font-primary: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    ${staticTokensToCss()}
+    ${paletteToCss(light)}
+
+    /* fluid layout scale */
     --header-height: 60px;
-    --header-height-scrolled: 56px;
     --text-nav: 1.125rem;
-    --hamburger-color: var(--text-primary);
     --content-max: 100%;
     --section-padding-x: clamp(1.25rem, 3vw, 2.5rem);
     --section-padding-top: clamp(3rem, 5.5vw, 4.5rem);
@@ -52,56 +34,14 @@ export const GlobalStyles = css`
     --text-h2: clamp(1.375rem, calc(1.75vw + 1rem), 2.5rem);
     --text-body: clamp(1rem, calc(0.55vw + 0.9rem), 1.1875rem);
     --text-small: clamp(0.875rem, calc(0.45vw + 0.8rem), 1rem);
-    --tech-item-bg: rgba(17, 17, 17, 0.03);
-    --tech-item-hover-bg: rgba(17, 17, 17, 0.06);
-    --card-shadow: 0 2px 8px rgba(17, 17, 17, 0.03), 0 8px 32px rgba(192, 96, 0, 0.06);
-    --card-shadow-hover: 0 4px 16px rgba(17, 17, 17, 0.04), 0 16px 48px rgba(192, 96, 0, 0.1);
-    --card-border: #E0E0E0;
-    --card-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.9);
-    --card-radius: 1.25rem;
-    --section-band: linear-gradient(135deg, rgba(192, 96, 0, 0.035) 0%, rgba(118, 118, 118, 0.025) 100%);
-    --marquee-bg: linear-gradient(135deg, #C06000 0%, #111111 100%);
-    --divider: linear-gradient(90deg, transparent, #E0E0E0 20%, #E0E0E0 80%, transparent);
-    --focus-ring: 0 0 0 3px rgba(192, 96, 0, 0.35);
-    --scrollbar-thumb: rgba(17, 17, 17, 0.14);
-    --scrollbar-thumb-hover: rgba(17, 17, 17, 0.28);
   }
 
-  /* ── Ash Dark ─────────────────────────────────────────────────── */
   :root.dark {
-    --primary: #F7F7F7;
-    --primary-rgb: 247, 247, 247;
-    --secondary: #111111;
-    --text-primary: #F7F7F7;
-    --text-secondary: #111111;
-    --text-muted: #999999;
-    --background: #111111;
-    --background-top: #181818;
-    --surface: rgba(32, 32, 32, 0.78);
-    --surface-elevated: rgba(40, 40, 40, 0.92);
-    --glow-color: rgba(192, 96, 0, 0.1);
-    --accent-subtle: rgba(192, 96, 0, 0.08);
-    --accent-line: rgba(192, 96, 0, 0.3);
-    --header-bg: rgba(17, 17, 17, 0.85);
-    --header-shadow: rgba(247, 247, 247, 0.04);
-    --nav-bg: #F7F7F7;
-    --nav-text: #111111;
-    --tech-item-bg: rgba(247, 247, 247, 0.06);
-    --tech-item-hover-bg: rgba(247, 247, 247, 0.1);
-    --card-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
-    --card-shadow-hover: 0 12px 40px rgba(192, 96, 0, 0.15);
-    --card-border: rgba(247, 247, 247, 0.08);
-    --card-highlight: inset 0 1px 0 rgba(247, 247, 247, 0.05);
-    --section-band: linear-gradient(135deg, rgba(192, 96, 0, 0.06) 0%, rgba(40, 40, 40, 0.04) 100%);
-    --marquee-bg: linear-gradient(135deg, #C06000 0%, #111111 100%);
-    --divider: linear-gradient(90deg, transparent, rgba(192, 96, 0, 0.2) 20%, rgba(192, 96, 0, 0.2) 80%, transparent);
-    --focus-ring: 0 0 0 3px rgba(192, 96, 0, 0.45);
-    --scrollbar-thumb: rgba(247, 247, 247, 0.16);
-    --scrollbar-thumb-hover: rgba(247, 247, 247, 0.3);
+    ${paletteToCss(dark)}
   }
 
+  /* ── Base ───────────────────────────────────────────────────────── */
   html {
-    scroll-behavior: smooth;
     font-size: 16px;
     width: 100%;
     overflow-x: clip;
@@ -119,12 +59,6 @@ export const GlobalStyles = css`
   body {
     font-family: var(--font-primary);
     background-color: var(--background);
-    background-image:
-      radial-gradient(ellipse 100% 70% at 50% -15%, var(--glow-color), transparent 60%),
-      radial-gradient(ellipse 45% 35% at 0% 30%, rgba(88, 86, 214, 0.05), transparent 55%),
-      radial-gradient(ellipse 40% 30% at 100% 60%, rgba(0, 113, 227, 0.04), transparent 50%),
-      linear-gradient(180deg, var(--background-top) 0%, var(--background) 55%, var(--background) 100%);
-    background-attachment: fixed;
     color: var(--text-primary);
     line-height: 1.5;
     width: 100%;
@@ -132,8 +66,8 @@ export const GlobalStyles = css`
     overflow-x: clip;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.01em;
     transition: background-color var(--transition), color var(--transition);
-    letter-spacing: -0.02em;
     scrollbar-width: none;
     -ms-overflow-style: none;
   }
@@ -144,11 +78,49 @@ export const GlobalStyles = css`
     display: none;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  /* Theme switch: transition every colour once, then the class is removed. */
+  html.theme-transition *,
+  html.theme-transition *::before,
+  html.theme-transition *::after {
+    transition:
+      background-color var(--transition),
+      color var(--transition),
+      border-color var(--transition),
+      fill var(--transition),
+      stroke var(--transition),
+      box-shadow var(--transition) !important;
+  }
+
+  /* Custom cursor active: hide the native pointer except on text fields. */
+  html.has-cursor,
+  html.has-cursor * {
+    cursor: none !important;
+  }
+
+  html.has-cursor input,
+  html.has-cursor textarea,
+  html.has-cursor select,
+  html.has-cursor [contenteditable] {
+    cursor: auto !important;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-display);
-    font-weight: 700;
+    font-weight: 600;
     line-height: 1.1;
     letter-spacing: -0.03em;
+  }
+
+  code,
+  kbd,
+  samp,
+  pre {
+    font-family: var(--font-mono);
   }
 
   a {
@@ -162,14 +134,13 @@ export const GlobalStyles = css`
     border: none;
     cursor: pointer;
     font-family: var(--font-primary);
-    transition: all var(--transition);
+    color: inherit;
   }
 
-  button:focus-visible,
-  a:focus-visible {
-    outline: none;
-    box-shadow: var(--focus-ring);
-    border-radius: 4px;
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: var(--radius-xs);
   }
 
   img {
@@ -179,11 +150,10 @@ export const GlobalStyles = css`
   }
 
   ::selection {
-    background-color: var(--accent);
-    color: #fff;
+    background-color: rgba(var(--accent-rgb), 0.28);
   }
 
-  /* Subtle scrollbars — thin, fade-in on hover */
+  /* Inner panes: thin scrollbar, visible on hover */
   * {
     scrollbar-width: thin;
     scrollbar-color: transparent transparent;
@@ -204,8 +174,7 @@ export const GlobalStyles = css`
 
   *::-webkit-scrollbar-thumb {
     background: transparent;
-    border-radius: 100px;
-    transition: background 0.3s ease;
+    border-radius: var(--radius-pill);
   }
 
   *:hover::-webkit-scrollbar-thumb {
@@ -216,15 +185,27 @@ export const GlobalStyles = css`
     background: var(--scrollbar-thumb-hover);
   }
 
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
   .skip-link {
     position: absolute;
     top: -100%;
     left: 1rem;
     z-index: 1000;
     padding: 0.75rem 1.25rem;
-    background: var(--accent);
-    color: #fff;
-    border-radius: 0.5rem;
+    background: var(--ink);
+    color: var(--ink-text);
+    border-radius: var(--radius-sm);
     font-weight: 500;
   }
 
@@ -232,15 +213,14 @@ export const GlobalStyles = css`
     top: 1rem;
   }
 
-  /* Global marquee keyframes — Safari/WebKit needs a document-level name, not Emotion-scoped hashes */
+  /* Global marquee keyframes — Safari needs a document-level name, not Emotion-scoped hashes */
   @keyframes marquee-scroll {
-    0% { transform: translate3d(0, 0, 0); }
-    100% { transform: translate3d(-50%, 0, 0); }
-  }
-
-  @-webkit-keyframes marquee-scroll {
-    0% { -webkit-transform: translate3d(0, 0, 0); transform: translate3d(0, 0, 0); }
-    100% { -webkit-transform: translate3d(-50%, 0, 0); transform: translate3d(-50%, 0, 0); }
+    0% {
+      transform: translate3d(0, 0, 0);
+    }
+    100% {
+      transform: translate3d(-50%, 0, 0);
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {

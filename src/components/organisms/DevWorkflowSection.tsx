@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from '../../lib/motion';
 import SectionHeader from '../molecules/SectionHeader';
 import { workflowCards } from '../../data/devWorkflow';
 import type { WorkflowItem } from '../../data/devWorkflow';
-import { fadeUp, staggerContainer } from '../../styles/animations';
+import { fadeUp, staggerContainer } from '../../motion/variants';
 import { sectionBand, sectionCentered } from '../../styles/layout';
 import { media } from '../../styles/mixins';
 

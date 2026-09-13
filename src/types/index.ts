@@ -7,8 +7,12 @@ export interface TimelineItem {
 }
 
 export interface ExperienceSectionData {
+  /** DOM id used by the resume rail, e.g. "resume-education". */
+  id: string;
   number: string;
   title: string;
+  /** Short label for the rail/tabs. */
+  shortTitle: string;
   items: TimelineItem[];
 }
 

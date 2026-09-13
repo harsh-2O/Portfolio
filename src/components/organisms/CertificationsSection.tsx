@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { motion } from '../../lib/motion';
 import SectionHeader from '../molecules/SectionHeader';
 import { certifications } from '../../data/certifications';
-import { fadeUp, staggerContainer } from '../../styles/animations';
+import { fadeUp, staggerContainer } from '../../motion/variants';
 import { sectionCentered } from '../../styles/layout';
 import { media } from '../../styles/mixins';
 
@@ -213,7 +213,6 @@ function TiltCertCard({
 export default function CertificationsSection() {
   return (
     <Section
-      id="certifications-section"
       variants={fadeUp}
       initial="hidden"
       whileInView="visible"
