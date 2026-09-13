@@ -4,7 +4,7 @@ import { keyframes } from '@emotion/react';
 interface StatusChipProps {
   label: string;
   now: string;
-  next: string;
+  next?: string;
 }
 
 const pulse = keyframes`
@@ -78,9 +78,13 @@ export default function StatusChip({ label, now, next }: StatusChipProps) {
       <Label>{label}</Label>
       <Text>
         <span>{now}</span>
-        <Arrow aria-hidden="true">→</Arrow>
-        <span className="sr-only">then</span>
-        <span>{next}</span>
+        {next && (
+          <>
+            <Arrow aria-hidden="true">→</Arrow>
+            <span className="sr-only">then</span>
+            <span>{next}</span>
+          </>
+        )}
       </Text>
     </Chip>
   );

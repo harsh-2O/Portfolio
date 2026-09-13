@@ -8,11 +8,6 @@ export const experienceSections: ExperienceSectionData[] = [
     shortTitle: 'Education',
     items: [
       {
-        title: 'Master of Science in Artificial Intelligence',
-        subtitle: 'Texas A&M University, College Station · Fall 2026',
-        date: 'Aug 2026 – Apr 2028',
-      },
-      {
         title: 'B.Tech. in Computer Science & Engineering',
         subtitle: 'Indian Institute of Information Technology, Vadodara',
         date: 'Jul 2020 – Jun 2024',

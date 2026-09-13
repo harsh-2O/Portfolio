@@ -2,7 +2,7 @@
 export const SITE_URL = 'https://portfolio-delta-one-30.vercel.app';
 
 export const CONTACT = {
-  email: 'harsh.mehta@tamu.edu',
+  email: 'hdmehta406@gmail.com',
   phone: '+91 9725682374',
   linkedin: 'https://www.linkedin.com/in/harsh2o',
   github: 'https://github.com/harsh-2O',
@@ -28,12 +28,11 @@ export const HERO = {
     'Building trading systems, market data infrastructure, and AI-powered tooling across 12 global exchanges at Graviton Research Capital.',
 } as const;
 
-/** Status chip — edit here, renders as "Currently: now → next". */
-export const STATUS = {
+/** Status chip — edit here. Add an optional `next` to render "now → next". */
+export const STATUS: { label: string; now: string; next?: string } = {
   label: 'Currently',
   now: 'Graviton Research · Gurugram',
-  next: 'Texas A&M · Fall 2026',
-} as const;
+};
 
 export const HERO_FACTS = [
   { key: 'Exchanges', value: '12' },
