@@ -1,12 +1,11 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import Header from '../components/organisms/Header';
-import ScrollChrome from '../components/organisms/ScrollChrome';
 import HeroSection from '../components/organisms/HeroSection';
 import SectionFallback from '../components/atoms/SectionFallback';
-import { useHeroAnimation } from '../hooks/useHeroAnimation';
-import { useScrollSpy } from '../hooks/useScrollSpy';
-import { useScrollChrome } from '../hooks/useScrollChrome';
+import { useActiveSection } from '../hooks/useActiveSection';
+import { SECTION_SPECS } from '../data/navigation';
+import { on } from '../lib/events';
 
 const BelowFold = lazy(() => import('../components/templates/BelowFold'));
 
@@ -15,43 +14,13 @@ const Page = styled.div`
   max-width: 100%;
   background: var(--background);
   color: var(--text-primary);
-  transition: background-color var(--transition), color var(--transition);
   overflow-x: clip;
 `;
-
-function useScrollProgress() {
-  useEffect(() => {
-    const bar = document.getElementById('scroll-progress');
-    if (!bar) return;
-
-    let ticking = false;
-    const update = () => {
-      const scrollH = document.documentElement.scrollHeight - window.innerHeight;
-      const pct = scrollH > 0 ? (window.scrollY / scrollH) * 100 : 0;
-      bar.style.width = `${pct}%`;
-      ticking = false;
-    };
-
-    const onScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(update);
-        ticking = true;
-      }
-    };
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    update();
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-}
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showBelowFold, setShowBelowFold] = useState(false);
-  const heroRefs = useHeroAnimation();
-  const activeSection = useScrollSpy(isMenuOpen);
-  const chromeRefs = useScrollChrome();
-  useScrollProgress();
+  const activeSection = useActiveSection(SECTION_SPECS, showBelowFold);
 
   useEffect(() => {
     const reveal = () => setShowBelowFold(true);
@@ -60,34 +29,25 @@ export default function Home() {
       ? window.requestIdleCallback(reveal, { timeout: 2000 })
       : window.setTimeout(reveal, 1200);
 
-    const onScroll = () => {
-      reveal();
-      window.removeEventListener('scroll', onScroll);
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('scroll', reveal, { passive: true, once: true });
+    const off = on('reveal-below-fold', reveal);
 
     return () => {
-      if (window.cancelIdleCallback) {
-        window.cancelIdleCallback(idleId as number);
-      } else {
-        clearTimeout(idleId as number);
-      }
-      window.removeEventListener('scroll', onScroll);
+      if (window.cancelIdleCallback) window.cancelIdleCallback(idleId as number);
+      else clearTimeout(idleId as number);
+      window.removeEventListener('scroll', reveal);
+      off();
     };
   }, []);
 
-  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
-
   return (
-    <>
-      <div id="scroll-progress" aria-hidden="true" />
-      <Page>
-        <Header
-          activeSection={activeSection}
-          isMenuOpen={isMenuOpen}
-          onMenuToggle={setIsMenuOpen}
-        />
-        <HeroSection {...heroRefs} />
+    <Page>
+      <a href="#main" className="skip-link">
+        Skip to content
+      </a>
+      <Header activeSection={activeSection} isMenuOpen={isMenuOpen} onMenuToggle={setIsMenuOpen} />
+      <main id="main">
+        <HeroSection />
         {showBelowFold ? (
           <Suspense fallback={<SectionFallback minHeight={480} />}>
             <BelowFold />
@@ -95,12 +55,7 @@ export default function Home() {
         ) : (
           <SectionFallback minHeight={480} />
         )}
-      </Page>
-      <ScrollChrome
-        scrollIndicatorRef={chromeRefs.scrollIndicatorRef}
-        scrollToTopRef={chromeRefs.scrollToTopRef}
-        onScrollToTop={scrollToTop}
-      />
-    </>
+      </main>
+    </Page>
   );
 }

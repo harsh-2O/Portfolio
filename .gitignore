@@ -36,3 +36,6 @@ npm-debug.log*
 
 # TypeScript
 *.tsbuildinfo
+
+# Local review screenshots (Playwright)
+.screens/

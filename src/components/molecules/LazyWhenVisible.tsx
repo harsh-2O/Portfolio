@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { on } from '../../lib/events';
 
 interface LazyWhenVisibleProps {
   children: ReactNode;
@@ -8,8 +9,8 @@ interface LazyWhenVisibleProps {
 }
 
 /**
- * Mounts children only when the placeholder nears the viewport.
- * Prevents below-fold chunks from loading during initial paint.
+ * Mounts children only when the placeholder nears the viewport, or when a
+ * programmatic jump asks every section to mount so scroll targets stay stable.
  */
 export default function LazyWhenVisible({
   children,
@@ -19,6 +20,8 @@ export default function LazyWhenVisible({
 }: LazyWhenVisibleProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+
+  useEffect(() => on('mount-all', () => setVisible(true)), []);
 
   useEffect(() => {
     const el = ref.current;

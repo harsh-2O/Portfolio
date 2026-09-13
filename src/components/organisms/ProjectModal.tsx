@@ -1,321 +1,414 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import styled from '@emotion/styled';
-import { motion, AnimatePresence } from '../../lib/motion';
-import type { Project } from '../../types';
-import { CATEGORY_META } from '../../data/projects';
+import { AnimatePresence, motion } from '../../lib/motion';
+import { overlayFade, softSpring, transitions } from '../../motion/variants';
 import { hideScrollbar } from '../../styles/hideScrollbar';
+import { media } from '../../styles/mixins';
+import type { Project } from '../../types';
 
 interface ProjectModalProps {
   project: Project | null;
   onClose: () => void;
 }
 
+const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
 const Overlay = styled(motion.div)`
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(12px);
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
   z-index: 1000;
-  padding: 0;
-
-  @media (min-width: 640px) {
-    align-items: center;
-    padding: 1.5rem;
-  }
-`;
-
-const Detail = styled(motion.div)`
-  position: relative;
-  width: 100%;
-  max-width: 680px;
-  background: var(--background);
-  border-radius: 1.75rem 1.75rem 0 0;
-  padding: clamp(1.25rem, 4vw, 2rem);
-  padding-top: clamp(1.5rem, 4vw, 2rem);
-  border: 1px solid var(--card-border);
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 113, 227, 0.06);
-  max-height: 92dvh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-  ${hideScrollbar};
-
-  @media (min-width: 640px) {
-    border-radius: 1.75rem;
-    max-height: 90vh;
-  }
-
-  scrollbar-color: var(--scrollbar-thumb) transparent;
-
-  &::-webkit-scrollbar {
-    width: 3px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: var(--scrollbar-thumb);
-  }
-
-  &::-webkit-scrollbar-thumb:hover {
-    background: var(--scrollbar-thumb-hover);
-  }
-`;
-
-const Thumb = styled.div<{ $accent: string }>`
-  height: clamp(120px, 25vw, 160px);
-  border-radius: 1.25rem;
-  background: ${({ $accent }) =>
-    `linear-gradient(135deg, ${$accent}18 0%, ${$accent}08 100%)`};
-  border: 1px solid var(--card-border);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: clamp(1rem, 4vh, 3rem) clamp(1rem, 4vw, 2rem);
+  background: var(--overlay);
 
-  img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.08));
-  }
-
-  span {
-    font-size: 2rem;
-    font-weight: 700;
-    letter-spacing: -0.04em;
-    color: ${({ $accent }) => $accent};
-    opacity: 0.85;
+  ${media.sm} {
+    align-items: flex-end;
+    padding: 0;
   }
 `;
 
-const RepoLink = styled.a`
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  margin-top: 1rem;
-  font-size: var(--text-small);
-  font-weight: 500;
-  color: var(--accent);
-  transition: opacity var(--transition);
+const Detail = styled(motion.article)`
+  position: relative;
+  width: min(880px, 100%);
+  max-height: min(86vh, 900px);
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  background: var(--background);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
 
-  &:hover { opacity: 0.75; }
+  ${media.sm} {
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    max-height: 92dvh;
+  }
 `;
 
-const Meta = styled.div`
+const Scroll = styled.div`
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  ${hideScrollbar};
+`;
+
+const Head = styled.header`
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: clamp(1.5rem, 3vw, 2.25rem) clamp(1.25rem, 3vw, 2.25rem) clamp(1rem, 2vw, 1.5rem);
+  border-bottom: 1px solid var(--border);
+`;
+
+const Eyebrow = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 1.5rem;
+  gap: 0.4rem 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  padding-right: 2.5rem;
 `;
 
-const Year = styled.span`
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--accent);
-  padding: 0.3rem 0.75rem;
-  border-radius: 100px;
-  background: rgba(0, 113, 227, 0.1);
-`;
-
-const CategoryBadge = styled.span<{ $accent: string }>`
-  font-size: 0.75rem;
-  font-weight: 550;
-  padding: 0.3rem 0.75rem;
-  border-radius: 100px;
-  background: ${({ $accent }) => `${$accent}14`};
-  border: 1px solid ${({ $accent }) => `${$accent}30`};
-  color: ${({ $accent }) => $accent};
-`;
-
-const Title = styled.h3`
+const Title = styled.h2`
+  font-family: var(--font-display);
   font-size: var(--text-h1);
   font-weight: 600;
-  margin-top: 1rem;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--text-primary);
+  padding-right: 2.5rem;
 `;
 
 const Subtitle = styled.p`
   font-size: var(--text-body);
   color: var(--text-muted);
+`;
+
+const Links = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
   margin-top: 0.35rem;
 `;
 
-const Description = styled.p`
-  margin-top: 1.25rem;
-  line-height: 1.65;
+const LinkButton = styled.a`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 40px;
+  padding: 0 0.9rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-strong);
+  font-size: 0.85rem;
+  font-weight: 500;
   color: var(--text-primary);
-  font-size: var(--text-body);
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+
+  svg {
+    width: 13px;
+    height: 13px;
+    stroke: currentColor;
+    stroke-width: 1.75;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      border-color: var(--text-primary);
+      background: var(--surface);
+    }
+  }
 `;
 
-const Metrics = styled.div`
+const Metrics = styled.dl`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.75rem;
-  margin-top: 1.5rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 0;
 
-  @media (max-width: 560px) { grid-template-columns: 1fr; }
+  ${media.sm} {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem 1rem;
+  }
 `;
 
 const Metric = styled.div`
-  padding: 1rem;
-  border-radius: 1rem;
-  background: var(--surface);
-  border: 1px solid var(--card-border);
-  text-align: center;
+  min-width: 0;
+
+  dt {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+
+  dd {
+    margin: 0.3rem 0 0;
+    font-family: var(--font-mono);
+    font-size: clamp(1rem, 1.2vw, 1.25rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+  }
 `;
 
-const MetricValue = styled.div`
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--accent);
-  letter-spacing: -0.02em;
-`;
-
-const MetricLabel = styled.div`
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  margin-top: 0.2rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-`;
-
-const Tags = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-top: 1.5rem;
-`;
-
-const Tag = styled.span`
-  font-size: 0.8rem;
-  font-weight: 500;
-  padding: 0.35rem 0.75rem;
-  border-radius: 100px;
-  background: var(--tech-item-bg);
-  border: 1px solid var(--card-border);
-  color: var(--text-primary);
-`;
-
-const BulletList = styled.ul`
-  list-style: none;
-  margin-top: 1.5rem;
+const Body = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: clamp(1.25rem, 2.5vw, 1.75rem);
+  padding: clamp(1.25rem, 3vw, 2rem) clamp(1.25rem, 3vw, 2.25rem) clamp(1.75rem, 3vw, 2.5rem);
+`;
+
+const Block = styled.section`
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr);
+  gap: clamp(0.75rem, 2vw, 1.75rem);
+
+  ${media.md} {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.5rem;
+  }
+`;
+
+const BlockLabel = styled.h3`
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  padding-top: 0.25em;
+`;
+
+const Prose = styled.p`
+  font-size: var(--text-body);
+  line-height: 1.65;
+  color: var(--text-muted);
+`;
+
+const Bullets = styled.ul`
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 `;
 
 const Bullet = styled.li`
-  font-size: 0.95rem;
-  line-height: 1.55;
-  color: var(--text-muted);
-  padding-left: 1.1rem;
   position: relative;
+  padding-left: 1.1rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-muted);
 
   &::before {
     content: '';
     position: absolute;
     left: 0;
-    top: 0.55em;
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
+    top: 0.85em;
+    width: 8px;
+    height: 1px;
     background: var(--accent);
   }
 `;
 
-const CloseButton = styled.button`
-  position: absolute;
-  top: 1.25rem;
-  right: 1.25rem;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--surface);
+const Tags = styled.ul`
+  list-style: none;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.25rem;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+`;
+
+const Tag = styled.li`
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+`;
+
+const Close = styled.button`
+  position: absolute;
+  top: clamp(1rem, 2vw, 1.5rem);
+  right: clamp(1rem, 2vw, 1.5rem);
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: var(--background);
   color: var(--text-primary);
-  border: 1px solid var(--card-border);
-  z-index: 1;
+
+  svg {
+    width: 15px;
+    height: 15px;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    fill: none;
+    stroke-linecap: round;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      border-color: var(--text-primary);
+    }
+  }
 `;
 
 export default function ProjectModal({ project, onClose }: ProjectModalProps) {
+  const ref = useRef<HTMLElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const restoreRef = useRef<HTMLElement | null>(null);
+
+  const onKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.stopPropagation();
+        onClose();
+        return;
+      }
+      if (e.key !== 'Tab' || !ref.current) return;
+      const items = [...ref.current.querySelectorAll<HTMLElement>(FOCUSABLE)].filter(
+        (el) => el.offsetParent !== null,
+      );
+      if (items.length === 0) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      const active = document.activeElement;
+      if (e.shiftKey && (active === first || !ref.current.contains(active))) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    },
+    [onClose],
+  );
+
   useEffect(() => {
     if (!project) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [project, onClose]);
+    restoreRef.current = document.activeElement as HTMLElement | null;
+    const id = requestAnimationFrame(() => closeRef.current?.focus());
+    return () => {
+      cancelAnimationFrame(id);
+      restoreRef.current?.focus?.();
+    };
+  }, [project]);
+
+  const titleId = project ? `project-${project.id}-title` : undefined;
 
   return (
     <AnimatePresence>
       {project && (
-        <Overlay
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={onClose}
-        >
+        <Overlay variants={overlayFade} initial="hidden" animate="visible" exit="exit" onClick={onClose}>
           <Detail
-            onClick={(e) => e.stopPropagation()}
-            initial={{ y: 50, opacity: 0, scale: 0.97 }}
-            animate={{ y: 0, opacity: 1, scale: 1 }}
-            exit={{ y: 40, opacity: 0, scale: 0.97 }}
-            transition={{ type: 'spring', damping: 30, stiffness: 350 }}
+            ref={ref}
+            layoutId={`project-${project.id}`}
+            transition={softSpring}
             role="dialog"
             aria-modal="true"
-            aria-label={project.title}
+            aria-labelledby={titleId}
+            onClick={(e) => e.stopPropagation()}
+            onKeyDown={onKeyDown}
           >
-            <CloseButton onClick={onClose} aria-label="Close">×</CloseButton>
+            <Close ref={closeRef} type="button" onClick={onClose} aria-label="Close case study" data-cursor="Close">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M6 6l12 12M18 6L6 18" />
+              </svg>
+            </Close>
 
-            <Thumb $accent={project.accent}>
-              {project.image ? (
-                <img src={project.image} alt={project.title} />
-              ) : (
-                <span aria-hidden="true">{project.title.slice(0, 2).toUpperCase()}</span>
-              )}
-            </Thumb>
+            <Scroll data-lenis-prevent>
+              <Head>
+                <Eyebrow>
+                  <span>{project.year}</span>
+                  <span>{project.category}</span>
+                </Eyebrow>
+                <motion.div
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ ...transitions.base, delay: 0.12 }}
+                >
+                  <Title id={titleId}>{project.title}</Title>
+                  <Subtitle>{project.subtitle}</Subtitle>
+                  {(project.repoUrl || project.liveUrl) && (
+                    <Links>
+                      {project.repoUrl && (
+                        <LinkButton href={project.repoUrl} target="_blank" rel="noopener noreferrer" data-cursor="Open">
+                          <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M7 17L17 7M9 7h8v8" />
+                          </svg>
+                          Repository
+                        </LinkButton>
+                      )}
+                      {project.liveUrl && (
+                        <LinkButton href={project.liveUrl} target="_blank" rel="noopener noreferrer" data-cursor="Open">
+                          <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M7 17L17 7M9 7h8v8" />
+                          </svg>
+                          Live
+                        </LinkButton>
+                      )}
+                    </Links>
+                  )}
+                </motion.div>
+              </Head>
 
-            <Meta>
-              <Year>{project.year}</Year>
-              <CategoryBadge $accent={CATEGORY_META[project.category].accent}>
-                {CATEGORY_META[project.category].icon} {project.category}
-              </CategoryBadge>
-            </Meta>
-            <Title>{project.title}</Title>
-            <Subtitle>{project.subtitle}</Subtitle>
-            <Description>{project.description}</Description>
+              <Body>
+                <Block>
+                  <BlockLabel>{project.caseStudy ? 'Problem' : 'Context'}</BlockLabel>
+                  <Prose>{project.caseStudy?.problem ?? project.description}</Prose>
+                </Block>
 
-            {project.repoUrl && (
-              <RepoLink href={project.repoUrl} target="_blank" rel="noopener noreferrer">
-                View on GitHub →
-              </RepoLink>
-            )}
+                <Block>
+                  <BlockLabel>Approach</BlockLabel>
+                  {project.caseStudy ? (
+                    <Prose>{project.caseStudy.approach}</Prose>
+                  ) : (
+                    <Bullets>
+                      {project.bullets.map((b) => (
+                        <Bullet key={b.slice(0, 48)}>{b}</Bullet>
+                      ))}
+                    </Bullets>
+                  )}
+                </Block>
 
-            <Metrics>
-              {project.highlights.map((h) => (
-                <Metric key={h.label}>
-                  <MetricValue>{h.value}</MetricValue>
-                  <MetricLabel>{h.label}</MetricLabel>
-                </Metric>
-              ))}
-            </Metrics>
+                <Block>
+                  <BlockLabel>Impact</BlockLabel>
+                  <div>
+                    <Metrics>
+                      {project.highlights.map((h) => (
+                        <Metric key={h.label}>
+                          <dt>{h.label}</dt>
+                          <dd>{h.value}</dd>
+                        </Metric>
+                      ))}
+                    </Metrics>
+                    {project.caseStudy && <Prose style={{ marginTop: '0.9rem' }}>{project.caseStudy.impact}</Prose>}
+                  </div>
+                </Block>
 
-            <Tags>
-              {project.tags.map((tag) => (
-                <Tag key={tag}>{tag}</Tag>
-              ))}
-            </Tags>
-
-            <BulletList>
-              {project.bullets.map((b) => (
-                <Bullet key={b.slice(0, 50)}>{b}</Bullet>
-              ))}
-            </BulletList>
+                <Block>
+                  <BlockLabel>Stack</BlockLabel>
+                  <Tags>
+                    {project.tags.map((tag) => (
+                      <Tag key={tag}>{tag}</Tag>
+                    ))}
+                  </Tags>
+                </Block>
+              </Body>
+            </Scroll>
           </Detail>
         </Overlay>
       )}

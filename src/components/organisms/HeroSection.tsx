@@ -1,396 +1,274 @@
 /**
- * Hero — typewriter name, crossfading roles, aurora gradient mesh, status badges.
+ * Hero — h1 in Cormorant, decoded role line, lede, magnetic CTAs, copy chips,
+ * status chip and a mono facts row, over a lazy WebGL market-data backdrop.
  */
+import { useEffect, useState, type ComponentType } from 'react';
 import styled from '@emotion/styled';
-import { keyframes } from '@emotion/react';
-import { CONTACT } from '../../config/site';
-import type { useHeroAnimation } from '../../hooks/useHeroAnimation';
-import { sectionContainer, headingHero, headingRole } from '../../styles/layout';
+import { motion } from '../../lib/motion';
+import { heroContainer, heroItem } from '../../motion/variants';
+import { CONTACT, HERO, HERO_FACTS, STATUS } from '../../config/site';
+import { useIntro } from '../../context/IntroContext';
+import { useTextScramble } from '../../hooks/useTextScramble';
+import { scrollToSection } from '../../lib/scroll';
+import { GRID_STEP } from '../../lib/marketLayout';
+import { sectionContainer, headingHero, motifMask } from '../../styles/layout';
 import { media } from '../../styles/mixins';
+import ErrorBoundary from '../atoms/ErrorBoundary';
+import MagneticButton from '../atoms/MagneticButton';
+import CopyChip from '../atoms/CopyChip';
+import StatusChip from '../molecules/StatusChip';
 
-type HeroRefs = ReturnType<typeof useHeroAnimation>;
+/* ── Layout ──────────────────────────────────────────────────────── */
 
-const HERO_BADGES = ['Graviton Research', 'MS AI · Texas A&M', '2× GCP Certified'];
-
-const heroFadeUp = keyframes`
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
-`;
-
-const auroraShift = keyframes`
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-`;
-
-const MainContent = styled.section`
+const Section = styled.section`
   ${sectionContainer};
+  position: relative;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   margin-top: var(--header-height);
-  padding-top: clamp(2rem, 4vw, 3rem);
+  padding-top: clamp(2.5rem, 6vh, 5rem);
   padding-bottom: clamp(1.75rem, 3.5vw, 2.75rem);
-  position: relative;
   overflow: hidden;
-  isolation: isolate;
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: clamp(2rem, 5vw, 3.5rem);
-    background: linear-gradient(180deg, transparent, var(--background));
-    pointer-events: none;
-    z-index: 0;
-  }
 
   ${media.lgUp} {
     min-height: calc(100dvh - var(--header-height));
-    padding-top: clamp(2.5rem, 5vh, 4rem);
-    padding-bottom: clamp(2rem, 4vh, 3rem);
   }
 `;
 
-const Ambient = styled.div`
+const Backdrop = styled.div`
   position: absolute;
   inset: 0;
-  pointer-events: none;
   z-index: 0;
-  overflow: hidden;
+  pointer-events: none;
 `;
 
-const AuroraMesh = styled.div`
-  position: absolute;
-  inset: -20%;
-  background: linear-gradient(
-    -45deg,
-    rgba(0, 113, 227, 0.15),
-    rgba(88, 86, 214, 0.12),
-    rgba(175, 82, 222, 0.1),
-    rgba(50, 173, 230, 0.12),
-    rgba(0, 113, 227, 0.08)
-  );
-  background-size: 400% 400%;
-  animation: ${auroraShift} 20s ease infinite;
-  filter: blur(80px);
-  opacity: 0.6;
-
-  :root.dark & {
-    opacity: 0.4;
-  }
-
-  @media (max-width: 768px) {
-    filter: blur(50px);
-    opacity: 0.5;
-    :root.dark & { opacity: 0.3; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-  }
-`;
-
-const Orb = styled.div<{ $x: string; $y: string; $size: string; $delay: string; $color: string }>`
-  position: absolute;
-  left: ${({ $x }) => $x};
-  top: ${({ $y }) => $y};
-  width: ${({ $size }) => $size};
-  height: ${({ $size }) => $size};
-  border-radius: 50%;
-  background: radial-gradient(circle, ${({ $color }) => $color} 0%, transparent 70%);
-  filter: blur(28px);
-  animation: float 12s ease-in-out infinite;
-  animation-delay: ${({ $delay }) => $delay};
-
-  @media (max-width: 768px) {
-    filter: blur(16px);
-    opacity: 0.7;
-  }
-
-  &.hero-orb-third {
-    @media (max-width: 480px) {
-      display: none;
-    }
-  }
-
-  @keyframes float {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33% { transform: translate(12px, -18px) scale(1.05); }
-    66% { transform: translate(-8px, 10px) scale(0.95); }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-  }
-`;
-
-const Grid = styled.div`
+/* The grid is CSS so it paints instantly and survives a missing WebGL context. */
+const GridLines = styled.div`
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(circle, var(--card-border) 1px, transparent 1px);
-  background-size: 28px 28px;
-  opacity: 0.35;
-  mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 20%, transparent 75%);
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: ${GRID_STEP}px ${GRID_STEP}px;
+  opacity: 0.7;
+  ${motifMask};
 `;
 
-const Content = styled.div`
+const Content = styled(motion.div)`
   position: relative;
   z-index: 1;
   display: flex;
   flex-direction: column;
-  gap: clamp(1rem, 2.5vw, 1.75rem);
+  gap: clamp(1.1rem, 2.2vw, 1.75rem);
+  max-width: 60rem;
   min-width: 0;
 `;
 
-const Eyebrow = styled.div`
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: var(--text-small);
-  font-weight: 500;
-  color: var(--accent);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  width: fit-content;
-  animation: ${heroFadeUp} 0.6s ease 0.1s both;
-
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-  }
-`;
-
-const LiveDot = styled.span`
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 8px var(--accent);
-  animation: pulse 2s ease-in-out infinite;
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 8px var(--accent); }
-    50% { opacity: 0.5; transform: scale(0.85); box-shadow: 0 0 4px var(--accent); }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-  }
-`;
-
-const Title = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  color: var(--text-primary);
-`;
-
-const NameLine = styled.span`
+const Name = styled(motion.h1)`
   ${headingHero};
-  display: block;
+  color: var(--text-primary);
   overflow-wrap: anywhere;
   padding-bottom: 0.04em;
-`;
-
-const TitleContainer = styled.div`
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 0.2rem 0.5rem;
-  max-width: 100%;
-  padding-bottom: 0.12em;
-
-  ${media.sm} {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.15rem;
-  }
-`;
-
-const RolePrefix = styled.span`
-  ${headingRole};
-  font-weight: 400;
-  color: var(--text-muted);
-  flex-shrink: 0;
-  line-height: 1.25;
-`;
-
-const ChangingText = styled.span`
-  ${headingRole};
-  display: inline-block;
-  overflow-wrap: anywhere;
-  word-break: break-word;
-  line-height: 1.25;
-  padding-bottom: 0.1em;
-  background: linear-gradient(135deg, var(--text-primary) 30%, var(--accent) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
-`;
-
-const BadgeRow = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
   margin-top: 0.25rem;
 `;
 
-const BADGE_ACCENTS = ['#0071e3', '#5856d6', '#32ade6'];
-
-const Badge = styled.span<{ $accent: string }>`
-  font-size: var(--text-small);
-  font-weight: 500;
-  padding: 0.35rem 0.7rem;
-  max-width: 100%;
-  border-radius: 100px;
-  border: 1px solid ${({ $accent }) => `${$accent}30`};
-  background: ${({ $accent }) => `${$accent}0c`};
-  color: var(--text-primary);
-  opacity: 0.7;
-  backdrop-filter: blur(8px);
-  transition: border-color var(--transition), opacity var(--transition), transform var(--transition-fast);
-
-  @media (hover: hover) {
-    &:hover {
-      border-color: ${({ $accent }) => `${$accent}60`};
-      opacity: 1;
-      transform: translateY(-1px);
-    }
-  }
-`;
-
-const ContactSection = styled.div`
-  position: relative;
-  z-index: 1;
+const Role = styled(motion.p)`
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  width: 100%;
-  gap: var(--section-inner-gap);
-  margin-top: clamp(1.5rem, 4vh, 2.5rem);
-  padding-top: clamp(1.25rem, 2.5vw, 2rem);
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 1.6em;
+  font-family: var(--font-mono);
+  font-size: clamp(0.85rem, 0.5vw + 0.72rem, 1.05rem);
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-primary);
 
   &::before {
     content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+    width: 28px;
     height: 1px;
-    background: var(--divider);
+    background: var(--accent);
+    flex-shrink: 0;
   }
+`;
+
+const Caret = styled.span<{ $on: boolean }>`
+  display: inline-block;
+  width: 0.55em;
+  height: 1.05em;
+  background: var(--accent);
+  opacity: ${({ $on }) => ($on ? 1 : 0)};
+  transition: opacity var(--transition-fast);
+`;
+
+const Lede = styled(motion.p)`
+  max-width: 36rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 1vw + 0.9rem, 1.75rem);
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+  color: var(--text-muted);
+`;
+
+const Actions = styled(motion.div)`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  margin-top: 0.25rem;
+`;
+
+const Chips = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  ${media.mdUp} {
+    margin-left: 0.5rem;
+  }
+`;
+
+const Facts = styled(motion.dl)`
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 2.5rem;
+  margin-top: clamp(2.5rem, 6vh, 4rem);
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
 
   ${media.lgUp} {
     margin-top: auto;
   }
-
-  ${media.md} {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--block-gap);
-  }
 `;
 
-const ContactInfo = styled.div`
-  flex-shrink: 0;
-  min-width: 0;
-
-  h3 {
-    font-size: clamp(1.125rem, 2.5vw, 1.5rem);
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    letter-spacing: -0.02em;
-  }
-`;
-
-const ContactLinks = styled.div`
+const Fact = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  min-width: 0;
-`;
+  align-items: baseline;
+  gap: 0.6rem;
 
-const ContactLink = styled.a`
-  font-size: var(--text-body);
-  color: var(--text-muted);
-  transition: color var(--transition);
-  overflow-wrap: anywhere;
-  word-break: break-word;
-
-  &:hover { color: var(--accent); }
-`;
-
-const Description = styled.p`
-  flex: 1;
-  min-width: 0;
-  max-width: 440px;
-  font-size: var(--text-body);
-  line-height: 1.65;
-  text-align: right;
-  color: var(--text-muted);
-  letter-spacing: -0.01em;
-
-  ${media.md} {
-    text-align: left;
-    max-width: 100%;
+  dt {
+    text-transform: uppercase;
+    color: var(--text-faint);
   }
 
-  ${media.xlUp} {
-    max-width: 480px;
+  dd {
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
   }
 `;
 
-export default function HeroSection(refs: HeroRefs) {
+/* ── Component ───────────────────────────────────────────────────── */
+
+export default function HeroSection() {
+  const { introDone } = useIntro();
+  const { text: role, done: roleDone } = useTextScramble(HERO.role, { start: introDone, delay: 380 });
+  // Held in state rather than React.lazy: lazy() components can be warmed
+  // eagerly, which fetched the ~240 KB WebGL chunk even when it never rendered.
+  const [Canvas, setCanvas] = useState<ComponentType | null>(null);
+  // If no intro plays (repeat visit, reduced motion) render the settled state at once for LCP.
+  const [skipEntrance] = useState(introDone);
+
+  useEffect(() => {
+    if (!introDone) return;
+
+    // The WebGL backdrop costs ~240 KB gzipped. It is a large-screen flourish:
+    // phones, coarse pointers and data-saver sessions keep the CSS grid alone.
+    const wideEnough = window.matchMedia('(min-width: 1024px)').matches;
+    const connection = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+    const constrained = connection?.saveData === true || /2g/.test(connection?.effectiveType ?? '');
+    if (!wideEnough || constrained) return;
+
+    let alive = true;
+    const start = () => {
+      void import('../molecules/MarketCanvas').then((mod) => {
+        if (alive) setCanvas(() => mod.default);
+      });
+    };
+
+    if (window.requestIdleCallback) {
+      const id = window.requestIdleCallback(start, { timeout: 1500 });
+      return () => {
+        alive = false;
+        window.cancelIdleCallback(id);
+      };
+    }
+    const id = window.setTimeout(start, 300);
+    return () => {
+      alive = false;
+      window.clearTimeout(id);
+    };
+  }, [introDone]);
+
   return (
-    <MainContent id="main-section">
-      <Ambient aria-hidden="true">
-        <AuroraMesh />
-        <Grid />
-        <Orb $x="75%" $y="5%" $size="min(420px, 55vw)" $delay="0s" $color="rgba(0, 113, 227, 0.14)" />
-        <Orb $x="-5%" $y="60%" $size="min(300px, 40vw)" $delay="-4s" $color="rgba(88, 86, 214, 0.1)" />
-        <Orb $x="40%" $y="80%" $size="min(200px, 30vw)" $delay="-8s" $color="rgba(0, 113, 227, 0.08)" className="hero-orb-third" />
-      </Ambient>
+    <Section id="main-section" aria-labelledby="hero-title">
+      <Backdrop aria-hidden="true">
+        <GridLines />
+        {Canvas && (
+          <ErrorBoundary>
+            <Canvas />
+          </ErrorBoundary>
+        )}
+      </Backdrop>
 
-      <Content>
-        <Eyebrow>
-          <LiveDot />
-          Portfolio · 2026
-        </Eyebrow>
+      <Content
+        variants={heroContainer}
+        initial={skipEntrance ? false : 'hidden'}
+        animate={introDone ? 'visible' : 'hidden'}
+      >
+        <motion.div variants={heroItem}>
+          <StatusChip label={STATUS.label} now={STATUS.now} next={STATUS.next} />
+        </motion.div>
 
-        <Title>
-          <NameLine ref={refs.titleSpanRef}>Harsh Mehta</NameLine>
-          <TitleContainer>
-            <RolePrefix ref={refs.plusSignRef}>—</RolePrefix>
-            <ChangingText ref={refs.changingTextRef}>Quant Tools Developer</ChangingText>
-          </TitleContainer>
-        </Title>
+        <Name id="hero-title" variants={heroItem}>
+          Harsh Mehta
+        </Name>
 
-        <BadgeRow ref={refs.badgesRef}>
-          {HERO_BADGES.map((badge, index) => (
-            <Badge key={badge} $accent={BADGE_ACCENTS[index % BADGE_ACCENTS.length]}>
-              {badge}
-            </Badge>
-          ))}
-        </BadgeRow>
+        <Role variants={heroItem}>
+          <span aria-hidden="true">{role}</span>
+          <Caret aria-hidden="true" $on={!roleDone} />
+          <span className="sr-only">{HERO.role}</span>
+        </Role>
+
+        <Lede variants={heroItem}>{HERO.lede}</Lede>
+
+        <Actions variants={heroItem}>
+          <MagneticButton onClick={() => scrollToSection('footer-section')} data-cursor="Talk">
+            Let&apos;s talk
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </MagneticButton>
+          <MagneticButton variant="ghost" onClick={() => scrollToSection('projects-section')} data-cursor="Work">
+            View work
+          </MagneticButton>
+          <Chips>
+            <CopyChip value={CONTACT.email} label="Email address" />
+            <CopyChip value={CONTACT.phone} label="Phone number" />
+          </Chips>
+        </Actions>
       </Content>
 
-      <ContactSection>
-        <ContactInfo ref={refs.contactInfoRef}>
-          <h3>Let's talk</h3>
-          <ContactLinks>
-            <ContactLink href={`mailto:${CONTACT.email}`}>{CONTACT.email}</ContactLink>
-            <ContactLink href={`tel:${CONTACT.phone.replace(/\s/g, '')}`}>{CONTACT.phone}</ContactLink>
-          </ContactLinks>
-        </ContactInfo>
-        <Description ref={refs.descriptionRef}>
-          Quant Tools Developer at Graviton Research Capital — building trading systems,
-          market data infrastructure, and AI-powered tooling across 12 global exchanges.
-        </Description>
-      </ContactSection>
-    </MainContent>
+      <Facts
+        variants={heroItem}
+        initial={skipEntrance ? false : 'hidden'}
+        animate={introDone ? 'visible' : 'hidden'}
+        transition={{ delay: 0.5 }}
+      >
+        {HERO_FACTS.map((f) => (
+          <Fact key={f.key}>
+            <dt>{f.key}</dt>
+            <dd>{f.value}</dd>
+          </Fact>
+        ))}
+      </Facts>
+    </Section>
   );
 }

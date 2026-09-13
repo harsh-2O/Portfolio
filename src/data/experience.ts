@@ -2,14 +2,11 @@ import type { ExperienceSectionData } from '../types';
 
 export const experienceSections: ExperienceSectionData[] = [
   {
+    id: 'resume-education',
     number: '01',
     title: 'Education',
+    shortTitle: 'Education',
     items: [
-      {
-        title: 'Master of Science in Artificial Intelligence',
-        subtitle: 'Texas A&M University, College Station · Fall 2026',
-        date: 'Aug 2026 – Apr 2028',
-      },
       {
         title: 'B.Tech. in Computer Science & Engineering',
         subtitle: 'Indian Institute of Information Technology, Vadodara',
@@ -19,8 +16,10 @@ export const experienceSections: ExperienceSectionData[] = [
     ],
   },
   {
+    id: 'resume-experience',
     number: '02',
     title: 'Experience',
+    shortTitle: 'Experience',
     items: [
       {
         title: 'Quant Tools Developer',
@@ -78,8 +77,10 @@ export const experienceSections: ExperienceSectionData[] = [
     ],
   },
   {
+    id: 'resume-achievements',
     number: '03',
     title: 'Achievements & Leadership',
+    shortTitle: 'Achievements',
     items: [
       {
         title: 'IMPACT Hackathon — Runner-Up',
